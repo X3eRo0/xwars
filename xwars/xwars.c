@@ -43,7 +43,7 @@ int main(int argc, char *argv[]){
 
     section_entry * temp = NULL;
     section_entry * text = init_section_entry();
-    set_section_entry(text, ".text", 0x1000, 0x1337000, PERM_READ | PERM_WRITE | PERM_EXEC);
+    set_section_entry(text, ".text", 0x400, 0x1337000, PERM_READ | PERM_WRITE | PERM_EXEC);
 
 
     // add 2 different stacks for both bots

@@ -109,7 +109,7 @@ while True:  # Event Loop
                 continue
             PID = os.fork()
             if PID == 0:
-                os.system("../build/xwars %s %s" % (values['-BOT1-'], values['-BOT2-']))
+                os.system("xwars %s %s" % (values['-BOT1-'], values['-BOT2-']))
             else:
                 fd.create_logfifo()
             BOT1Name = values['-BOT1-'].split('/')[-1]
@@ -144,7 +144,7 @@ while True:  # Event Loop
                 update_disassembly()
             else:
                 if b"Winner" in res:
-                    winner = int(res.strip().split(" : ")[1])
+                    winner = int(res.strip().split(b" : ")[1])
                     print("[+] Winner is %s" % [BOT1Name, BOT2Name][winner - 1])
                     RUNNING = False
                     continue
@@ -157,7 +157,7 @@ while True:  # Event Loop
             update_disassembly()
         else:
             if b"Winner" in res:
-                winner = int(res.strip().split(" : ")[1])
+                winner = int(res.strip().split(b" : ")[1])
                 print("[+] Winner is %s" % [BOT1Name, BOT2Name][winner - 1])
                 RUNNING = False
                 continue
