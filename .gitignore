@@ -4,3 +4,4 @@
 /build/
 /.idea
 /pygui/__pycache__
+*.swp

@@ -100,8 +100,59 @@ int main(int argc, char *argv[]){
     bot2->cpu->regs.pc = text->v_addr + bot2->offset;
 
     u8 winner = 0;
+    u32 counter = 0;
+    int init_status = 0;
+    
+    while (
+            (counter < 0x50) &&
+            get_RF(bot1->cpu) && 
+            get_RF(bot2->cpu)
+    ){
+        if (!wait_for_gui()){
+            continue;
+        }
+        xlog("SENDING\n");
+        // dump registers
+        dump_reg(bot1, bot2);
+        dump_dis(bot1, bot2);
+        
+        if (bot1->cpu->regs.pc != text->v_addr + bot1->offset){
+            step(bot1);
+
+            if (signal_abort(bot1->cpu->errors, bot1->cpu) == E_ERR){
+                init_status = -1;
+                break;
+            }
+            if (signal_abort(bot1->bin->x_section->errors, bot1->cpu) == E_ERR){
+                init_status = -1;
+                break;
+            }
+        }
+        
+        if (bot2->cpu->regs.pc != text->v_addr + bot2->offset){   
+            step(bot2);
+
+            if (signal_abort(bot2->cpu->errors, bot2->cpu) == E_ERR){
+                init_status = -1;
+                break;
+            }
+            if (signal_abort(bot2->bin->x_section->errors, bot2->cpu) == E_ERR){
+                init_status = -1;
+                break;
+            }
+        }
+        counter++;
+    }
+
+    if (init_status == -1){
+        xlog("INIT_FAILED\n");
+    }
+    if (init_status == 0){
+        xlog("INIT_SUCCESS\n");
+    }
+
     // execution loop
-    while (get_RF(bot1->cpu) && get_RF(bot2->cpu)){
+    while ((counter < 0x2050) && get_RF(bot1->cpu) && get_RF(bot2->cpu)){
 
         if (!wait_for_gui()){
             continue;
@@ -131,6 +182,7 @@ int main(int argc, char *argv[]){
             winner = 1;
             break;
         }
+        counter++;
     }
 
     if (wait_for_gui()){
