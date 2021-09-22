@@ -129,7 +129,7 @@ u32 append_dword(section *sec, section_entry *sec_entry, u32 dword) {
         raise_signal(sec->errors, XSIGSEGV, sec_entry->v_addr + sec_entry->m_ofst, 0);
         // segfault(XSIGSEGV, sec_entry, sec_entry->v_addr + sec_entry->m_ofst);
     }
-
+    
     *((u32*)&sec_entry->m_buff[sec_entry->m_ofst]) = dword;
     sec_entry->m_ofst += sizeof(u32);
     return sizeof(u32);

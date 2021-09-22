@@ -1,4 +1,0 @@
-.section .init #0x400000 #0x400 rwx
-
-
-.section .bot #0x401000 #0x400 rwx

@@ -79,6 +79,7 @@ INIT_DONE = False
 counter = 0
 speed = 100
 PID = 0
+KILLED=False
 window = sg.Window('Window Title', layout, element_justification='c')
 
 def get_random_str(length):
@@ -130,14 +131,19 @@ try:
             if PID == 0:
                 os.system("xwars %s %s" % (values['-BOT1-'], values['-BOT2-']))
                 os.kill(os.getpid(), 9)
+                KILLED=True
             else:
                 fd.create_logfifo()
+            KILLED = False
             BOT1Name = values['-BOT1-'].split('/')[-1]
             BOT2Name = values['-BOT2-'].split('/')[-1]
             print("[+] Loaded bots")
             print("[+] %s VS %s" % (BOT1Name, BOT2Name))
             INIT_DONE = True
         if event == "Kill":
+            if RUNNING:
+                RUNNING=False
+            KILLED=True
             values['-BOT1-'] = ''
             values['-BOT2-'] = ''
             window['-OUT-'].Update('')
@@ -147,6 +153,9 @@ try:
             window['-DIS_BOT2-'].Update('')
             os.kill(PID, 9)
         if event == "Run":
+            if KILLED:
+                print("[!] Please Initialise Bots and try again")
+                continue
             if not INIT_DONE:
                 print("[!] Please Select bots and initialise xwars")
                 continue

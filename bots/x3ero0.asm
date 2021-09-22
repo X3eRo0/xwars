@@ -22,7 +22,7 @@ _outer_loop:
 
     _inner_hook2:
 
-    add $ra, #8
+    add $ra, #0x40
     cmp $ra, $rc
     rjae reset_ra
     rjmp _outer_loop
