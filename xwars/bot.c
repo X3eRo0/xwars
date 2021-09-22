@@ -35,14 +35,14 @@ u32 copy_bots(xbot* bot1, xbot* bot2, section_entry* text){
     srandom(time(NULL));
     // assign bot1 in first half
     while ( (bot1->offset < 0x20) ||
-            (bot1->offset > 0x800 - bot1->size)
+            (bot1->offset > 0x200 - bot1->size)
     ){
         bot1->offset = random() & 0xfff;
     }
 
     // assign bot2 in second half
-    while ( (bot2->offset < 0x820) ||
-            (bot2->offset > 0x1000 - bot2->size)
+    while ( (bot2->offset < 0x220) ||
+            (bot2->offset > 0x400 - bot2->size)
             ){
         bot2->offset = random() & 0xfff;
     }

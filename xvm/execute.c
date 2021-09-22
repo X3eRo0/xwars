@@ -306,6 +306,222 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin){
             break;
         }
 
+        case XVM_OP_CMOVZ:
+        case XVM_OP_CMOVE: {
+
+            if (!arg1 || !arg2){
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                return E_ERR;
+            }
+
+            if (get_ZF(cpu)){
+                *arg1 = *arg2;
+            }
+            break;
+        }
+        case XVM_OP_CMOVZW:
+        case XVM_OP_CMOVEW: {
+
+            if (!arg1 || !arg2) {
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                return E_ERR;
+            }
+            if (get_ZF(cpu)){
+                *(u16 *) arg1 = *(u16 *) arg2;
+            }
+            break;
+        }
+        case XVM_OP_CMOVZB:
+        case XVM_OP_CMOVEB: {
+
+            if (!arg1 || !arg2) {
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                return E_ERR;
+            }
+            if (get_ZF(cpu)){
+                *(u8 *) arg1 = *(u8 *) arg2;
+            }
+            break;
+        }
+
+        case XVM_OP_CMOVNZ:
+        case XVM_OP_CMOVNE: {
+
+            if (!arg1 || !arg2){
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                return E_ERR;
+            }
+
+            if (!get_ZF(cpu)){
+                *arg1 = *arg2;
+            }
+            break;
+        }
+        case XVM_OP_CMOVNZW:
+        case XVM_OP_CMOVNEW: {
+
+            if (!arg1 || !arg2) {
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                return E_ERR;
+            }
+            if (!get_ZF(cpu)){
+                *(u16 *) arg1 = *(u16 *) arg2;
+            }
+            break;
+        }
+        case XVM_OP_CMOVNZB:
+        case XVM_OP_CMOVNEB: {
+
+            if (!arg1 || !arg2) {
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                return E_ERR;
+            }
+            if (!get_ZF(cpu)){
+                *(u8 *) arg1 = *(u8 *) arg2;
+            }
+            break;
+        }
+
+        case XVM_OP_CMOVA: {
+
+            if (!arg1 || !arg2){
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                return E_ERR;
+            }
+
+            if (!get_ZF(cpu) && !get_CF(cpu)){
+                *arg1 = *arg2;
+            }
+            break;
+        }
+        case XVM_OP_CMOVAW: {
+
+            if (!arg1 || !arg2) {
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                return E_ERR;
+            }
+            if (!get_ZF(cpu) && !get_CF(cpu)){
+                *(u16 *) arg1 = *(u16 *) arg2;
+            }
+            break;
+        }
+        case XVM_OP_CMOVAB: {
+
+            if (!arg1 || !arg2) {
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                return E_ERR;
+            }
+            if (!get_ZF(cpu) && !get_CF(cpu)){
+                *(u8 *) arg1 = *(u8 *) arg2;
+            }
+            break;
+        }
+
+        case XVM_OP_CMOVAE: {
+
+            if (!arg1 || !arg2){
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                return E_ERR;
+            }
+
+            if (!get_CF(cpu)){
+                *arg1 = *arg2;
+            }
+            break;
+        }
+        case XVM_OP_CMOVAEW: {
+
+            if (!arg1 || !arg2) {
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                return E_ERR;
+            }
+            if (!get_CF(cpu)){
+                *(u16 *) arg1 = *(u16 *) arg2;
+            }
+            break;
+        }
+        case XVM_OP_CMOVAEB: {
+
+            if (!arg1 || !arg2) {
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                return E_ERR;
+            }
+            if (!get_CF(cpu)){
+                *(u8 *) arg1 = *(u8 *) arg2;
+            }
+            break;
+        }
+
+        case XVM_OP_CMOVB: {
+
+            if (!arg1 || !arg2){
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                return E_ERR;
+            }
+
+            if (!get_ZF(cpu) && get_CF(cpu)){
+                *arg1 = *arg2;
+            }
+            break;
+        }
+        case XVM_OP_CMOVBW: {
+
+            if (!arg1 || !arg2) {
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                return E_ERR;
+            }
+            if (!get_ZF(cpu) && get_CF(cpu)){
+                *(u16 *) arg1 = *(u16 *) arg2;
+            }
+            break;
+        }
+        case XVM_OP_CMOVBB: {
+
+            if (!arg1 || !arg2) {
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                return E_ERR;
+            }
+            if (!get_ZF(cpu) && get_CF(cpu)){
+                *(u8 *) arg1 = *(u8 *) arg2;
+            }
+            break;
+        }
+
+        case XVM_OP_CMOVBE: {
+
+            if (!arg1 || !arg2){
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                return E_ERR;
+            }
+
+            if (get_ZF(cpu) || get_CF(cpu)){
+                *arg1 = *arg2;
+            }
+            break;
+        }
+        case XVM_OP_CMOVBEW: {
+
+            if (!arg1 || !arg2) {
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                return E_ERR;
+            }
+            if (get_ZF(cpu) || get_CF(cpu)){
+                *(u16 *) arg1 = *(u16 *) arg2;
+            }
+            break;
+        }
+        case XVM_OP_CMOVBEB: {
+
+            if (!arg1 || !arg2) {
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                return E_ERR;
+            }
+            if (get_ZF(cpu) || get_CF(cpu)){
+                *(u8 *) arg1 = *(u8 *) arg2;
+            }
+            break;
+        }
+
         case XVM_OP_LEA: {
             u32 temp = 0;
             size = load_effective_address(cpu, bin, mode, &arg1, &temp);
@@ -854,6 +1070,29 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin){
             break;
         }
 
+        case XVM_OP_PUSHA: {
+
+            if (!arg1){
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                return E_ERR;
+            }
+
+            cpu->regs.sp -= sizeof(u32); write_dword(bin->x_section, cpu->regs.sp, cpu->regs.r0);
+            cpu->regs.sp -= sizeof(u32); write_dword(bin->x_section, cpu->regs.sp, cpu->regs.r1);
+            cpu->regs.sp -= sizeof(u32); write_dword(bin->x_section, cpu->regs.sp, cpu->regs.r2);
+            cpu->regs.sp -= sizeof(u32); write_dword(bin->x_section, cpu->regs.sp, cpu->regs.r3);
+            cpu->regs.sp -= sizeof(u32); write_dword(bin->x_section, cpu->regs.sp, cpu->regs.r4);
+            cpu->regs.sp -= sizeof(u32); write_dword(bin->x_section, cpu->regs.sp, cpu->regs.r5);
+            cpu->regs.sp -= sizeof(u32); write_dword(bin->x_section, cpu->regs.sp, cpu->regs.r6);
+            cpu->regs.sp -= sizeof(u32); write_dword(bin->x_section, cpu->regs.sp, cpu->regs.r7);
+            cpu->regs.sp -= sizeof(u32); write_dword(bin->x_section, cpu->regs.sp, cpu->regs.r8);
+            cpu->regs.sp -= sizeof(u32); write_dword(bin->x_section, cpu->regs.sp, cpu->regs.r9);
+            cpu->regs.sp -= sizeof(u32); write_dword(bin->x_section, cpu->regs.sp, cpu->regs.ra);
+            cpu->regs.sp -= sizeof(u32); write_dword(bin->x_section, cpu->regs.sp, cpu->regs.rb);
+            cpu->regs.sp -= sizeof(u32); write_dword(bin->x_section, cpu->regs.sp, cpu->regs.rc);
+            break;
+        }
+
         // pop
         case XVM_OP_POP: {
 
@@ -864,6 +1103,29 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin){
 
             *arg1 = read_dword(bin->x_section, cpu->regs.sp, PERM_WRITE);
             cpu->regs.sp += sizeof(u32);
+            break;
+        }
+
+        case XVM_OP_POPA: {
+
+            if (!arg1){
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                return E_ERR;
+            }
+
+            cpu->regs.r0 = read_dword(bin->x_section, cpu->regs.sp, PERM_WRITE); cpu->regs.sp += sizeof(u32);
+            cpu->regs.r1 = read_dword(bin->x_section, cpu->regs.sp, PERM_WRITE); cpu->regs.sp += sizeof(u32);
+            cpu->regs.r2 = read_dword(bin->x_section, cpu->regs.sp, PERM_WRITE); cpu->regs.sp += sizeof(u32);
+            cpu->regs.r3 = read_dword(bin->x_section, cpu->regs.sp, PERM_WRITE); cpu->regs.sp += sizeof(u32);
+            cpu->regs.r4 = read_dword(bin->x_section, cpu->regs.sp, PERM_WRITE); cpu->regs.sp += sizeof(u32);
+            cpu->regs.r5 = read_dword(bin->x_section, cpu->regs.sp, PERM_WRITE); cpu->regs.sp += sizeof(u32);
+            cpu->regs.r6 = read_dword(bin->x_section, cpu->regs.sp, PERM_WRITE); cpu->regs.sp += sizeof(u32);
+            cpu->regs.r7 = read_dword(bin->x_section, cpu->regs.sp, PERM_WRITE); cpu->regs.sp += sizeof(u32);
+            cpu->regs.r8 = read_dword(bin->x_section, cpu->regs.sp, PERM_WRITE); cpu->regs.sp += sizeof(u32);
+            cpu->regs.r9 = read_dword(bin->x_section, cpu->regs.sp, PERM_WRITE); cpu->regs.sp += sizeof(u32);
+            cpu->regs.ra = read_dword(bin->x_section, cpu->regs.sp, PERM_WRITE); cpu->regs.sp += sizeof(u32);
+            cpu->regs.rb = read_dword(bin->x_section, cpu->regs.sp, PERM_WRITE); cpu->regs.sp += sizeof(u32);
+            cpu->regs.rc = read_dword(bin->x_section, cpu->regs.sp, PERM_WRITE); cpu->regs.sp += sizeof(u32);
             break;
         }
 

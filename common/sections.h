@@ -46,6 +46,7 @@ u32                 append_byte(section *sec, section_entry *sec_entry, u8 byte)
 u32                 append_word(section *sec, section_entry *sec_entry, u16 word);
 u32                 append_dword(section *sec, section_entry *sec_entry, u32 dword);
 u32                 memcpy_to_buffer(section *sec, section_entry *sec_entry, char *buffer, u32 size);
+u32                 memcpy_from_buffer(section *sec, char *buffer, section_entry *sec_entry, u32 size);
 u32                 show_section_entry_info(section_entry* sec_entry);
 u32                 fini_section_entry(section_entry* sec_entry);
 section*            init_section();
@@ -63,6 +64,8 @@ u32                 write_buffer_to_section_by_addr(section* sec, u32 addr, u32 
 u32                 write_buffer_to_section_by_name(section* sec, char* name, u32 buffer, u32 write_as_flag);
 u32                 memcpy_buffer_to_section_by_name(section* sec, char* name, char* buffer, u32 size);
 u32                 memcpy_buffer_to_section_by_addr(section* sec, u32 addr, char* buffer, u32 size);
+u32                 memcpy_buffer_from_section_by_addr(section* sec, char* buffer, u32 addr, u32 size);
+u32                 memcpy_buffer_from_section_by_name(section* sec,  char* buffer, char* name, u32 size);
 section_entry*      add_section(section* sec, char* name, u32 size, u32 addr, u32 flag);
 u32                 remove_section_by_addr(section* section, u32 addr);
 u32                 remove_section_by_name(section* section, char* name);

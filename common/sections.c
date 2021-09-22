@@ -129,7 +129,7 @@ u32 append_dword(section *sec, section_entry *sec_entry, u32 dword) {
         raise_signal(sec->errors, XSIGSEGV, sec_entry->v_addr + sec_entry->m_ofst, 0);
         // segfault(XSIGSEGV, sec_entry, sec_entry->v_addr + sec_entry->m_ofst);
     }
-
+    
     *((u32*)&sec_entry->m_buff[sec_entry->m_ofst]) = dword;
     sec_entry->m_ofst += sizeof(u32);
     return sizeof(u32);
@@ -140,6 +140,17 @@ u32 memcpy_to_buffer(section *sec, section_entry *sec_entry, char *buffer, u32 s
     u32 b_written = 0;
     for (u32 i = 0; i < size; i++){
         b_written += append_byte(sec, sec_entry, buffer[i]);
+    }
+
+    return b_written;
+}
+
+u32 memcpy_from_buffer(section *sec, char *buffer, section_entry *sec_entry, u32 size) {
+
+    u32 b_written = 0;
+    for (u32 i = 0; i < size; i++){
+        buffer[i] = (char) read_byte(sec, sec_entry->v_addr, PERM_READ);
+        b_written++;
     }
 
     return b_written;
@@ -592,6 +603,46 @@ u32 memcpy_buffer_to_section_by_addr(section* sec, u32 addr, char* buffer, u32 s
         temp = temp->next;
     }
     return memcpy_to_buffer(NULL, temp, buffer, size);
+}
+
+u32 memcpy_buffer_from_section_by_name(section* sec, char* buffer, char* name,  u32 size){
+
+    if (sec == NULL) {
+        return E_ERR;
+    }
+
+    if (sec->sections == NULL){
+        return E_ERR;
+    }
+
+    section_entry* temp = sec->sections;
+    while (temp != NULL){
+        if (!strncmp(temp->m_name, name, strlen(name))){
+            break;
+        }
+        temp = temp->next;
+    }
+    return memcpy_from_buffer(NULL, buffer, temp, size);
+}
+
+u32 memcpy_buffer_from_section_by_addr(section* sec, char* buffer, u32 addr, u32 size){
+
+    if (sec == NULL) {
+        return E_ERR;
+    }
+
+    if (sec->sections == NULL){
+        return E_ERR;
+    }
+
+    section_entry* temp = sec->sections;
+    while (temp != NULL){
+        if (addr >= temp->v_addr && addr < temp->v_addr + temp->v_size){
+            break;
+        }
+        temp = temp->next;
+    }
+    return memcpy_from_buffer(NULL, buffer, temp, size);
 }
 
 u32 reset_address_of_sections(section* sec){

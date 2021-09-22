@@ -9,6 +9,30 @@ const char* mnemonics[] = {
         [XVM_OP_MOV]  = "mov",
         [XVM_OP_MOVB] = "movb",
         [XVM_OP_MOVW] = "movw",
+        [XVM_OP_CMOVE] = "cmove",
+        [XVM_OP_CMOVEW] = "cmovew",
+        [XVM_OP_CMOVEB] = "cmoveb",
+        [XVM_OP_CMOVZ] = "cmovz",
+        [XVM_OP_CMOVZW] = "cmovzw",
+        [XVM_OP_CMOVZB] = "cmovzb",
+        [XVM_OP_CMOVNE] = "cmovne",
+        [XVM_OP_CMOVNEW] = "cmovnew",
+        [XVM_OP_CMOVNEB] = "cmovneb",
+        [XVM_OP_CMOVNZ] = "cmovnz",
+        [XVM_OP_CMOVNZW] = "cmovnzw",
+        [XVM_OP_CMOVNZB] = "cmovnzb",
+        [XVM_OP_CMOVA] = "cmova",
+        [XVM_OP_CMOVAW] = "cmovaw",
+        [XVM_OP_CMOVAB] = "cmovab",
+        [XVM_OP_CMOVAE] = "cmovae",
+        [XVM_OP_CMOVAEW] = "cmovaew",
+        [XVM_OP_CMOVAEB] = "cmovaeb",
+        [XVM_OP_CMOVB] = "cmovb",
+        [XVM_OP_CMOVBW] = "cmovbw",
+        [XVM_OP_CMOVBB] = "cmovbb",
+        [XVM_OP_CMOVBE] = "cmovbe",
+        [XVM_OP_CMOVBEW] = "cmovbew",
+        [XVM_OP_CMOVBEB] = "cmovbeb",
         [XVM_OP_LEA]  = "lea",
         [XVM_OP_NOP]  = "nop",
         [XVM_OP_HLT]  = "hlt",
@@ -42,7 +66,9 @@ const char* mnemonics[] = {
         [XVM_OP_NOTB]  = "notb",
         [XVM_OP_NOTW]  = "notw",
         [XVM_OP_PUSH] = "push",
+        [XVM_OP_PUSHA] = "pusha",
         [XVM_OP_POP]  = "pop",
+        [XVM_OP_POPA] = "popa",
         [XVM_OP_XCHG] = "xchg",
         [XVM_OP_INC]  = "inc",
         [XVM_OP_DEC]  = "dec",
@@ -85,177 +111,6 @@ const char* registers[XVM_NREGS] = {
         [reg_sp] = "$sp",
 };
 
-
-void xasm_disassemble(xvm_bin* bin, section_entry* sec, u32 ninstr){
-
-    if (sec->m_name == NULL){
-        printf("\n[" KGRN "+" KNRM "] Disassembling <Unnamed Section>\n");
-    } else {
-        printf("\n[" KGRN "+" KNRM "] Disassembling %s\n", sec->m_name);
-    }
-    printf("[" KGRN "+" KNRM "] Raw Size : %d BYTES\n", sec->m_ofst);
-    printf("[" KGRN "+" KNRM "] Address  : 0x%X\n", sec->v_addr);
-    char* bytecode = sec->m_buff;    // bytecode array
-    u32 pc = 0;                      // pc
-
-    u8 opcd = 0;
-    u8 mode = 0;
-    u8 mode1 = 0;
-    u8 mode2 = 0;
-    u32 imm = 0;
-    char *temp = NULL;
-
-    if (ninstr == 0){
-        ninstr = -1;
-    }
-    for (u32 i = 0; (pc < sec->m_ofst) && i < ninstr; i++){
-
-        imm = sec->v_addr + pc;
-        temp = resolve_symbol_name(bin->x_symtab, imm);
-
-        if (temp != NULL){
-            printf(KBLU "\n0x%.8X" KNRM " <" KGRN "%s" KNRM ">:\n", imm, temp);
-        }
-
-        printf(KBLU "0x%-14.8X" KNRM, imm);
-
-        opcd = bytecode[pc++];
-        mode = bytecode[pc++];
-
-        mode1 = (mode >> 0x0) & 0xf;
-        mode2 = (mode >> 0x4) & 0xf;
-
-        printf(KCYN "%-10.7s" KNRM, mnemonics[opcd]);
-
-        /* ARG1 */
-        switch(mode1){
-            case ARG_NARG: break;
-            case ARG_REGD: {
-                printf("%s", registers[bytecode[pc++]]);
-                break;
-            }
-            case ARG_IMMD: {
-                imm = *(u32 *)&bytecode[pc];
-                temp = resolve_symbol_name(bin->x_symtab, imm);
-
-                if (temp == NULL){
-                    if (((signed int) imm) < 0){
-                        printf(KMAG "#0x%x" KNRM, -1 * imm);
-                    } else {
-                        printf(KMAG "#0x%x" KNRM, (signed  int)imm);
-                    }
-                } else {
-                    printf(KGRN "%s" KNRM, temp);
-                }
-
-                pc += sizeof(u32);
-                break;
-            }
-            default:{
-                if (mode1 & ARG_PTRD){
-                    printf("[");
-
-                    if (mode1 & ARG_REGD){
-                        printf("%s", registers[bytecode[pc++]]);
-                    }
-
-                    if ((mode1 & ARG_REGD) && (mode1 & ARG_IMMD)){
-                        imm = *(u32 *)&bytecode[pc];
-                        if (((signed int) imm) < 0 && imm != 0){
-                            printf(" - ");
-                        } else {
-                            printf(" + ");
-                        }
-                    }
-
-                    if (mode1 & ARG_IMMD){
-                        temp = resolve_symbol_name(bin->x_symtab, imm);
-
-                        if (temp == NULL){
-                            if (((signed int) imm) < 0){
-                                printf(KMAG "#0x%x" KNRM, -1 * imm);
-                            } else {
-                                printf(KMAG "#0x%x" KNRM, (signed  int)imm);
-                            }
-
-                        } else {
-                            printf(KGRN "%s" KNRM, temp);
-                        }
-                        pc += sizeof(u32);
-                    }
-                    printf("]");
-                }
-            }
-        }
-
-        if (mode2 != ARG_NARG){
-            printf(", ");
-        }
-
-        /* ARG2 */
-        switch(mode2){
-            case ARG_NARG: break;
-            case ARG_REGD: {
-                printf("%s", registers[bytecode[pc++]]);
-                break;
-            }
-            case ARG_IMMD: {
-                imm = *(u32 *)&bytecode[pc];
-                temp = resolve_symbol_name(bin->x_symtab, imm);
-
-                if (temp == NULL){
-                    if (((signed int) imm) < 0){
-                        printf(KMAG "#0x%x" KNRM, -1 * imm);
-                    } else {
-                        printf(KMAG "#0x%x" KNRM, (signed  int)imm);
-                    }
-                } else {
-                    printf(KGRN "%s" KNRM, temp);
-                }
-                pc += sizeof(u32);
-                break;
-            }
-            default:{
-                if (mode2 & ARG_PTRD){
-                    printf("[");
-
-                    if (mode2 & ARG_REGD){
-                        printf("%s", registers[bytecode[pc++]]);
-                    }
-
-                    if ((mode2 & ARG_REGD) && (mode2 & ARG_IMMD)){
-                        imm = *(u32 *)&bytecode[pc];
-                        if (((signed int) imm) < 0 && imm != 0){
-                            printf(" - ");
-                        } else {
-                            printf(" + ");
-                        }
-                    }
-
-                    if (mode2 & ARG_IMMD){
-                        imm = *(u32 *)&bytecode[pc];
-                        temp = resolve_symbol_name(bin->x_symtab, imm);
-
-                        if (temp == NULL){
-                            if (((signed int) imm) < 0 ){
-                                printf(KMAG "#0x%x" KNRM, -1 * imm);
-                            } else {
-                                printf(KMAG "#0x%x" KNRM, (signed  int)imm);
-                            }
-
-                        } else {
-                            printf(KGRN "%s" KNRM, temp);
-                        }
-                        pc += sizeof(u32);
-                    }
-                    printf("]");
-                }
-            }
-        }
-        puts(KNRM);
-    }
-}
-
 u32 xasm_disassemble_bytes(FILE *fp, xvm_bin * bin, const char * bytecode, u32 len, u32 address, u32 ninstr){
     if (bytecode == NULL || len == 0){
         return E_ERR;
@@ -272,12 +127,26 @@ u32 xasm_disassemble_bytes(FILE *fp, xvm_bin * bin, const char * bytecode, u32 l
     u8 mode2 = 0;
     u8 opcode = 0;
     u8 reg = 0;
+    u8 rel_jmp = 0;
 
     char * temp = NULL;
 
     for (u32 i = 0; (pc < len) && i < ninstr; i++){
         fprintf(fp, "0x%-14.8X", address+pc);
         opcode = bytecode[pc++];
+
+
+        if ( (opcode == XVM_OP_RJMP) ||
+             (opcode == XVM_OP_RJNZ) ||
+             (opcode == XVM_OP_RJAE) ||
+             (opcode == XVM_OP_RJBE) ||
+             (opcode == XVM_OP_RJA)  ||
+             (opcode == XVM_OP_RJB)  ||
+             (opcode == XVM_OP_RJZ)
+        ){
+            rel_jmp = 1;
+        }
+
         mode = bytecode[pc++];
         if (opcode >= sizeof(mnemonics)/sizeof(mnemonics[0])){
             fprintf(fp, "%-10.7s\n", "(bad)");
@@ -312,6 +181,11 @@ u32 xasm_disassemble_bytes(FILE *fp, xvm_bin * bin, const char * bytecode, u32 l
             }
             case ARG_IMMD: {
                 imm = *(u32 *)&bytecode[pc];
+
+                if (rel_jmp){
+                    imm = address + pc - 2 + (signed int) imm;
+                }
+
                 if (bin != NULL) {
                     temp = resolve_symbol_name(bin->x_symtab, imm);
                 }
