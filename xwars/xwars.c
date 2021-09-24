@@ -92,12 +92,12 @@ int main(int argc, char *argv[]){
     // push address of botcode and run init function
     bot1->cpu->regs.sp -= sizeof(u32);
     write_dword(bot1->bin->x_section, bot1->cpu->regs.sp, bot1->bot_addr);
-    bot1->cpu->regs.pc = text->v_addr + bot1->offset;
+    bot1->cpu->regs.pc = bot1->init_addr;
 
     // push address of botcode and run init function
     bot2->cpu->regs.sp -= sizeof(u32);
     write_dword(bot1->bin->x_section, bot1->cpu->regs.sp, bot2->bot_addr);
-    bot2->cpu->regs.pc = text->v_addr + bot2->offset;
+    bot2->cpu->regs.pc = bot2->init_addr;
 
     u8 winner = 0;
     u32 counter = 0;
