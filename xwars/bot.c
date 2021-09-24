@@ -47,6 +47,9 @@ u32 copy_bots(xbot* bot1, xbot* bot2, section_entry* text){
         bot2->offset = random() & 0xfff;
     }
 
+    bot1->bot_addr = text->v_addr + bot1->offset;
+    bot2->bot_addr = text->v_addr + bot2->offset;
+
     printf("text : 0x%x\n", text->v_addr);
     printf("bot1 offset: 0x%x\n", bot1->offset);
     printf("bot2 offset: 0x%x\n", bot2->offset);

@@ -1072,11 +1072,6 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin){
 
         case XVM_OP_PUSHA: {
 
-            if (!arg1){
-                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
-                return E_ERR;
-            }
-
             cpu->regs.sp -= sizeof(u32); write_dword(bin->x_section, cpu->regs.sp, cpu->regs.r0);
             cpu->regs.sp -= sizeof(u32); write_dword(bin->x_section, cpu->regs.sp, cpu->regs.r1);
             cpu->regs.sp -= sizeof(u32); write_dword(bin->x_section, cpu->regs.sp, cpu->regs.r2);
@@ -1095,11 +1090,6 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin){
 
         // pop
         case XVM_OP_POP: {
-
-            if (!arg1){
-                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
-                return E_ERR;
-            }
 
             *arg1 = read_dword(bin->x_section, cpu->regs.sp, PERM_WRITE);
             cpu->regs.sp += sizeof(u32);
