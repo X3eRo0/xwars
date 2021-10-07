@@ -3,14 +3,16 @@
 
 #include "Common.hpp"
 #include "XBot.hpp"
+#include "Utils/Singleton.hpp"
 
-
-struct xwar{
-    xwar(cstring bot_path1, cstring bot_path2);
+struct xwar : public Singleton<xwar>{
+    xwar(const std::vector<cstring>& bot_paths);
     ~xwar();
 
+    void allocate_bots(const std::vector<cstring>& bot_paths);
+
     // our bots
-    xbot *bot1, *bot2;
+    std::vector<xbot*> bots;
     // this is the actual memory region that will contain our bots
     section_entry *text_section;
     // temporary section
