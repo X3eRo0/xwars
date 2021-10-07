@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <stdarg.h>
 #include <ctype.h>
+#include <string.h>
 #include "../common/symbols.h"
 #include "../common/sections.h"
 #include "../common/loader.h"
@@ -100,8 +101,8 @@ typedef struct xasm_t {
 
     FILE*       ifile;     // input file
     FILE*       ofile;     // output file
-    symtab*     symtab;    // symbol table
-    symtab*     define;    // symbol table for #define directive
+    struct symtab_t*     symtab;    // symbol table
+    struct symtab_t*     define;    // symbol table for #define directive
     section*    sections;  // sections
     exe_header* header;
 } xasm;
@@ -135,6 +136,6 @@ u32     xasm_close_ifile(xasm* xasm);
 u32     xasm_close_ofile(xasm* xasm);
 u32     fini_xasm(xasm* xasm);
 u32     get_total_size(xasm* xasm);
-char*   strchrnul(const char*, int c);
+// char*   strchrnul(const char*, int c);
 u32     xasm_error(u32 error_id, u32 line, char* func, char* msg, ...);
 #endif //XVM_XASM_H

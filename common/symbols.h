@@ -38,12 +38,14 @@ typedef struct sym_entry_t {
 
 } sym_entry;
 
-typedef struct symtab_t {
+struct symtab_t {
 
     sym_entry*	symbols; // head of symbol table
     u32         n_symbols;
 
-} symtab;
+};
+
+typedef struct symtab_t symtab;
 
 
 /* ****************************** SYM_ENTRY ***************************** */

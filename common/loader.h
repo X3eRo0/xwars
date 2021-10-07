@@ -1,6 +1,10 @@
 //
 // Created by X3eRo0 on 2/21/2021.
 //
+// modified @brightprogrammer 7/10/2021
+//      modifications : changed char* to const char* in some function parameter types
+//      reason : ISO C++11 forbids using "char*" as string, "const char*" bust be used instead
+//      description : check "diff" for more information
 
 #ifndef XVM_LOADER_H
 #define XVM_LOADER_H
@@ -35,8 +39,8 @@ u32         xvm_bin_set_ofile(xvm_bin* bin, FILE* ofile);
 u32         xvm_bin_set_ifile(xvm_bin* bin, FILE* ifile);
 u32         xvm_bin_read_exe_header(xvm_bin* bin);
 u32         xvm_bin_show_exe_info(xvm_bin* bin);
-u32         xvm_bin_load_file(xvm_bin* bin, char* filename);
-u32         xvm_bin_open_file(xvm_bin* bin, char* filename);
+u32         xvm_bin_load_file(xvm_bin* bin, const char* filename);
+u32         xvm_bin_open_file(xvm_bin* bin, const char* filename);
 u32         xvm_bin_close_file(xvm_bin* bin);
 u32         fini_xvm_bin(xvm_bin* bin);
 exe_header* init_exe_header();

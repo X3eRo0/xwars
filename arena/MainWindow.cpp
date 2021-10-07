@@ -21,13 +21,13 @@ MainWindow::MainWindow(wxWindow* parent, wxWindowID id, const wxString& title, c
     rightPanel = new wxPanel(parentPanel);
 
     // add these panels to main sizer
-    mainHSizer->Add(leftPanel, 1, wxEXPAND | wxALL, 4);
-    mainHSizer->Add(midPanel, 2, wxEXPAND | wxALL, 4);
-    mainHSizer->Add(rightPanel, 1, wxEXPAND | wxALL, 4);
+    mainHSizer->Add(leftPanel, 2, wxEXPAND | wxALL, 4);
+    mainHSizer->Add(midPanel, 1, wxEXPAND | wxALL, 4);
+    mainHSizer->Add(rightPanel, 2, wxEXPAND | wxALL, 4);
 
     // set colors for panels to tell them apart
-    leftPanel->SetBackgroundColour(wxColour(64, 32, 0));
+    leftPanel->SetBackgroundColour(*wxBLACK);
     midPanel->SetBackgroundColour(wxColour(64, 64, 64));
-    rightPanel->SetBackgroundColour(wxColour(0, 50, 64));
+    rightPanel->SetBackgroundColour(*wxBLACK);
    
 }

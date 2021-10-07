@@ -1,6 +1,10 @@
 //
 // Created by X3eRo0 on 2/21/2021.
 //
+// modified @brightprogrammer 7/10/2021
+//      modifications : changed char* to const char* in some function parameter types
+//      reason : ISO C++11 forbids using "char*" as string, "const char*" bust be used instead
+//      description : check "diff" for more information
 
 #include "loader.h"
 
@@ -108,7 +112,7 @@ xvm_bin* init_xvm_bin(){
 }
 
 
-u32 xvm_bin_load_file(xvm_bin* bin, char* filename){
+u32 xvm_bin_load_file(xvm_bin* bin, const char* filename){
 
     if (!bin){
         return E_ERR;
@@ -202,7 +206,7 @@ u32 xvm_bin_load_file(xvm_bin* bin, char* filename){
     return E_OK;
 }
 
-u32 xvm_bin_open_file(xvm_bin* bin, char* filename){
+u32 xvm_bin_open_file(xvm_bin* bin, const char* filename){
 
     if (!bin){
         return E_ERR;

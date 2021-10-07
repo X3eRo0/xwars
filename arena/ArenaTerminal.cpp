@@ -1,5 +1,7 @@
 #include "ArenaTerminal.hpp"
+#include <algorithm>
 #include <wx/event.h>
+#include <wx/filedlg.h>
 #include <wx/gdicmn.h>
 #include <wx/sizer.h>
 #include <wx/stringimpl.h>
@@ -59,6 +61,42 @@ ArenaTerminal::ArenaTerminal(wxWindow* parent) : wxPanel(parent){
     m_mainSizer->Add(m_terminal, 14, wxEXPAND | wxALL, 0);
 }
 
+// gets the actual bot name from reversed path
+wxString GetBotNameFromFilePath(wxString filepath){
+    wxString botname = "";
+    size_t i = filepath.size() - 1;
+
+    // read till '/'
+    while((filepath[i] != '/') && i > 0){
+        botname += filepath[i];
+        i--;
+    }
+
+    // reverse botname
+    std::reverse(botname.begin(), botname.end());
+
+    return botname;
+}
+
+// when load button is clicked
+// we will open a file selection dialog and read that file into memory
 void ArenaTerminal::OnLoad(wxCommandEvent& WXUNUSED(event)){
-    m_terminal->WriteText("\n[+] Hn Hn Load kr rha hu na, pgla kyu rha h!?");
+    // create a new file dialog
+    wxFileDialog *fd = new wxFileDialog(this, "XVM XWars - Arena - Load New Bot(s)", ".", wxEmptyString, "Assembly Files (*.asm)|*.asm", wxFD_MULTIPLE | wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    
+    // check if file was selected or not
+    if(fd->ShowModal() == wxID_CANCEL){
+        return;
+    }
+
+    wxArrayString filePaths;
+    fd->GetPaths(filePaths);
+
+    if(filePaths.size() == 0){
+        wxLogError("No files were selected");
+    }else{
+        for(auto& filepath : filePaths){
+            Print("\nLoaded Bot [ %s ]", GetBotNameFromFilePath(filepath));
+        }
+    }
 }

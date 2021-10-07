@@ -1,6 +1,11 @@
 //
 // Created by X3eRo0 on 2/28/2021.
 //
+// modified @brightprogrammer on 10/7/2021
+//     modification : in function "find_section_entry_by_name" changed parameter type "char*" to "const char*"
+//                    same thing done in "set_section entry" function and many more functions
+//                    CHECK "diff" to see changes. Build Tested! Works!
+//     reason : ISO C++11 forbids using char* as string
 
 #include "sections.h"
 
@@ -135,7 +140,7 @@ u32 append_dword(section *sec, section_entry *sec_entry, u32 dword) {
     return sizeof(u32);
 }
 
-u32 memcpy_to_buffer(section *sec, section_entry *sec_entry, char *buffer, u32 size) {
+u32 memcpy_to_buffer(section *sec, section_entry *sec_entry, const char *buffer, u32 size) {
 
     u32 b_written = 0;
     for (u32 i = 0; i < size; i++){
@@ -206,7 +211,7 @@ u32 write_dword(section *sec, u32 addr, u32 dword){
     return E_ERR;
 }
 
-u32 set_section_entry(section_entry* sec_entry, char* name, u32 size, u32 addr, u32 flag) {
+u32 set_section_entry(section_entry* sec_entry, const char* name, u32 size, u32 addr, u32 flag) {
     // set section entry members
 
     if ((size % 0x1000) != 0) {
@@ -307,7 +312,7 @@ section* init_section(){
     return sec;
 }
 
-section_entry* add_section(section* sec, char* name, u32 size, u32 addr, u32 flag){
+section_entry* add_section(section* sec, const char* name, u32 size, u32 addr, u32 flag){
     // add new section to section list
 
     size = (size % 0x1000) == 0 ? size : (size/0x1000 + 1) * 0x1000;
@@ -382,7 +387,7 @@ section_entry* add_section(section* sec, char* name, u32 size, u32 addr, u32 fla
     return prev->next;
 }
 
-u32 remove_section_by_name(section* section, char *name){
+u32 remove_section_by_name(section* section, const char *name){
     section_entry * temp  = find_section_entry_by_name(section, name);
     section_entry * prev  = NULL;
     section_entry * text  = find_section_entry_by_name(section, ".text");
@@ -442,7 +447,7 @@ u32 remove_section_by_addr(section* section, u32 addr){
 }
 
 
-section_entry* find_section_entry_by_name(section* sec, char* name){
+section_entry* find_section_entry_by_name(section* sec, const char* name){
 
     section_entry* temp = sec->sections;
     while (temp != NULL){
@@ -504,7 +509,7 @@ u32 write_raw_section_to_file(section* sec, FILE* file){
     return E_OK;
 }
 
-u32 write_buffer_to_section_by_name(section* sec, char* name, u32 buffer, u32 write_as_flag){
+u32 write_buffer_to_section_by_name(section* sec, const char* name, u32 buffer, u32 write_as_flag){
 
     if (sec == NULL) {
         return E_ERR;
@@ -565,7 +570,7 @@ u32 write_buffer_to_section_by_addr(section* sec, u32 addr, u32 buffer, u32 writ
     }
 }
 
-u32 memcpy_buffer_to_section_by_name(section* sec, char* name, char* buffer, u32 size){
+u32 memcpy_buffer_to_section_by_name(section* sec, const char* name, const char* buffer, u32 size){
 
     if (sec == NULL) {
         return E_ERR;
@@ -585,7 +590,7 @@ u32 memcpy_buffer_to_section_by_name(section* sec, char* name, char* buffer, u32
     return memcpy_to_buffer(NULL, temp, buffer, size);
 }
 
-u32 memcpy_buffer_to_section_by_addr(section* sec, u32 addr, char* buffer, u32 size){
+u32 memcpy_buffer_to_section_by_addr(section* sec, u32 addr, const char* buffer, u32 size){
 
     if (sec == NULL) {
         return E_ERR;
@@ -605,7 +610,7 @@ u32 memcpy_buffer_to_section_by_addr(section* sec, u32 addr, char* buffer, u32 s
     return memcpy_to_buffer(NULL, temp, buffer, size);
 }
 
-u32 memcpy_buffer_from_section_by_name(section* sec, char* buffer, char* name,  u32 size){
+u32 memcpy_buffer_from_section_by_name(section* sec, char* buffer, const char* name,  u32 size){
 
     if (sec == NULL) {
         return E_ERR;

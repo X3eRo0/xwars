@@ -17,7 +17,7 @@ private:
     wxGridSizer *m_memGridSizer = nullptr;
 
     // colour for our item in grid
-    wxColour m_gridElementColour = *wxBLACK;
+    wxColour m_gridElementColour = *wxWHITE;
 
     // our memory grid
     std::array<std::array<wxButton*, NUM_COLS_IN_MEM_GRID>, NUM_ROWS_IN_MEM_GRID> m_memGrid;

@@ -61,6 +61,7 @@ u32 copy_bots(xbot* bot1, xbot* bot2, section_entry* text){
 }
 
 
+// printing formatted message to logfifo2
 u32 xlog(char *message, ...){
     va_list args;
     va_start(args, message);

@@ -12,6 +12,19 @@ class ArenaTerminal : public wxPanel{
 public:
     ArenaTerminal(wxWindow *parent);
 
+    // void Print(cstring str){
+    //     // write with new line
+    //     wxString string(str);
+    //     m_terminal->WriteText("\n" + string);
+    // }
+
+    template<typename fmtstringtype, typename... args>
+    void Print(fmtstringtype fmt, args... _args){
+        wxString str(fmt);
+        str.Printf(fmt, _args...);
+        m_terminal->AppendText(str);
+    }
+
 private:
     void OnLoad(wxCommandEvent& event);
 
@@ -22,7 +35,7 @@ private:
     // cmd terminal will accept terminal commands
     wxTextCtrl *m_cmdTerminal;
     // terminal fg colour decides text color
-    wxColour m_terminalFGColour = *wxBLUE;
+    wxColour m_terminalFGColour = *wxWHITE;
     // terminal bg color
     wxColour m_terminalBGColour = *wxBLACK;
     // will contain control buttons
@@ -32,7 +45,7 @@ private:
     // our control buttons
     wxButton *m_btnLoad, *m_btnStart, *m_btnPlus, *m_btnMinus, *m_btnPause;
     // terminal font
-    wxFont m_terminalFont = wxFont(10, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM);
+    wxFont m_terminalFont = wxFont(8, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM);
 
     DECLARE_EVENT_TABLE();
 };
