@@ -102,14 +102,14 @@ u32 fini_xasm(xasm* xasm){
     return E_OK;
 }
 
-char* strchrnul(const char *s, int c)
-{
-    char *ptr = strchr(s, c);
-    if (!ptr) {
-        ptr = strchr(s, '\0');
-    }
-    return ptr;
-}
+// char* strchrnul(const char *s, int c)
+// {
+//     char *ptr = strchr(s, c);
+//     if (!ptr) {
+//         ptr = strchr(s, '\0');
+//     }
+//     return ptr;
+// }
 
 u32 get_sign(char s){
 

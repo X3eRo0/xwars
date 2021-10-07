@@ -2,6 +2,7 @@
 // Created by X3eRo0 on 2/23/2021.
 //
 
+#define _GNU_SOURCE
 #include "xasm.h"
 
 const char* mnemonics[] = {

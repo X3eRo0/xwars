@@ -6,6 +6,9 @@
 #include <wx/sizer.h>
 #include <wx/stringimpl.h>
 #include <wx/wxcrt.h>
+#include <sys/types.h>
+#include <dirent.h>
+
 
 enum xvmArenaButtonIDs{
     ID_LOAD  = wxID_HIGHEST + 1000,
@@ -33,7 +36,7 @@ ArenaTerminal::ArenaTerminal(wxWindow* parent) : wxPanel(parent){
     m_terminal->SetEditable(false);
 
     // add welcome text
-    m_terminal->AppendText("[+] Welcome To XWars!");
+    m_terminal->AppendText("[+] Welcome To XWars!\n");
 
     // create buttons panel and add to sizer
     m_buttonsPanel = new wxPanel(this);
@@ -82,21 +85,25 @@ wxString GetBotNameFromFilePath(wxString filepath){
 // we will open a file selection dialog and read that file into memory
 void ArenaTerminal::OnLoad(wxCommandEvent& WXUNUSED(event)){
     // create a new file dialog
-    wxFileDialog *fd = new wxFileDialog(this, "XVM XWars - Arena - Load New Bot(s)", ".", wxEmptyString, "Assembly Files (*.asm)|*.asm", wxFD_MULTIPLE | wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    wxDirDialog *fd = new wxDirDialog(this, "XVM XWars - Arena - Choose Bots Folder", wxEmptyString, wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST);
     
     // check if file was selected or not
     if(fd->ShowModal() == wxID_CANCEL){
         return;
     }
 
-    wxArrayString filePaths;
-    fd->GetPaths(filePaths);
-
-    if(filePaths.size() == 0){
-        wxLogError("No files were selected");
-    }else{
-        for(auto& filepath : filePaths){
-            Print("\nLoaded Bot [ %s ]", GetBotNameFromFilePath(filepath));
+    wxString botFolder = fd->GetPath();
+    DIR * botdir = opendir(botFolder.GetData().AsChar());
+    
+    struct dirent *dp = NULL;
+    while (botdir){
+        if ((dp = readdir(botdir)) != NULL){
+            if (!strncmp(strchr(dp->d_name, '.'), ".asm", 4)){
+                Print("[+] Loading %s\n", dp->d_name);
+            }
+        } else {
+            closedir(botdir);
+            break;
         }
     }
 }
