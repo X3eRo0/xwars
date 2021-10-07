@@ -1,0 +1,3 @@
++ [Wed 6th Oct 23:20] @brightprogrammer : added wxWidgets as dependency for building arena
+:---+ Description :
+    :---> Need a working wxWidgets build already present on host to build and run arena

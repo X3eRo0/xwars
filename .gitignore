@@ -5,3 +5,4 @@
 /.idea
 /pygui/__pycache__
 *.swp
+.cache/

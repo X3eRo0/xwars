@@ -1,7 +1,14 @@
 cmake_minimum_required(VERSION 3.16)
-project(xvm C)
+project(xvm C CXX)
 
+# for pure xvm
 set(CMAKE_C_STANDARD 11)
+
+# for arena
+# arena is written in cpp
+set(CMAKE_CXX_STANDARD 17)
+
+# c binaries exec flag setup
 # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -g -O0")
 
 add_executable(xwars
@@ -79,3 +86,6 @@ add_executable(xdis
     common/signals.c
     common/signals.h
 )
+
+# build arena
+add_subdirectory(arena)
