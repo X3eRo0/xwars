@@ -6,6 +6,10 @@
 //      reason : ISO C++11 forbids using "char*" as string, "const char*" bust be used instead
 //      description : check "diff" for more information
 
+#ifdef __cplusplus
+    extern "C" {
+#endif
+
 #include "loader.h"
 
 exe_header* init_exe_header(){
@@ -250,3 +254,7 @@ u32 fini_xvm_bin(xvm_bin* bin) {
     free(bin); bin = NULL;
     return E_OK;
 }
+
+#ifdef __cplusplus
+    }
+#endif

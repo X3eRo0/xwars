@@ -2,6 +2,10 @@
 // Created by X3eRo0 on 5/1/2021.
 //
 
+#ifdef __cplusplus
+    extern "C" {
+#endif
+
 #include "xasm.h"
 #include <unistd.h>
 
@@ -325,3 +329,7 @@ u32 xasm_disassemble_bytes(FILE *fp, xvm_bin * bin, const char * bytecode, u32 l
     }
 
 }
+
+#ifdef __cplusplus
+    }
+#endif

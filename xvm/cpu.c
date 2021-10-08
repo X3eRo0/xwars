@@ -2,6 +2,10 @@
 // Created by X3eRo0 on 4/15/2021.
 //
 
+#ifdef __cplusplus
+    extern "C" {
+#endif
+
 #include "cpu.h"
 
 void reset_reg(xvm_reg * regs){
@@ -122,3 +126,7 @@ void fini_xvm_cpu(xvm_cpu * cpu){
     memset(cpu, 0, sizeof(xvm_cpu));
     free(cpu); cpu = NULL;
 }
+
+#ifdef __cplusplus
+    }
+#endif

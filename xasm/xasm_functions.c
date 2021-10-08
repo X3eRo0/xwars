@@ -2,6 +2,10 @@
 // Created by X3eRo0 on 2/23/2021.
 //
 
+#ifdef __cplusplus
+    extern "C" {
+#endif
+
 #include "xasm.h"
 
 xasm* init_xasm(){
@@ -304,3 +308,7 @@ u32 fini_arg(arg* x_arg){
     free(x_arg); x_arg = NULL;
     return E_OK;
 }
+
+#ifdef __cplusplus
+    }
+#endif

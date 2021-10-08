@@ -2,8 +2,18 @@
 #define XVM_ARENA_XBOT_HPP
 
 #include <time.h>
+
+#ifdef __cplusplus
+    extern "C" {
+#endif
+
 #include "../xvm/cpu.h"
 #include "../xasm/xasm.h"
+
+#ifdef __cplusplus
+    }
+#endif
+
 #include "Common.hpp"
 
 // xbot
@@ -28,11 +38,11 @@ struct xbot{
     section_entry* bot_section;
 };
 
-u32   step(xbot* bot);
-u32   copy_bots(xbot* bot1, xbot* bot2, section_entry* text);
-u32   xlog(char * message, ...);
-u32   wait_for_gui();
-u32   dump_reg(xbot* bot1, xbot* bot2);
-u32   dump_dis(xbot* bot1, xbot* bot2);
+// u32   step(xbot* bot);
+// u32   copy_bots(xbot* bot1, xbot* bot2, section_entry* text);
+// u32   xlog(char * message, ...);
+// u32   wait_for_gui();
+// u32   dump_reg(xbot* bot1, xbot* bot2);
+// u32   dump_dis(xbot* bot1, xbot* bot2);
 
 #endif//XVM_ARENA_XBOT_HPP

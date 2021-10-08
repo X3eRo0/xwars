@@ -3,7 +3,6 @@
 
 #include "Common.hpp"
 #include "XBot.hpp"
-#include "Utils/Singleton.hpp"
 #include <utility>
 
 struct xwar{
@@ -12,7 +11,7 @@ struct xwar{
 
     // this will allocate bots for the first time by loading
     // the assembly file(s) from locations in bot_paths
-    void load_bots(const std::vector<cstring>& bot_paths);
+    void load_bots(const std::vector<cstring>& bot_paths, const std::vector<cstring>& bot_names);
 
     // this will copy bots to text_section
     void copy_bots(xbot *bot1, xbot *bot2);
@@ -30,6 +29,10 @@ struct xwar{
 
     // our bots
     std::vector<xbot*> bots;
+    // paths of all bots
+    std::vector<cstring> botpaths;
+    // names of all bots
+    std::vector<cstring> botnames;
     // this is the actual memory region that will contain our bots
     section_entry *text_section;
 };

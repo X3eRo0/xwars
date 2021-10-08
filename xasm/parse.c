@@ -2,6 +2,10 @@
 // Created by X3eRo0 on 2/23/2021.
 //
 
+#ifdef __cplusplus
+    extern "C" {
+#endif
+
 #define _GNU_SOURCE
 #include "xasm.h"
 
@@ -757,3 +761,8 @@ u32 xasm_assemble(xasm *xasm, section_entry *default_section_entry, FILE **input
 
     return E_OK;
 }
+
+
+#ifdef __cplusplus
+    }
+#endif

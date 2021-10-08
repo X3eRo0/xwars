@@ -38,9 +38,11 @@ xwar::xwar(){
     set_section_entry(text_section, ".text", 0x400, 0x1337000, PERM_READ | PERM_WRITE | PERM_EXEC);
 }
 
-void xwar::load_bots(const std::vector<cstring> &bot_paths){
+void xwar::load_bots(const std::vector<cstring> &bot_paths, const std::vector<cstring>& bot_names){
     // allocate memory space for all bots
     bots.resize(bot_paths.size());
+    botpaths = bot_paths;
+    botnames = bot_names;
     
     // initialize every bot
     for(size_t i = 0; i < bots.size(); i++){
@@ -50,7 +52,10 @@ void xwar::load_bots(const std::vector<cstring> &bot_paths){
 
         // initialize this bot
         bot = new xbot;
-    
+
+        // set bot name
+        bot->botname = botnames[i];
+        
         // add stacks for each bots
         add_section(bot->bin->x_section, "stack", XVM_STACK_SIZE, XVM_DFLT_SP & 0xfffff000, PERM_READ | PERM_WRITE);
     

@@ -12,17 +12,25 @@ class ArenaTerminal : public wxPanel{
 public:
     ArenaTerminal(wxWindow *parent);
 
-    // void Print(cstring str){
-    //     // write with new line
-    //     wxString string(str);
-    //     m_terminal->WriteText("\n" + string);
-    // }
-
+    // write normal text in the terminal
     template<typename fmtstringtype, typename... args>
     void Print(fmtstringtype fmt, args... _args){
-        wxString str(fmt);
+        wxString str;
         str.Printf(fmt, _args...);
         m_terminal->AppendText(str);
+    }
+
+    // write error text into the terminal
+    template<typename fmtstringtype, typename... args>
+    void PrintError(fmtstringtype fmt, args... _args){
+        // set write colour to red
+        m_terminal->SetForegroundColour(*wxRED);
+
+        // write message
+        Print(fmt, _args...);
+
+        // change back to normal
+        m_terminal->SetForegroundColour(m_terminalFGColour);
     }
 
 private:

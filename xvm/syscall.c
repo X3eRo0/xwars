@@ -2,6 +2,10 @@
 // Created by X3eRo0 on 4/18/2021.
 //
 
+#ifdef __cplusplus
+    extern "C" {
+#endif
+
 #include "cpu.h"
 
 // do_syscall($r0, $r1, $r2, $r3)
@@ -192,3 +196,7 @@ u32 do_syscall(xvm_cpu* cpu, xvm_bin* bin){
 
     return cpu->regs.r0;
 }
+
+#ifdef __cplusplus
+    }
+#endif

@@ -7,6 +7,10 @@
 //                    CHECK "diff" to see changes. Build Tested! Works!
 //     reason : ISO C++11 forbids using char* as string
 
+#ifdef __cplusplus
+    extern "C" {
+#endif
+
 #include "sections.h"
 
 section_entry* init_section_entry(){
@@ -678,3 +682,7 @@ u32 fini_section(section* sec){
     free(sec); sec = NULL;
     return E_OK;
 }
+
+#ifdef __cplusplus
+    }
+#endif

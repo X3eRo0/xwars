@@ -2,6 +2,10 @@
 // Created by X3eRo0 on 2/21/2021.
 //
 
+#ifdef __cplusplus
+    extern "C" {
+#endif
+
 #include "symbols.h"
 
 /* ****************************** SYM_ENTRY ***************************** */
@@ -252,3 +256,8 @@ u32 fini_symtab(symtab* x_symtab) {
 }
 
 /* ********************************************************************** */
+
+
+#ifdef __cplusplus
+    }
+#endif

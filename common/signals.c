@@ -2,8 +2,11 @@
 // Created by X3eRo0 on 9/16/2021.
 //
 
+#ifdef __cplusplus
+    extern "C" {
+#endif
+
 #include "signals.h"
-// #include
 
 
 u32 raise_signal(signal_report* err, u32 signal_id, u32 error_addr, u32 error_misc){
@@ -16,3 +19,7 @@ u32 raise_signal(signal_report* err, u32 signal_id, u32 error_addr, u32 error_mi
     }
     return E_OK;
 }
+
+#ifdef __cplusplus
+    }
+#endif

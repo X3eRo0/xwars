@@ -5,6 +5,10 @@
 // TODO: add Left and Right Shift Instructions
 // TODO: add more syscalls
 
+#ifdef __cplusplus
+    extern "C" {
+#endif
+
 #include "cpu.h"
 
 /*static xvm_instr instructions[] = {
@@ -1456,3 +1460,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin){
     }
     return size;
 }
+
+#ifdef __cplusplus
+    }
+#endif

@@ -1,4 +1,5 @@
 #include "ArenaTerminal.hpp"
+#include "XWar.hpp"
 #include <algorithm>
 #include <wx/event.h>
 #include <wx/filedlg.h>
@@ -92,18 +93,34 @@ void ArenaTerminal::OnLoad(wxCommandEvent& WXUNUSED(event)){
         return;
     }
 
+    // get the selected directory path
     wxString botFolder = fd->GetPath();
     DIR * botdir = opendir(botFolder.GetData().AsChar());
     
+    // get file names in the selected folder
+    std::vector<cstring> botpaths, botnames;
     struct dirent *dp = NULL;
     while (botdir){
         if ((dp = readdir(botdir)) != NULL){
             if (!strncmp(strchr(dp->d_name, '.'), ".asm", 4)){
-                Print("[+] Loading %s\n", dp->d_name);
+                Print("[+] Loading [ %s ]\n", dp->d_name);
+
+                botnames.push_back(dp->d_name);
+                botpaths.push_back(botFolder + "/" + dp->d_name);
             }
         } else {
             closedir(botdir);
             break;
         }
+    }
+
+    // create and load bots
+    get_xwar()->load_bots(botpaths, botnames);
+
+    // check and print status
+    const auto& bots = get_xwar()->bots;
+    for(size_t i = 0; i < bots.size(); i++){
+        if(!bots[i]) PrintError("[*] Failed to load Bot [ %s ]\n", botnames[i]);
+        else Print("Loaded Bot [ %s ]", botnames[i]);
     }
 }
