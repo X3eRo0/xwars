@@ -6,6 +6,7 @@
     #include <wx/wx.h>
 #endif//WX_PRECOMP
 
+#include <malloc.h>
 #include <cstdint>
 
 typedef uint8_t  uint8;

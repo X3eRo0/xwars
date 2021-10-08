@@ -9,9 +9,12 @@ struct xwar{
     xwar();
     ~xwar();
 
+    // compile given bots
+    void compile_bots(const std::vector<std::string>& bot_paths);
+
     // this will allocate bots for the first time by loading
     // the assembly file(s) from locations in bot_paths
-    void load_bots(const std::vector<cstring>& bot_paths, const std::vector<cstring>& bot_names);
+    void load_bots(const std::vector<std::string>& bot_paths, const std::vector<std::string>& bot_names);
 
     // this will copy bots to text_section
     void copy_bots(xbot *bot1, xbot *bot2);
@@ -30,9 +33,9 @@ struct xwar{
     // our bots
     std::vector<xbot*> bots;
     // paths of all bots
-    std::vector<cstring> botpaths;
+    std::vector<std::string> botpaths;
     // names of all bots
-    std::vector<cstring> botnames;
+    std::vector<std::string> botnames;
     // this is the actual memory region that will contain our bots
     section_entry *text_section;
 };

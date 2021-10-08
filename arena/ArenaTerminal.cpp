@@ -98,15 +98,17 @@ void ArenaTerminal::OnLoad(wxCommandEvent& WXUNUSED(event)){
     DIR * botdir = opendir(botFolder.GetData().AsChar());
     
     // get file names in the selected folder
-    std::vector<cstring> botpaths, botnames;
+    std::vector<std::string> botpaths, botnames;
     struct dirent *dp = NULL;
     while (botdir){
         if ((dp = readdir(botdir)) != NULL){
             if (!strncmp(strchr(dp->d_name, '.'), ".asm", 4)){
                 Print("[+] Loading [ %s ]\n", dp->d_name);
 
-                botnames.push_back(dp->d_name);
-                botpaths.push_back(botFolder + "/" + dp->d_name);
+            // assemble all bots
+            // bot paths must contain assembled bot paths
+                botnames.emplace_back(std::string(dp->d_name));
+                botpaths.emplace_back((botFolder + "/" + dp->d_name).ToStdString());
             }
         } else {
             closedir(botdir);

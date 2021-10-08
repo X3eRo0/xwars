@@ -1,4 +1,5 @@
 #include "XWar.hpp"
+
 #include "XBot.hpp"
 //
 // Created by X3eRo0 on 6/7/2021.
@@ -15,7 +16,7 @@
 // in this cpp file we can use this xwar_instance by it's name
 // but in other cpp/hpp files we will need to call get_xwar()
 // to get this instance
-static xwar *xwar_instance;
+static xwar *xwar_instance = nullptr;
 
 // will create a new xwar_instance if not created already
 // and return the intance
@@ -38,7 +39,7 @@ xwar::xwar(){
     set_section_entry(text_section, ".text", 0x400, 0x1337000, PERM_READ | PERM_WRITE | PERM_EXEC);
 }
 
-void xwar::load_bots(const std::vector<cstring> &bot_paths, const std::vector<cstring>& bot_names){
+void xwar::load_bots(const std::vector<std::string> &bot_paths, const std::vector<std::string>& bot_names){
     // allocate memory space for all bots
     bots.resize(bot_paths.size());
     botpaths = bot_paths;
@@ -48,7 +49,9 @@ void xwar::load_bots(const std::vector<cstring> &bot_paths, const std::vector<cs
     for(size_t i = 0; i < bots.size(); i++){
         // shorter names
         xbot* &bot = bots[i];
-        cstring bot_path = bot_paths[i];
+        std::string bot_path = bot_paths[i];
+
+    wxPuts("Something");
 
         // initialize this bot
         bot = new xbot;
@@ -64,7 +67,9 @@ void xwar::load_bots(const std::vector<cstring> &bot_paths, const std::vector<cs
 
         // load binary file
         // load init and bot sections
-        xvm_bin_load_file(bot->bin, bot_path);
+        wxPuts(bot_path);
+        wxPuts(bot_paths[i]);
+        xvm_bin_load_file(bot->bin, botpaths[i].c_str());
 
         // remove .text section
         remove_section_by_name(bot->bin->x_section, ".text");

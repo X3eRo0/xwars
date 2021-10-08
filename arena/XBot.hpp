@@ -28,7 +28,7 @@ struct xbot{
     // execute next instruction
     u32 step();
 
-    cstring botname; // unique name of this bot
+    std::string botname; // unique name of this bot
     xvm_cpu *cpu;
     xvm_bin *bin;
     u32 init_addr;

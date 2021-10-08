@@ -14,7 +14,7 @@ add_library(arena_deps  ../xasm/xasm_functions.c
                         ../common/symbols.c)
 
 # create executable
-add_executable(arena MainApp.cpp MainWindow.cpp MiddlePanel.cpp MemoryGrid.cpp ArenaTerminal.cpp
+add_executable(xwars MainApp.cpp MainWindow.cpp MiddlePanel.cpp MemoryGrid.cpp ArenaTerminal.cpp
                      XBot.cpp XWar.cpp)
-target_link_libraries(arena arena_deps ${wxWidgets_LIBRARIES})
-target_include_directories(arena PUBLIC ${wxWidgets_INCLUDE_DIRS})
+target_link_libraries(xwars arena_deps ${wxWidgets_LIBRARIES})
+target_include_directories(xwars PUBLIC ${wxWidgets_INCLUDE_DIRS})

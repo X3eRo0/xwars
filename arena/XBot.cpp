@@ -2,7 +2,6 @@
 
 // initialize xbot
 xbot::xbot(){
-    botname = nullptr;
     cpu = init_xvm_cpu();
     bin = init_xvm_bin();
     bot_addr = 0;
