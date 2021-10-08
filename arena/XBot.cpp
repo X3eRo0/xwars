@@ -1,61 +1,38 @@
-// #include "XBot.hpp"
+#include "XBot.hpp"
 
-// // initialize xbot
-// xbot *init_xbot(){
-//     xbot *bot = (xbot *)malloc(sizeof(xbot));
-    
-//     bot->botname = nullptr;
-//     bot->cpu = init_xvm_cpu();
-//     bot->bin = init_xvm_bin();
-//     bot->bot_addr = 0;
-//     bot->init_addr = 0;
-//     bot->offset = 0;
-//     bot->size = 0;
-//     bot->bot_section = NULL;
-    
-//     return bot;
-// }
+// initialize xbot
+xbot::xbot(){
+    botname = nullptr;
+    cpu = init_xvm_cpu();
+    bin = init_xvm_bin();
+    bot_addr = 0;
+    init_addr = 0;
+    offset = 0;
+    size = 0;
+    bot_section = NULL;
+}
 
-// u32 step(xbot* bot){
-//     return do_execute(bot->cpu, bot->bin);
-// }
+// bot destructor
+xbot::~xbot(){
+    if (cpu != nullptr) fini_xvm_cpu(cpu);
+    if (bin) fini_xvm_bin(bin);
+}
 
-// u32 copy_bots(xbot* bot1, xbot* bot2, section_entry* text_section){
-//     // get random offsets
+// add a new section to this bot
+void xbot::add_section(section_entry* sxn){
+    section_entry *tmp_sxn = bin->x_section->sections;
+    while (tmp_sxn->next != NULL){
+        tmp_sxn = tmp_sxn->next;
+    }
+        
+    tmp_sxn->next = sxn;
+    bin->x_section->n_sections++;
+}
 
-//     bot1->bot_section = find_section_entry_by_name(bot1->bin->x_section, ".bot");
-//     bot1->size = bot1->bot_section->m_ofst;
+u32 xbot::step(){
+    return do_execute(cpu, bin);
+}
 
-//     bot2->bot_section = find_section_entry_by_name(bot2->bin->x_section, ".bot");
-//     bot2->size = bot2->bot_section->m_ofst;
-
-//     srandom(time(NULL));
-//     // assign bot1 in first half
-//     while ( (bot1->offset < 0x20) ||
-//             (bot1->offset > 0x200 - bot1->size)
-//     ){
-//         bot1->offset = random() & 0xfff;
-//     }
-
-//     // assign bot2 in second half
-//     while ( (bot2->offset < 0x220) ||
-//             (bot2->offset > 0x400 - bot2->size)
-//             ){
-//         bot2->offset = random() & 0xfff;
-//     }
-
-//     bot1->bot_addr = text_section->v_addr + bot1->offset;
-//     bot2->bot_addr = text_section->v_addr + bot2->offset;
-
-//     printf("text : 0x%x\n", text->v_addr);
-//     printf("bot1 offset: 0x%x\n", bot1->offset);
-//     printf("bot2 offset: 0x%x\n", bot2->offset);
-
-//     memcpy(&text->m_buff[bot1->offset], bot1->bot_section->m_buff, bot1->size);
-//     memcpy(&text->m_buff[bot2->offset], bot2->bot_section->m_buff, bot2->size);
-
-//     return 0;
-// }
 
 // // xlog is writing to logfifo2
 // // logfifo2 is writable only
@@ -114,11 +91,3 @@
 //     return E_OK;
 // }
 
-
-// // bot destructor
-// void fini_xbot(xbot *bot){
-//     if (bot == nullptr) return;
-//     if (bot->cpu != nullptr) fini_xvm_cpu(bot->cpu);
-//     if (bot->bin) fini_xvm_bin(bot->bin);
-//     free(bot); bot = nullptr;
-// }

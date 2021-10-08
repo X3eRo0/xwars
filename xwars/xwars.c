@@ -60,7 +60,6 @@ int main(int argc, char *argv[]){
     remove_section_by_name(bot2->bin->x_section, ".text");
 
     // execute some number of instructions from .init for initialisation purposes
-
     bot1->init_addr = find_section_entry_by_name(bot1->bin->x_section, ".init")->v_addr;
     bot2->init_addr = find_section_entry_by_name(bot2->bin->x_section, ".init")->v_addr;
 

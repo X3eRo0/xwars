@@ -7,7 +7,17 @@
 #include "Common.hpp"
 
 // xbot
-typedef struct xwars_bot_t {
+struct xbot{
+    xbot();     // init_xbot()
+    ~xbot();    // fini_xbot()
+
+    // add a new section to this bot
+    // this will load them at random memory locations
+    void add_section(section_entry *sxn);
+
+    // execute next instruction
+    u32 step();
+
     cstring botname; // unique name of this bot
     xvm_cpu *cpu;
     xvm_bin *bin;
@@ -16,10 +26,8 @@ typedef struct xwars_bot_t {
     u32 offset;
     u32 size;
     section_entry* bot_section;
-} xbot;
+};
 
-xbot *init_xbot();
-void  fini_xbot(xbot* bot);
 u32   step(xbot* bot);
 u32   copy_bots(xbot* bot1, xbot* bot2, section_entry* text);
 u32   xlog(char * message, ...);
