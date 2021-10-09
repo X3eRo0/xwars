@@ -11,6 +11,7 @@
 
 
 #include "RegisterDisplay.hpp"
+#include <wx/gtk/colour.h>
 #include <wx/sizer.h>
 
 RegisterDisplay::RegisterDisplay(wxWindow* parent) : wxPanel(parent){
@@ -23,9 +24,17 @@ RegisterDisplay::RegisterDisplay(wxWindow* parent) : wxPanel(parent){
 
     // create static box to contain register display areas and set it to span whole space
     m_parentBox = new wxStaticBox(this, wxID_ANY, "Registers");
-    m_mainSizer->Add(m_parentBox, 1, wxEXPAND | wxALL);
+    m_mainSizer->Add(m_parentBox, 1, wxEXPAND | wxALL, 10);
     
-    // sizer for our parent box
-    m_parentBoxSizer = new wxBoxSizer(wxVERTICAL);
-    m_parentBox->SetSizer(m_parentBoxSizer);
+    // initialize grid sizer for arranging gprs
+    m_regGridSizer = new wxGridSizer(4, 4, 1, 1);
+    m_parentBox->SetSizer(m_regGridSizer);
+
+    // initialize gen purpose regs
+    for(size_t i = 0; i < NUMBER_OF_REGISTERS; i++){
+        // initialize registers and add to grid sizer
+        m_registers[Register::RegisterNames[i]] = new Register(m_parentBox, Register::RegisterNames[i]);
+        m_registers[Register::RegisterNames[i]]->SetBackgroundColour(wxColour(81, 0, 81));
+        m_regGridSizer->Add(m_registers[Register::RegisterNames[i]]);
+    }
 }

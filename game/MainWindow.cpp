@@ -16,9 +16,9 @@ MainWindow::MainWindow(wxWindow* parent, wxWindowID id, const wxString& title, c
     // left panel will show information about bots
     // right panel will show memory space
     BotInfo *leftPanel, *rightPanel;
-    leftPanel = new BotInfo(parentPanel, "X3eRo0");
+    leftPanel = new BotInfo(parentPanel, "Khiladi One");
     midPanel = new MiddlePanel(parentPanel);
-    rightPanel = new BotInfo(parentPanel, "r00t3r");
+    rightPanel = new BotInfo(parentPanel, "Khiladi Two");
 
     // add these panels to main sizer
     mainHSizer->Add(leftPanel, 3, wxEXPAND | wxALL, 4);

@@ -21,7 +21,7 @@ BotInfo::BotInfo(wxWindow* parent, cstring botname) : wxPanel(parent){
     this->SetSizer(m_mainSizer);
 
     // create register and instruction dislay
-    m_headingPanel = new wxPanel(this);
+    m_headingPanel = new BotNameDisplay(this, botname);
     m_registerDisplay = new RegisterDisplay(this);
     m_instructionDisplay = new InstructionDisplay(this);
 
@@ -29,21 +29,11 @@ BotInfo::BotInfo(wxWindow* parent, cstring botname) : wxPanel(parent){
     m_mainSizer->Add(m_headingPanel, 1, wxEXPAND | wxALL);
     m_mainSizer->Add(m_registerDisplay, 5, wxEXPAND | wxALL);
     m_mainSizer->Add(m_instructionDisplay, 10, wxEXPAND | wxALL);
-
-    // sizer for heading panel at top
-    m_headingPanelSizer = new wxBoxSizer(wxHORIZONTAL);
-    m_headingPanel->SetSizer(m_headingPanelSizer);
-
-    m_botnameText = new wxStaticText(m_headingPanel, wxID_ANY, botname);
-    m_botnameText->SetFont(m_botnameTextFont);
-    m_botnameText->SetForegroundColour(m_botnameTextColour);
-    m_headingPanelSizer->Add(m_botnameText, 1, wxEXPAND | wxALL);
 }
 
 // change botname text display text color
-void BotInfo::SetBotNameFGColour(const wxColour &c){
-    m_botnameTextColour = c;
-    m_botnameText->SetForegroundColour(c);
+void BotInfo::SetBotNameColour(const wxColour &c){
+    m_headingPanel->SetNameColour(c);
 }
 
 // change register display text color

@@ -16,6 +16,7 @@
 #include "Common.hpp"
 #include "RegisterDisplay.hpp"
 #include "InstructionDisplay.hpp"
+#include "BotNameDisplay.hpp"
 #include <wx/font.h>
 #include <wx/gdicmn.h>
 
@@ -24,12 +25,11 @@ public:
     BotInfo(wxWindow *parent, cstring botname);
     
     // fg color setters
-    void SetBotNameFGColour(const wxColour& c);
+    void SetBotNameColour(const wxColour& c);
     void SetRegisterDisplayFGColour(const wxColour& c);
     void SetInstructionDisplayFGColour(const wxColour& c);
 
     // bg color setters
-    void SetBotNameBGColour(const wxColour& c);
     void SetRegisterDisplayBGColour(const wxColour& c);
     void SetInstructionDisplayBGColour(const wxColour& c);
 private:
@@ -37,15 +37,7 @@ private:
     wxBoxSizer *m_mainSizer;
     // heading panel will contain bot name and some other stuffs
     // heading panel is at the top of bot info panel
-    wxPanel* m_headingPanel;
-    // heading panel sizer is for sizing things in heading panel
-    wxBoxSizer *m_headingPanelSizer;
-    // static text that will show our botname
-    wxStaticText *m_botnameText;
-    // botname text font 
-    wxFont m_botnameTextFont = wxFont(24, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
-    // botname text colour
-    wxColour m_botnameTextColour = *wxGREEN;
+    BotNameDisplay* m_headingPanel;
     // register display will show current state of registers for this bot
     RegisterDisplay *m_registerDisplay;
     // register display colour

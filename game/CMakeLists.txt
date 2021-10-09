@@ -25,8 +25,10 @@ add_executable(xwars
     Arena.cpp
     XBot.cpp
     XWars.cpp
+    Register.cpp
     RegisterDisplay.cpp
     InstructionDisplay.cpp
+    BotNameDisplay.cpp
     BotInfo.cpp
 )
 
