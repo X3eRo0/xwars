@@ -1,4 +1,5 @@
-.section .init #0x400000 #0x400 rwx
+.section .bot #0x400000 #0x400 rwx
+_start:
 	mov $r3, [$sp]
 	mov $r0, $r3
 	mov $r1, $r0
@@ -17,8 +18,6 @@
 	mov $r1, $r7
 	jmp $r3
 
-.section .bot #0x401000 #0x400 rwx
-_start:
 	pusha
 	jmp $sp
 

@@ -13,25 +13,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
 # c binaries exec flag setup
 # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -g -O0")
 
-# add_executable(xwars
-#     xwars/xwars.c
-#     xwars/xwars.h
-#     xwars/bot.c
-#     xvm/cpu.c
-#     xvm/cpu.h
-#     xvm/execute.c
-#     xvm/syscall.c
-#     xasm/disasm.c
-#     common/symbols.c
-#     common/symbols.h
-#     common/const.h
-#     common/loader.c
-#     common/loader.h
-#     common/sections.c
-#     common/sections.h
-#     common/signals.c
-#     common/signals.h)
-
 add_executable(xvm
     xvm/xvm.c
     xvm/cpu.c
@@ -89,5 +70,5 @@ add_executable(xdis
     common/signals.h
 )
 
-# build arena
-add_subdirectory(arena)
+# build xwars
+add_subdirectory(game)

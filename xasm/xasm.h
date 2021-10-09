@@ -1,3 +1,7 @@
+#ifdef __cplusplus
+    extern "C"{
+#endif
+
 //
 // Created by X3eRo0 on 2/23/2021.
 //
@@ -139,3 +143,7 @@ u32     get_total_size(xasm* xasm);
 // char*   strchrnul(const char*, int c);
 u32     xasm_error(u32 error_id, u32 line, char* func, char* msg, ...);
 #endif //XVM_XASM_H
+
+#ifdef __cplusplus
+    }
+#endif

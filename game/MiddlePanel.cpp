@@ -2,7 +2,7 @@
 #include <wx/gdicmn.h>
 #include <wx/sizer.h>
 #include "MemoryGrid.hpp"
-#include "ArenaTerminal.hpp"
+#include "Arena.hpp"
 
 MiddlePanel::MiddlePanel(wxWindow* parent) : wxPanel(parent){
     // create main sizer to arrage items within
@@ -12,7 +12,7 @@ MiddlePanel::MiddlePanel(wxWindow* parent) : wxPanel(parent){
 
     // create panels within middle panel
     MemoryGrid *m_topPanel = new MemoryGrid(this);
-    ArenaTerminal *m_bottomPanel = new ArenaTerminal(this);
+    Arena *m_bottomPanel = new Arena(this);
 
     // add items to main sizer
     m_mainSizer->Add(m_topPanel, 2, wxEXPAND | wxALL);

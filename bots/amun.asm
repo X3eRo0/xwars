@@ -1,11 +1,7 @@
-.section .init #0x401000 #0x100 rwx
-_start:
-    ret
-
 .section .bot #0x402000 #0x100 rwx
 ; size = 0x400
 
-bot_start:
+_start:
     lea $r9, [$pc]
     lea $ra, [$r9+#0x92]
     mov $rb, $r9
@@ -38,4 +34,4 @@ patch_instruction2:
     rjmp start_loop
 
 exit_loop:
-    rjmp bot_start
+    rjmp _start

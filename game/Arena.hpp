@@ -1,5 +1,5 @@
-#ifndef XVM_ARENA_ARENA_TERMINAL_HPP
-#define XVM_ARENA_ARENA_TERMINAL_HPP
+#ifndef XVM_ARENA_TERMINAL_HPP
+#define XVM_ARENA_TERMINAL_HPP
 
 #include "Common.hpp"
 #include <wx/event.h>
@@ -8,9 +8,9 @@
 #include <wx/gtk/colour.h>
 #include <wx/textctrl.h>
 
-class ArenaTerminal : public wxPanel{
+class Arena : public wxPanel{
 public:
-    ArenaTerminal(wxWindow *parent);
+    Arena(wxWindow *parent);
 
     // write normal text in the terminal
     template<typename fmtstringtype, typename... args>
@@ -35,6 +35,7 @@ public:
 
 private:
     void OnLoad(wxCommandEvent& event);
+    void OnStart(wxCommandEvent& event);
 
     // main sizer
     wxBoxSizer *m_mainSizer;
@@ -58,4 +59,4 @@ private:
     DECLARE_EVENT_TABLE();
 };
 
-#endif//XVM_ARENA_ARENA_TERMINAL_HPP
+#endif//XVM_ARENA_TERMINAL_HPP

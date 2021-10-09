@@ -60,7 +60,7 @@ u8 set_CF(xvm_cpu * cpu, u8 bit){
 
 xvm_cpu * init_xvm_cpu(){
     xvm_cpu * cpu = (xvm_cpu *)malloc(sizeof(xvm_cpu));
-    cpu->errors = (signal_report*)malloc(sizeof(signal_report));
+    cpu->errors = (signal_report*)calloc(1, sizeof(signal_report));
     reset_reg(&cpu->regs);
     reset_flags(&cpu->flags);
 

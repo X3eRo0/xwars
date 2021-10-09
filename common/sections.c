@@ -242,6 +242,7 @@ u32 set_section_entry(section_entry* sec_entry, const char* name, u32 size, u32 
     sec_entry->m_ofst = 0;
     sec_entry->a_size = 0;
     sec_entry->m_buff = (char*)realloc(sec_entry->m_buff, size);
+    memset(sec_entry->m_buff, 0, size);
     sec_entry->next = NULL;
 
     return E_OK;
@@ -309,10 +310,10 @@ u32 fini_section_entry(section_entry* sec_entry){
 section* init_section(){
     // initialize section list
 
-    section* sec  = (section*)malloc(sizeof(section));
+    section* sec  = (section*)calloc(1, sizeof(section));
     sec->sections = NULL;
     sec->n_sections = 0;
-    sec->errors = (signal_report*)malloc(sizeof(signal_report));
+    sec->errors = (signal_report*)calloc(1, sizeof(signal_report));
     return sec;
 }
 
@@ -364,6 +365,7 @@ section_entry* add_section(section* sec, const char* name, u32 size, u32 addr, u
             if (temp->v_size != size && temp->next != NULL && temp->v_addr + size < temp->next->v_addr){
                 temp->v_size = size;
                 temp->m_buff = realloc(temp->m_buff, size);
+                memset(temp->m_buff, 0, size);
             }
             if (temp->m_flag != flag){
                 temp->m_flag = flag;
@@ -399,6 +401,15 @@ u32 remove_section_by_name(section* section, const char *name){
     section_entry * stack = find_section_entry_by_name(section, "stack");
 
     temp = section->sections;
+    
+    // if required section is the first section
+
+    if (strncmp(section->sections->m_name, name, strlen(temp->m_name)) == 0){
+        section->sections = section->sections->next;
+        fini_section_entry(temp); temp = NULL;
+        return E_OK;
+    }
+
     while (temp != NULL){
         if (strncmp(temp->m_name, name, strlen(temp->m_name)) == 0){
             break;

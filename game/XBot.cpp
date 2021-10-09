@@ -5,7 +5,6 @@ xbot::xbot(){
     cpu = init_xvm_cpu();
     bin = init_xvm_bin();
     bot_addr = 0;
-    init_addr = 0;
     offset = 0;
     size = 0;
     bot_section = NULL;

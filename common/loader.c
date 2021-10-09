@@ -106,7 +106,7 @@ u32 fini_exe_header(exe_header* header){
 
 xvm_bin* init_xvm_bin(){
     // create binary structure
-    xvm_bin* bin = (xvm_bin*) malloc(sizeof(xvm_bin));
+    xvm_bin* bin = (xvm_bin*) calloc(1, sizeof(xvm_bin));
     bin->x_header     = init_exe_header();
     bin->x_symtab     = init_symtab();
     bin->x_section    = init_section();

@@ -1,5 +1,5 @@
-#include "ArenaTerminal.hpp"
-#include "XWar.hpp"
+#include "Arena.hpp"
+#include "XWars.hpp"
 #include <algorithm>
 #include <wx/event.h>
 #include <wx/filedlg.h>
@@ -20,11 +20,12 @@ enum xvmArenaButtonIDs{
 };
 
 // event table
-BEGIN_EVENT_TABLE(ArenaTerminal, wxPanel)
-    EVT_BUTTON(ID_LOAD, ArenaTerminal::OnLoad)
+BEGIN_EVENT_TABLE(Arena, wxPanel)
+    EVT_BUTTON(ID_LOAD, Arena::OnLoad)
+    EVT_BUTTON(ID_START, Arena::OnStart)
 END_EVENT_TABLE()
 
-ArenaTerminal::ArenaTerminal(wxWindow* parent) : wxPanel(parent){
+Arena::Arena(wxWindow* parent) : wxPanel(parent){
     m_mainSizer = new wxBoxSizer(wxVERTICAL);
     this->SetSizer(m_mainSizer);
 
@@ -84,7 +85,7 @@ wxString GetBotNameFromFilePath(wxString filepath){
 
 // when load button is clicked
 // we will open a file selection dialog and read that file into memory
-void ArenaTerminal::OnLoad(wxCommandEvent& WXUNUSED(event)){
+void Arena::OnLoad(wxCommandEvent& WXUNUSED(event)){
     // create a new file dialog
     wxDirDialog *fd = new wxDirDialog(this, "XVM XWars - Arena - Choose Bots Folder", wxEmptyString, wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST);
     
@@ -102,11 +103,11 @@ void ArenaTerminal::OnLoad(wxCommandEvent& WXUNUSED(event)){
     struct dirent *dp = NULL;
     while (botdir){
         if ((dp = readdir(botdir)) != NULL){
-            if (!strncmp(strchr(dp->d_name, '.'), ".asm", 4)){
+            if (!strncmp(strchr(dp->d_name, '.'), ".bot", 4)){
                 Print("[+] Loading [ %s ]\n", dp->d_name);
 
-            // assemble all bots
-            // bot paths must contain assembled bot paths
+                // assemble all bots
+                // bot paths must contain assembled bot paths
                 botnames.emplace_back(std::string(dp->d_name));
                 botpaths.emplace_back((botFolder + "/" + dp->d_name).ToStdString());
             }
@@ -117,12 +118,21 @@ void ArenaTerminal::OnLoad(wxCommandEvent& WXUNUSED(event)){
     }
 
     // create and load bots
-    get_xwar()->load_bots(botpaths, botnames);
+    get_xwars_instance()->load_bots(botpaths, botnames);
 
     // check and print status
-    const auto& bots = get_xwar()->bots;
+    const auto& bots = get_xwars_instance()->bots;
     for(size_t i = 0; i < bots.size(); i++){
         if(!bots[i]) PrintError("[*] Failed to load Bot [ %s ]\n", botnames[i]);
-        else Print("Loaded Bot [ %s ]", botnames[i]);
+        else Print("[+] Loaded Bot [ %s ]\n", botnames[i]);
     }
+}
+
+void Arena::OnStart(wxCommandEvent& WXUNUSED(event)){
+    const auto& bots = get_xwars_instance()->bots;
+    for (size_t i = 0; i < bots.size(); i++){
+        Print("Bots: %p\n", bots[i]);
+    }
+    
+    get_xwars_instance()->battle(bots[0], bots[1]);
 }
