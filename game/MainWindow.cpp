@@ -15,15 +15,15 @@ MainWindow::MainWindow(wxWindow* parent, wxWindowID id, const wxString& title, c
 
     // left panel will show information about bots
     // right panel will show memory space
-    wxPanel *leftPanel, *rightPanel;
-    leftPanel = new wxPanel(parentPanel);
+    BotInfo *leftPanel, *rightPanel;
+    leftPanel = new BotInfo(parentPanel, "X3eRo0");
     midPanel = new MiddlePanel(parentPanel);
-    rightPanel = new wxPanel(parentPanel);
+    rightPanel = new BotInfo(parentPanel, "r00t3r");
 
     // add these panels to main sizer
-    mainHSizer->Add(leftPanel, 1, wxEXPAND | wxALL, 4);
+    mainHSizer->Add(leftPanel, 3, wxEXPAND | wxALL, 4);
     mainHSizer->Add(midPanel, 2, wxEXPAND | wxALL, 4);
-    mainHSizer->Add(rightPanel, 1, wxEXPAND | wxALL, 4);
+    mainHSizer->Add(rightPanel, 3, wxEXPAND | wxALL, 4);
 
     // set colors for panels to tell them apart
     leftPanel->SetBackgroundColour(*wxBLACK);

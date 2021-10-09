@@ -3,6 +3,7 @@
 
 #include "Common.hpp"
 #include "MiddlePanel.hpp"
+#include "BotInfo.hpp"
 #include <wx/gdicmn.h>
 #include <wx/stringimpl.h>
 

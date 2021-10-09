@@ -25,6 +25,9 @@ add_executable(xwars
     Arena.cpp
     XBot.cpp
     XWars.cpp
+    RegisterDisplay.cpp
+    InstructionDisplay.cpp
+    BotInfo.cpp
 )
 
 message(STATUS "DEBUG1")
