@@ -20,7 +20,7 @@ private:
     wxColour m_gridElementColour = *wxWHITE;
 
     // our memory grid
-    std::array<std::array<wxButton*, NUM_COLS_IN_MEM_GRID>, NUM_ROWS_IN_MEM_GRID> m_memGrid;
+    std::array<std::array<wxStaticText*, NUM_COLS_IN_MEM_GRID>, NUM_ROWS_IN_MEM_GRID> m_memGrid;
 };
 
 #endif//XVM_ARENA_MEMORY_GRID_HPP

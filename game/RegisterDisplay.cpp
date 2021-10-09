@@ -34,7 +34,7 @@ RegisterDisplay::RegisterDisplay(wxWindow* parent) : wxPanel(parent){
     for(size_t i = 0; i < NUMBER_OF_REGISTERS; i++){
         // initialize registers and add to grid sizer
         m_registers[Register::RegisterNames[i]] = new Register(m_parentBox, Register::RegisterNames[i]);
-        m_registers[Register::RegisterNames[i]]->SetBackgroundColour(wxColour(81, 0, 81));
+        m_registers[Register::RegisterNames[i]]->SetBackgroundColour(wxColour(32, 0, 32));
         m_regGridSizer->Add(m_registers[Register::RegisterNames[i]]);
     }
 }

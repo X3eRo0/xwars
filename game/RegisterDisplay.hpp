@@ -21,7 +21,7 @@ public:
     RegisterDisplay(wxWindow* parent);
 
 private:
-    wxColour m_bgColor = *wxBLACK;
+    wxColour m_bgColor = wxColour(16, 16, 16);
     // main sizer
     wxSizer *m_mainSizer;
     // this box will contain all our objects
