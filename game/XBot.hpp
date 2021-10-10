@@ -36,6 +36,9 @@ struct xbot{
     u32 offset;
     u32 size;
     section_entry* bot_section;
+    i32 reg_pipes[2];
+    i32 dis_pipes[2];
+    FILE * reg_reader_e, * reg_writer_e, * dis_reader_e, * dis_writer_e;
 };
 
 // u32   step(xbot* bot);

@@ -3,8 +3,8 @@
 
 #include "Common.hpp"
 
-#define MAIN_WINDOW_WIDTH 1366 
-#define MAIN_WINDOW_HEIGHT 740
+#define MAIN_WINDOW_WIDTH 1600 
+#define MAIN_WINDOW_HEIGHT 900
 
 
 class MainApp : public wxApp{

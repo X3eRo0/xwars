@@ -10,7 +10,7 @@
  * 
  */
 
-
+#include "Common.hpp"
 #include "BotInfo.hpp"
 #include <wx/gdicmn.h>
 #include <wx/sizer.h>
@@ -31,8 +31,8 @@ BotInfo::BotInfo(wxWindow* parent, cstring botname) : wxPanel(parent){
 
     // add displays for sizing
     m_mainSizer->Add(m_headingPanel, 1, wxEXPAND | wxALL);
-    m_mainSizer->Add(m_registerDisplay, 5, wxEXPAND | wxALL, 5);
-    m_mainSizer->Add(m_instructionDisplay, 10, wxEXPAND | wxALL, 5);
+    m_mainSizer->Add(m_registerDisplay, 3, wxEXPAND | wxALL, 3);
+    m_mainSizer->Add(m_instructionDisplay, 12, wxEXPAND | wxALL, 3);
 
     Connect(REGISTER_DISPLAY_UPDATE_EVENT, wxCommandEventHandler(BotInfo::OnRegisterUpdate));
     Connect(INSTRUCTION_DISPLAY_UPDATE_EVENT, wxCommandEventHandler(BotInfo::OnInstructionUpdate));
@@ -57,10 +57,31 @@ void BotInfo::SetInstructionDisplayFGColour(const wxColour &c){
 
 // register update event handler
 void BotInfo::OnRegisterUpdate(wxCommandEvent &event){
-    puts("this works");
+    char * lineptr = NULL;
+    size_t n = 0;
+    FILE * reader = ((xbot *)event.GetClientData())->reg_reader_e;
+    if (!reader){
+        puts("bot register reader fucked");
+        return;
+    }
+    for (i32 i = 0; i < 16; i++){
+        getline(&lineptr, &n, reader);
+        printf("register: %s", lineptr);
+    }
 }
 
 // register update event handler
 void BotInfo::OnInstructionUpdate(wxCommandEvent &event){
-    puts("this works af");
+    char * lineptr = NULL;
+    size_t n = 0;
+    FILE * reader = ((xbot *)event.GetClientData())->dis_reader_e;
+    if (!reader){
+        puts("bot register reader fucked");
+        return;
+    }
+    for (i32 i = 0; i < 20; i++){
+        getline(&lineptr, &n, reader);
+        PrintInstruction("%s", lineptr); 
+    }
+    free(lineptr);
 }

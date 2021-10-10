@@ -25,11 +25,11 @@ Register::Register(wxWindow *parent, const std::string& name)
     // create label and value static texts
     m_registerNameText = new wxStaticText(this, wxID_ANY, "$"+m_registerName, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER);
     m_delimiterText = new wxStaticText(this, wxID_ANY, m_delimiterString, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER);
-    m_registerValueText = new wxStaticText(this, wxID_ANY, "0x0000", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER);
+    m_registerValueText = new wxStaticText(this, wxID_ANY, "0x00000000", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER);
 
     // set font
     m_registerNameText->SetFont(m_registerNameFont);
-    m_delimiterText->SetFont(wxFont(6, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
+    m_delimiterText->SetFont(wxFont(9, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
     m_registerValueText->SetFont(m_registerValueFont);
     
     // set Colour
@@ -37,9 +37,9 @@ Register::Register(wxWindow *parent, const std::string& name)
     m_registerValueText->SetForegroundColour(m_registerValueFGColour);
     
     // add for sizing
-    m_mainSizer->Add(m_registerNameText, 4, wxEXPAND | wxALL);
+    m_mainSizer->Add(m_registerNameText, 3, wxEXPAND | wxALL);
     m_mainSizer->Add(m_delimiterText, 1, wxEXPAND | wxALL);
-    m_mainSizer->Add(m_registerValueText, 5, wxEXPAND | wxALL);
+    m_mainSizer->Add(m_registerValueText, 10, wxEXPAND | wxALL);
 }
 
 void Register::SetName(const std::string& n){

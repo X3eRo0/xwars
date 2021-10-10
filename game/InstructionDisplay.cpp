@@ -39,6 +39,6 @@ InstructionDisplay::InstructionDisplay(wxWindow* parent) : wxPanel(parent){
     m_displayTextCtrl->SetBackgroundColour(m_displayBGColour);
     m_displayTextCtrl->SetForegroundColour(m_displayFGColour);
     m_displayTextCtrl->SetFont(m_displayFont);
-    m_displayTextCtrl->SetEditable(false); // disable editing
+    // m_displayTextCtrl->SetEditable(false); // disable editing
     m_parentBoxSizer->Add(m_displayTextCtrl, 1, wxEXPAND | wxALL);
 }

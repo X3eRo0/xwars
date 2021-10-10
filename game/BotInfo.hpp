@@ -13,6 +13,7 @@
 #ifndef XVM_ARENA_BOT_INFO_HPP
 #define XVM_ARENA_BOT_INFO_HPP
 
+#include "XBot.hpp"
 #include "Common.hpp"
 #include "RegisterDisplay.hpp"
 #include "InstructionDisplay.hpp"

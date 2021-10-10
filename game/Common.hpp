@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <cstdint>
+#include <wx/utils.h>
+#include <unistd.h>
 
 typedef uint8_t  u8;
 typedef uint16_t u16;

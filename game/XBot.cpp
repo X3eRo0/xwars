@@ -8,6 +8,18 @@ xbot::xbot(){
     offset = 0;
     size = 0;
     bot_section = NULL;
+    pipe(reg_pipes);
+    pipe(dis_pipes);
+
+    reg_reader_e = fdopen(reg_pipes[0], "r");
+    reg_writer_e = fdopen(reg_pipes[1], "w");
+
+    dis_reader_e = fdopen(dis_pipes[0], "r");
+    dis_writer_e = fdopen(dis_pipes[1], "w");
+    
+    if (!reg_reader_e || !reg_writer_e || !dis_reader_e || !dis_writer_e){
+        puts("[!] Failed to allocate pipes for bot");
+    }
 }
 
 // bot destructor

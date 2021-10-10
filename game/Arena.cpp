@@ -38,10 +38,9 @@ Arena::Arena(wxWindow* parent) : wxPanel(parent){
     m_terminal->SetForegroundColour(m_terminalFGColour);
     m_terminal->SetFont(m_terminalFont);
     m_terminal->SetEditable(false);
-
+    
     // add welcome text
-    m_terminal->AppendText("[+] Welcome To XWars!\n");
-
+    Print("=-----------------[ XWARS ]----------------=\n[+] Authors: @X3eRo0, @brightprogrammer\n");
     // create buttons panel and add to sizer
     m_buttonsPanel = new wxPanel(this);
     

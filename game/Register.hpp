@@ -40,12 +40,12 @@ private:
     // main sizer
     wxBoxSizer *m_mainSizer;
     // label name and value
-    std::string m_registerName, m_registerValue = "0x0000", m_delimiterString = "=";
+    std::string m_registerName, m_registerValue = "0x00000000", m_delimiterString = "=";
     // panel will be like this [ <reg_name> : <reg_value> ]
     wxStaticText *m_registerNameText, *m_registerValueText, *m_delimiterText;
     // label and value fomt
-    wxFont m_registerNameFont = wxFont(8, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
-    wxFont m_registerValueFont = wxFont(8, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
+    wxFont m_registerNameFont = wxFont(11, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
+    wxFont m_registerValueFont = wxFont(11, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
     // color values
     wxColour m_registerNameFGColour = *wxGREEN, m_registerValueFGColour = *wxWHITE;
 };

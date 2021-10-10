@@ -79,58 +79,60 @@ void xwars::load_bots(const std::vector<std::string> &bot_paths, const std::vect
 void xwars::display_registers(xbot *bot1, xbot *bot2){
     // update registers
     // update order must be same as Register::RegisterNames
-    fprintf(get_writer_end(), "$r0=0x%x\n", bot1->cpu->regs.r0);
-    fprintf(get_writer_end(), "$r1=0x%x\n", bot1->cpu->regs.r1);
-    fprintf(get_writer_end(), "$r2=0x%x\n", bot1->cpu->regs.r2);
-    fprintf(get_writer_end(), "$r3=0x%x\n", bot1->cpu->regs.r3);
-    fprintf(get_writer_end(), "$r4=0x%x\n", bot1->cpu->regs.r4);
-    fprintf(get_writer_end(), "$r5=0x%x\n", bot1->cpu->regs.r5);
-    fprintf(get_writer_end(), "$r6=0x%x\n", bot1->cpu->regs.r6);
-    fprintf(get_writer_end(), "$r7=0x%x\n", bot1->cpu->regs.r7);
-    fprintf(get_writer_end(), "$r8=0x%x\n", bot1->cpu->regs.r8);
-    fprintf(get_writer_end(), "$r9=0x%x\n", bot1->cpu->regs.r9);
-    fprintf(get_writer_end(), "$ra=0x%x\n", bot1->cpu->regs.ra);
-    fprintf(get_writer_end(), "$rb=0x%x\n", bot1->cpu->regs.rb);
-    fprintf(get_writer_end(), "$rc=0x%x\n", bot1->cpu->regs.rc);
-    fprintf(get_writer_end(), "$sp=0x%x\n", bot1->cpu->regs.sp);
-    fprintf(get_writer_end(), "$bp=0x%x\n", bot1->cpu->regs.bp);
-    fprintf(get_writer_end(), "$pc=0x%x\n", bot1->cpu->regs.pc);
-    fflush(get_writer_end());
+    fprintf(bot1->reg_writer_e, "$r0=0x%.8x\n", bot1->cpu->regs.r0);
+    fprintf(bot1->reg_writer_e, "$r1=0x%.8x\n", bot1->cpu->regs.r1);
+    fprintf(bot1->reg_writer_e, "$r2=0x%.8x\n", bot1->cpu->regs.r2);
+    fprintf(bot1->reg_writer_e, "$r3=0x%.8x\n", bot1->cpu->regs.r3);
+    fprintf(bot1->reg_writer_e, "$r4=0x%.8x\n", bot1->cpu->regs.r4);
+    fprintf(bot1->reg_writer_e, "$r5=0x%.8x\n", bot1->cpu->regs.r5);
+    fprintf(bot1->reg_writer_e, "$r6=0x%.8x\n", bot1->cpu->regs.r6);
+    fprintf(bot1->reg_writer_e, "$r7=0x%.8x\n", bot1->cpu->regs.r7);
+    fprintf(bot1->reg_writer_e, "$r8=0x%.8x\n", bot1->cpu->regs.r8);
+    fprintf(bot1->reg_writer_e, "$r9=0x%.8x\n", bot1->cpu->regs.r9);
+    fprintf(bot1->reg_writer_e, "$ra=0x%.8x\n", bot1->cpu->regs.ra);
+    fprintf(bot1->reg_writer_e, "$rb=0x%.8x\n", bot1->cpu->regs.rb);
+    fprintf(bot1->reg_writer_e, "$rc=0x%.8x\n", bot1->cpu->regs.rc);
+    fprintf(bot1->reg_writer_e, "$sp=0x%.8x\n", bot1->cpu->regs.sp);
+    fprintf(bot1->reg_writer_e, "$bp=0x%.8x\n", bot1->cpu->regs.bp);
+    fprintf(bot1->reg_writer_e, "$pc=0x%.8x\n", bot1->cpu->regs.pc);
+    fflush(bot1->reg_writer_e);
 
 
     // post event
     wxCommandEvent e1(REGISTER_DISPLAY_UPDATE_EVENT);
+    e1.SetClientData((void *)bot1);
     if(!m_botInfos.first) puts("No bot panel set!");
     wxPostEvent(m_botInfos.first, e1);
     
     // update registers
-    fprintf(get_writer_end(), "$r0=0x%x\n", bot2->cpu->regs.r0);
-    fprintf(get_writer_end(), "$r1=0x%x\n", bot2->cpu->regs.r1);
-    fprintf(get_writer_end(), "$r2=0x%x\n", bot2->cpu->regs.r2);
-    fprintf(get_writer_end(), "$r3=0x%x\n", bot2->cpu->regs.r3);
-    fprintf(get_writer_end(), "$r4=0x%x\n", bot2->cpu->regs.r4);
-    fprintf(get_writer_end(), "$r5=0x%x\n", bot2->cpu->regs.r5);
-    fprintf(get_writer_end(), "$r6=0x%x\n", bot2->cpu->regs.r6);
-    fprintf(get_writer_end(), "$r7=0x%x\n", bot2->cpu->regs.r7);
-    fprintf(get_writer_end(), "$r8=0x%x\n", bot2->cpu->regs.r8);
-    fprintf(get_writer_end(), "$r9=0x%x\n", bot2->cpu->regs.r9);
-    fprintf(get_writer_end(), "$ra=0x%x\n", bot2->cpu->regs.ra);
-    fprintf(get_writer_end(), "$rb=0x%x\n", bot2->cpu->regs.rb);
-    fprintf(get_writer_end(), "$rc=0x%x\n", bot2->cpu->regs.rc);
-    fprintf(get_writer_end(), "$sp=0x%x\n", bot2->cpu->regs.sp);
-    fprintf(get_writer_end(), "$bp=0x%x\n", bot2->cpu->regs.bp);
-    fprintf(get_writer_end(), "$pc=0x%x\n", bot2->cpu->regs.pc);
-    fflush(get_writer_end());
+    fprintf(bot2->reg_writer_e, "$r0=0x%.8x\n", bot2->cpu->regs.r0);
+    fprintf(bot2->reg_writer_e, "$r1=0x%.8x\n", bot2->cpu->regs.r1);
+    fprintf(bot2->reg_writer_e, "$r2=0x%.8x\n", bot2->cpu->regs.r2);
+    fprintf(bot2->reg_writer_e, "$r3=0x%.8x\n", bot2->cpu->regs.r3);
+    fprintf(bot2->reg_writer_e, "$r4=0x%.8x\n", bot2->cpu->regs.r4);
+    fprintf(bot2->reg_writer_e, "$r5=0x%.8x\n", bot2->cpu->regs.r5);
+    fprintf(bot2->reg_writer_e, "$r6=0x%.8x\n", bot2->cpu->regs.r6);
+    fprintf(bot2->reg_writer_e, "$r7=0x%.8x\n", bot2->cpu->regs.r7);
+    fprintf(bot2->reg_writer_e, "$r8=0x%.8x\n", bot2->cpu->regs.r8);
+    fprintf(bot2->reg_writer_e, "$r9=0x%.8x\n", bot2->cpu->regs.r9);
+    fprintf(bot2->reg_writer_e, "$ra=0x%.8x\n", bot2->cpu->regs.ra);
+    fprintf(bot2->reg_writer_e, "$rb=0x%.8x\n", bot2->cpu->regs.rb);
+    fprintf(bot2->reg_writer_e, "$rc=0x%.8x\n", bot2->cpu->regs.rc);
+    fprintf(bot2->reg_writer_e, "$sp=0x%.8x\n", bot2->cpu->regs.sp);
+    fprintf(bot2->reg_writer_e, "$bp=0x%.8x\n", bot2->cpu->regs.bp);
+    fprintf(bot2->reg_writer_e, "$pc=0x%.8x\n", bot2->cpu->regs.pc);
+    fflush(bot2->reg_writer_e);
 
     // post event
     wxCommandEvent e2(REGISTER_DISPLAY_UPDATE_EVENT);
+    e2.SetClientData((void *)bot2);
     if(!m_botInfos.second) puts("No bot panel set!");
     wxPostEvent(m_botInfos.second, e2);
 }
 void xwars::display_disassembly(xbot *bot1, xbot *bot2){
     section_entry * text = find_section_entry_by_name(bot1->bin->x_section, ".text");
     xasm_disassemble_bytes(
-        get_writer_end(),
+        bot1->dis_writer_e,
         bot1->bin,
         (char *) get_reference(bot1->bin->x_section, bot1->cpu->regs.pc, PERM_EXEC),
         text->v_size - (bot1->cpu->regs.pc - text->v_addr),
@@ -139,12 +141,13 @@ void xwars::display_disassembly(xbot *bot1, xbot *bot2){
     );
 
     // post event
-    wxCommandEvent e1(REGISTER_DISPLAY_UPDATE_EVENT);
+    wxCommandEvent e1(INSTRUCTION_DISPLAY_UPDATE_EVENT);
+    e1.SetClientData((void *)bot1);
     if(!m_botInfos.first) puts("No bot panel set!");
     wxPostEvent(m_botInfos.first, e1);
 
     xasm_disassemble_bytes(
-        get_writer_end(),
+        bot2->dis_writer_e,
         bot2->bin,
         (char *) get_reference(bot2->bin->x_section, bot2->cpu->regs.pc, PERM_EXEC),
         text->v_size - (bot2->cpu->regs.pc - text->v_addr),
@@ -152,8 +155,9 @@ void xwars::display_disassembly(xbot *bot1, xbot *bot2){
         20
     ); 
 
-        // post event
+    // post event
     wxCommandEvent e2(INSTRUCTION_DISPLAY_UPDATE_EVENT);
+    e2.SetClientData((void *)bot2);
     if(!m_botInfos.second) puts("No bot panel set!");
     wxPostEvent(m_botInfos.second, e2);
 }
