@@ -12,7 +12,10 @@
 
 #include "InstructionDisplay.hpp"
 #include <limits>
+#include <wx/event.h>
 #include <wx/gdicmn.h>
+#include <wx/stringimpl.h>
+
 
 InstructionDisplay::InstructionDisplay(wxWindow* parent) : wxPanel(parent){
     // change background colour
@@ -31,49 +34,11 @@ InstructionDisplay::InstructionDisplay(wxWindow* parent) : wxPanel(parent){
     m_parentBoxSizer = new wxBoxSizer(wxVERTICAL);
     m_parentBox->SetSizer(m_parentBoxSizer);
 
-    // create instruction list and add required columns
-    m_instructionList = new wxListView(m_parentBox, wxID_ANY);
-    m_instructionList->AppendColumn("Address");
-    m_instructionList->AppendColumn("OpCode");
-    m_instructionList->AppendColumn("Instruction");
-
-    m_instructionList->SetColumnWidth(0, 100);
-    m_instructionList->SetColumnWidth(1, 100);
-    m_instructionList->SetColumnWidth(2, 220);
-
-    // populate instruction list
-    for(size_t i = 0; i < 10; i++){
-        AddNewInstruction("<address>", "<opcode>", "<instruction>");
-    }
-
-    m_parentBoxSizer->Add(m_instructionList, 1, wxEXPAND | wxALL);
-}
-
-// add new instruction trio
-void InstructionDisplay::AddNewInstruction(const std::string &address, const std::string &opcode, const std::string &instruction){
-    m_instructionList->InsertItem(m_numInstructions, address);
-    m_instructionList->SetItem(m_numInstructions, 1, opcode);
-    m_instructionList->SetItem(m_numInstructions, 2, instruction);
-
-    m_instructions.push_back({address, opcode, instruction});
-
-    m_numInstructions++;
-}
-
-void InstructionDisplay::SelectInstructionByIndex(size_t idx){
-    m_instructionList->Select(idx);
-}
-
-size_t InstructionDisplay::GetInstructionIndexByAddress(const std::string &address){
-    for(size_t i = 0; i < m_numInstructions; i++){
-        if(m_instructions[i].address == address) return i;
-    }
-
-    // if address not found then return max value (-1);
-    // return std::numeric_limits<size_t>::max();
-    return -1;
-}
-
-void InstructionDisplay::SelectInstructionByAddress(const std::string& address){
-    m_instructionList->Select(GetInstructionIndexByAddress(address));
+    // create area to display instructions
+    m_displayTextCtrl = new wxTextCtrl(m_parentBox, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
+    m_displayTextCtrl->SetBackgroundColour(m_displayBGColour);
+    m_displayTextCtrl->SetForegroundColour(m_displayFGColour);
+    m_displayTextCtrl->SetFont(m_displayFont);
+    m_displayTextCtrl->SetEditable(false); // disable editing
+    m_parentBoxSizer->Add(m_displayTextCtrl, 1, wxEXPAND | wxALL);
 }

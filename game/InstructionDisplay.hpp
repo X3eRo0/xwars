@@ -13,31 +13,20 @@
 #define XVM_ARENA_INSTRUCTION_DISPLAY_HPP
 
 #include "Common.hpp"
+#include <wx/font.h>
+#include <wx/gdicmn.h>
 #include <wx/listctrl.h>
-
-struct InstructionData{
-    std::string address;
-    std::string opcode;
-    std::string instruction;
-};
 
 class InstructionDisplay : public wxPanel{
 public:
     InstructionDisplay(wxWindow *parent);
 
-    // add a new address, opcode, instruction trio
-    void AddNewInstruction(const std::string& address, const std::string& opcode, const std::string& instruction);
-
-    // select a particular instruction by index
-    void SelectInstructionByIndex(size_t idx);
-
-    // get index of instruction by address
-    // returns -1 if fails to find address in list
-    size_t GetInstructionIndexByAddress(const std::string& address);
-
-    // select instruction by address
-    void SelectInstructionByAddress(const std::string& address);
-
+    template<typename fmtype = wxString, typename... argstype>
+    void Print(fmtype str, argstype... args){
+        wxString writestr;
+        writestr.Printf(str, args...);
+        m_displayTextCtrl->AppendText(writestr);
+    }
 private:
     wxColour m_bgColor = wxColour(32, 16, 32);
     // main sizer
@@ -48,12 +37,12 @@ private:
     wxColour m_parentBoxFGColour = *wxCYAN;
     // sizer for sizing objects in parent box
     wxBoxSizer *m_parentBoxSizer;
-    // list to display our instructions
-    wxListView *m_instructionList;
-    // keep instruction data
-    std::vector<InstructionData> m_instructions;
-    // keep track of number of instructions in list
-    size_t m_numInstructions = 0;
+    // this is where our instructions will be displayed
+    wxTextCtrl *m_displayTextCtrl;
+    // display area bg color
+    wxColour m_displayBGColour = *wxBLACK, m_displayFGColour = *wxGREEN;
+    // instruction display font
+    wxFont m_displayFont = wxFont(8, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM);
 };
 
 #endif//XVM_ARENA_INSTRUCTION_DISPLAY_HPP

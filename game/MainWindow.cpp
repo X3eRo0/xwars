@@ -1,4 +1,5 @@
 #include "MainWindow.hpp"
+#include "XWars.hpp"
 #include <wx/gdicmn.h>
 
 MainWindow::MainWindow(wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size) 
@@ -20,6 +21,9 @@ MainWindow::MainWindow(wxWindow* parent, wxWindowID id, const wxString& title, c
     midPanel = new MiddlePanel(parentPanel);
     rightPanel = new BotInfo(parentPanel, "Khiladi Two");
 
+    // register the two bot infos to xwars
+    get_xwars_instance()->register_bot_info(leftPanel, rightPanel);
+
     // add these panels to main sizer
     mainHSizer->Add(leftPanel, 3, wxEXPAND | wxALL, 4);
     mainHSizer->Add(midPanel, 2, wxEXPAND | wxALL, 4);
@@ -30,4 +34,5 @@ MainWindow::MainWindow(wxWindow* parent, wxWindowID id, const wxString& title, c
     midPanel->SetBackgroundColour(wxColour(64, 64, 64));
     rightPanel->SetBackgroundColour(*wxBLACK);
    
+    leftPanel->PrintInstruction("Something %s", "Is working well");
 }

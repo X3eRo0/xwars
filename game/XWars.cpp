@@ -1,5 +1,8 @@
 #include "XWars.hpp"
 #include "../xasm/xasm.h"
+#include "Common.hpp"
+#include <cstdio>
+#include <wx/event.h>
 
 // Created by X3eRo0 on 6/7/2021.
 //
@@ -19,7 +22,7 @@
 static xwars *xwars_instance = nullptr;
 
 // writer_e and reader_e
-extern FILE * reader_e, * writer_e;
+// extern FILE * reader_e, * writer_e;
 
 // will create a new xwars_instance if not created already
 // and return the intance
@@ -74,8 +77,55 @@ void xwars::load_bots(const std::vector<std::string> &bot_paths, const std::vect
 }
 
 void xwars::display_registers(xbot *bot1, xbot *bot2){
-    printf("bot1->pc = 0x%x\n", bot1->cpu->regs.pc);
-    printf("bot2->pc = 0x%x\n", bot2->cpu->regs.pc);
+    // update registers
+    // update order must be same as Register::RegisterNames
+    fprintf(get_writer_end(), "$r0=0x%x\n", bot1->cpu->regs.r0);
+    fprintf(get_writer_end(), "$r1=0x%x\n", bot1->cpu->regs.r1);
+    fprintf(get_writer_end(), "$r2=0x%x\n", bot1->cpu->regs.r2);
+    fprintf(get_writer_end(), "$r3=0x%x\n", bot1->cpu->regs.r3);
+    fprintf(get_writer_end(), "$r4=0x%x\n", bot1->cpu->regs.r4);
+    fprintf(get_writer_end(), "$r5=0x%x\n", bot1->cpu->regs.r5);
+    fprintf(get_writer_end(), "$r6=0x%x\n", bot1->cpu->regs.r6);
+    fprintf(get_writer_end(), "$r7=0x%x\n", bot1->cpu->regs.r7);
+    fprintf(get_writer_end(), "$r8=0x%x\n", bot1->cpu->regs.r8);
+    fprintf(get_writer_end(), "$r9=0x%x\n", bot1->cpu->regs.r9);
+    fprintf(get_writer_end(), "$ra=0x%x\n", bot1->cpu->regs.ra);
+    fprintf(get_writer_end(), "$rb=0x%x\n", bot1->cpu->regs.rb);
+    fprintf(get_writer_end(), "$rc=0x%x\n", bot1->cpu->regs.rc);
+    fprintf(get_writer_end(), "$sp=0x%x\n", bot1->cpu->regs.sp);
+    fprintf(get_writer_end(), "$bp=0x%x\n", bot1->cpu->regs.bp);
+    fprintf(get_writer_end(), "$pc=0x%x\n", bot1->cpu->regs.pc);
+    fflush(get_writer_end());
+
+
+    // post event
+    wxCommandEvent e1(REGISTER_DISPLAY_UPDATE_EVENT);
+    if(!m_botInfos.first) puts("No bot panel set!");
+    wxPostEvent(m_botInfos.first, e1);
+    
+    // update registers
+    fprintf(get_writer_end(), "$r0=0x%x\n", bot2->cpu->regs.r0);
+    fprintf(get_writer_end(), "$r1=0x%x\n", bot2->cpu->regs.r1);
+    fprintf(get_writer_end(), "$r2=0x%x\n", bot2->cpu->regs.r2);
+    fprintf(get_writer_end(), "$r3=0x%x\n", bot2->cpu->regs.r3);
+    fprintf(get_writer_end(), "$r4=0x%x\n", bot2->cpu->regs.r4);
+    fprintf(get_writer_end(), "$r5=0x%x\n", bot2->cpu->regs.r5);
+    fprintf(get_writer_end(), "$r6=0x%x\n", bot2->cpu->regs.r6);
+    fprintf(get_writer_end(), "$r7=0x%x\n", bot2->cpu->regs.r7);
+    fprintf(get_writer_end(), "$r8=0x%x\n", bot2->cpu->regs.r8);
+    fprintf(get_writer_end(), "$r9=0x%x\n", bot2->cpu->regs.r9);
+    fprintf(get_writer_end(), "$ra=0x%x\n", bot2->cpu->regs.ra);
+    fprintf(get_writer_end(), "$rb=0x%x\n", bot2->cpu->regs.rb);
+    fprintf(get_writer_end(), "$rc=0x%x\n", bot2->cpu->regs.rc);
+    fprintf(get_writer_end(), "$sp=0x%x\n", bot2->cpu->regs.sp);
+    fprintf(get_writer_end(), "$bp=0x%x\n", bot2->cpu->regs.bp);
+    fprintf(get_writer_end(), "$pc=0x%x\n", bot2->cpu->regs.pc);
+    fflush(get_writer_end());
+
+    // post event
+    wxCommandEvent e2(REGISTER_DISPLAY_UPDATE_EVENT);
+    if(!m_botInfos.second) puts("No bot panel set!");
+    wxPostEvent(m_botInfos.second, e2);
 }
 void xwars::display_disassembly(xbot *bot1, xbot *bot2){
     section_entry * text = find_section_entry_by_name(bot1->bin->x_section, ".text");
@@ -88,6 +138,11 @@ void xwars::display_disassembly(xbot *bot1, xbot *bot2){
         20
     );
 
+    // post event
+    wxCommandEvent e1(REGISTER_DISPLAY_UPDATE_EVENT);
+    if(!m_botInfos.first) puts("No bot panel set!");
+    wxPostEvent(m_botInfos.first, e1);
+
     xasm_disassemble_bytes(
         get_writer_end(),
         bot2->bin,
@@ -96,6 +151,11 @@ void xwars::display_disassembly(xbot *bot1, xbot *bot2){
         bot2->cpu->regs.pc,
         20
     ); 
+
+        // post event
+    wxCommandEvent e2(INSTRUCTION_DISPLAY_UPDATE_EVENT);
+    if(!m_botInfos.second) puts("No bot panel set!");
+    wxPostEvent(m_botInfos.second, e2);
 }
 
 // load bots into text section at random placesx
@@ -216,4 +276,8 @@ xwars::~xwars(){
     for(xbot* bot : bots){
         delete bot;
     }
+}
+
+void xwars::register_bot_info(BotInfo *first, BotInfo *second){
+    m_botInfos = {first, second};
 }

@@ -20,13 +20,25 @@
 #include <wx/font.h>
 #include <wx/gdicmn.h>
 
+// new event types are declared in header and defined in source
+wxDECLARE_EVENT(INSTRUCTION_DISPLAY_UPDATE_EVENT, wxCommandEvent);
+wxDECLARE_EVENT(REGISTER_DISPLAY_UPDATE_EVENT, wxCommandEvent);
+
 class BotInfo : public wxPanel{
 public:
     BotInfo(wxWindow *parent, cstring botname);
 
+    // event handlers
+    void OnRegisterUpdate(wxCommandEvent& event);
+    void OnInstructionUpdate(wxCommandEvent& event);
+
     // change name of register
     void ChangeRegisterValue(const std::string& regname);
-
+    
+    template<typename fmtype = wxString, typename... argstype>
+    void PrintInstruction(fmtype str, argstype... args){
+        m_instructionDisplay->Print(str, args...);
+    }
     // fg color setters
     void SetBotNameColour(const wxColour& c);
     void SetRegisterDisplayFGColour(const wxColour& c);

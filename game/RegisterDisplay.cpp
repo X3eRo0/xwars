@@ -11,7 +11,7 @@
 
 
 #include "RegisterDisplay.hpp"
-#include <wx/gtk/colour.h>
+#include "Common.hpp"
 #include <wx/sizer.h>
 
 RegisterDisplay::RegisterDisplay(wxWindow* parent) : wxPanel(parent){
@@ -38,4 +38,9 @@ RegisterDisplay::RegisterDisplay(wxWindow* parent) : wxPanel(parent){
         m_registers[Register::RegisterNames[i]]->SetBackgroundColour(wxColour(32, 0, 32));
         m_regGridSizer->Add(m_registers[Register::RegisterNames[i]]);
     }
+}
+
+// set register value
+void RegisterDisplay::SetRegisterValue(const std::string &regname, const std::string& val){
+    m_registers[regname]->SetValue(val);
 }

@@ -23,7 +23,6 @@ typedef int64_t i64;
 typedef const char* cstring;
 
 // get reader and writer
-
 FILE * get_reader_end();
 FILE * get_writer_end();
 

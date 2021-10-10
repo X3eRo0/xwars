@@ -19,7 +19,8 @@
 class RegisterDisplay : public wxPanel{
 public:
     RegisterDisplay(wxWindow* parent);
-
+    
+    void SetRegisterValue(const std::string& regname, const std::string& val);
 private:
     wxColour m_bgColor = wxColour(32, 16, 32);
     // main sizer
