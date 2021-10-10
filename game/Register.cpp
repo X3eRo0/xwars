@@ -23,7 +23,7 @@ Register::Register(wxWindow *parent, const std::string& name)
     this->SetSizer(m_mainSizer);
 
     // create label and value static texts
-    m_registerNameText = new wxStaticText(this, wxID_ANY, m_registerName, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER);
+    m_registerNameText = new wxStaticText(this, wxID_ANY, "$"+m_registerName, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER);
     m_delimiterText = new wxStaticText(this, wxID_ANY, m_delimiterString, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER);
     m_registerValueText = new wxStaticText(this, wxID_ANY, "0x0000", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER);
 
@@ -44,7 +44,7 @@ Register::Register(wxWindow *parent, const std::string& name)
 
 void Register::SetName(const std::string& n){
     m_registerName = n;
-    m_registerNameText->SetLabel(n);
+    m_registerNameText->SetLabel("$"+n);
 }
 
 void Register::SetValue(const std::string& v){

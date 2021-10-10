@@ -83,7 +83,8 @@ void xwars::display_disassembly(xbot *bot1, xbot *bot2){
         text->v_size - (bot1->cpu->regs.pc - text->v_addr),
         bot1->cpu->regs.pc,
         20
-    ); 
+    );
+
     xasm_disassemble_bytes(
         stdout,
         bot2->bin,
@@ -131,9 +132,7 @@ void xwars::copy_bots(xbot *bot1, xbot *bot2){
 
 
 u32 xwars::battle(xbot *bot1, xbot *bot2){
-    
     // allocate a common text region
-
     section_entry * temp = NULL;
     section_entry * text = init_section_entry();
     set_section_entry(text, ".text", 0x400, 0x1337000, PERM_READ | PERM_WRITE | PERM_EXEC);

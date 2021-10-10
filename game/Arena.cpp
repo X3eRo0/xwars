@@ -48,11 +48,11 @@ Arena::Arena(wxWindow* parent) : wxPanel(parent){
     m_buttonsPanel->SetSizer(m_btnsPanelHSizer);
 
     // create buttons
-    m_btnLoad = new wxButton(this, ID_LOAD, "Load");
-    m_btnStart = new wxButton(this, ID_START, "Start");
-    m_btnPause = new wxButton(this, ID_PAUSE, "Pause");
-    m_btnPlus = new wxButton(this, ID_PLUS, "+");
-    m_btnMinus = new wxButton(this, ID_MINUS, "-");
+    m_btnLoad = new wxButton(this, ID_LOAD, "Load", wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
+    m_btnStart = new wxButton(this, ID_START, "Start", wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
+    m_btnPause = new wxButton(this, ID_PAUSE, "Pause", wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
+    m_btnPlus = new wxButton(this, ID_PLUS, "+", wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
+    m_btnMinus = new wxButton(this, ID_MINUS, "-", wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
 
     // add for sizing
     m_btnsPanelHSizer->Add(m_btnLoad, 1);

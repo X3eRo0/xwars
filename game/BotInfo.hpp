@@ -24,6 +24,9 @@ class BotInfo : public wxPanel{
 public:
     BotInfo(wxWindow *parent, cstring botname);
 
+    // change name of register
+    void ChangeRegisterValue(const std::string& regname);
+
     // fg color setters
     void SetBotNameColour(const wxColour& c);
     void SetRegisterDisplayFGColour(const wxColour& c);
