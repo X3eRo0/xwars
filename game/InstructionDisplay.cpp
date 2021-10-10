@@ -11,6 +11,7 @@
 
 
 #include "InstructionDisplay.hpp"
+#include <limits>
 #include <wx/gdicmn.h>
 
 InstructionDisplay::InstructionDisplay(wxWindow* parent) : wxPanel(parent){
@@ -42,10 +43,37 @@ InstructionDisplay::InstructionDisplay(wxWindow* parent) : wxPanel(parent){
 
     // populate instruction list
     for(size_t i = 0; i < 10; i++){
-        m_instructionList->InsertItem(i, "<address>");
-        m_instructionList->SetItem(i, 1, "<opcode>");
-        m_instructionList->SetItem(i, 2, "<instruction>");
+        AddNewInstruction("<address>", "<opcode>", "<instruction>");
     }
 
     m_parentBoxSizer->Add(m_instructionList, 1, wxEXPAND | wxALL);
+}
+
+// add new instruction trio
+void InstructionDisplay::AddNewInstruction(const std::string &address, const std::string &opcode, const std::string &instruction){
+    m_instructionList->InsertItem(m_numInstructions, address);
+    m_instructionList->SetItem(m_numInstructions, 1, opcode);
+    m_instructionList->SetItem(m_numInstructions, 2, instruction);
+
+    m_instructions.push_back({address, opcode, instruction});
+
+    m_numInstructions++;
+}
+
+void InstructionDisplay::SelectInstructionByIndex(size_t idx){
+    m_instructionList->Select(idx);
+}
+
+size_t InstructionDisplay::GetInstructionIndexByAddress(const std::string &address){
+    for(size_t i = 0; i < m_numInstructions; i++){
+        if(m_instructions[i].address == address) return i;
+    }
+
+    // if address not found then return max value (-1);
+    // return std::numeric_limits<size_t>::max();
+    return -1;
+}
+
+void InstructionDisplay::SelectInstructionByAddress(const std::string& address){
+    m_instructionList->Select(GetInstructionIndexByAddress(address));
 }

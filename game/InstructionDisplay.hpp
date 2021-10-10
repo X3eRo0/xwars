@@ -15,9 +15,28 @@
 #include "Common.hpp"
 #include <wx/listctrl.h>
 
+struct InstructionData{
+    std::string address;
+    std::string opcode;
+    std::string instruction;
+};
+
 class InstructionDisplay : public wxPanel{
 public:
     InstructionDisplay(wxWindow *parent);
+
+    // add a new address, opcode, instruction trio
+    void AddNewInstruction(const std::string& address, const std::string& opcode, const std::string& instruction);
+
+    // select a particular instruction by index
+    void SelectInstructionByIndex(size_t idx);
+
+    // get index of instruction by address
+    // returns -1 if fails to find address in list
+    size_t GetInstructionIndexByAddress(const std::string& address);
+
+    // select instruction by address
+    void SelectInstructionByAddress(const std::string& address);
 
 private:
     wxColour m_bgColor = wxColour(32, 16, 32);
@@ -31,6 +50,10 @@ private:
     wxBoxSizer *m_parentBoxSizer;
     // list to display our instructions
     wxListView *m_instructionList;
+    // keep instruction data
+    std::vector<InstructionData> m_instructions;
+    // keep track of number of instructions in list
+    size_t m_numInstructions = 0;
 };
 
 #endif//XVM_ARENA_INSTRUCTION_DISPLAY_HPP

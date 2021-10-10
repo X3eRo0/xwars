@@ -23,7 +23,7 @@
 class BotInfo : public wxPanel{
 public:
     BotInfo(wxWindow *parent, cstring botname);
-    
+
     // fg color setters
     void SetBotNameColour(const wxColour& c);
     void SetRegisterDisplayFGColour(const wxColour& c);
