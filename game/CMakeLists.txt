@@ -18,6 +18,7 @@ add_library(libxvm
 
 # create executable
 add_executable(xwars 
+    Common.cpp
     MainApp.cpp
     MainWindow.cpp
     MiddlePanel.cpp

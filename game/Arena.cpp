@@ -9,6 +9,8 @@
 #include <wx/wxcrt.h>
 #include <sys/types.h>
 #include <dirent.h>
+#include <unistd.h>
+#include <stdio.h>
 
 
 enum xvmArenaButtonIDs{
@@ -64,6 +66,7 @@ Arena::Arena(wxWindow* parent) : wxPanel(parent){
     // add for sizing
     m_mainSizer->Add(m_buttonsPanel, 1, wxEXPAND | wxALL, 0);
     m_mainSizer->Add(m_terminal, 14, wxEXPAND | wxALL, 0);
+
 }
 
 // gets the actual bot name from reversed path

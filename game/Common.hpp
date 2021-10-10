@@ -6,6 +6,7 @@
     #include <wx/wx.h>
 #endif//WX_PRECOMP
 
+#include <stdio.h>
 #include <malloc.h>
 #include <cstdint>
 
@@ -20,5 +21,10 @@ typedef int32_t i32;
 typedef int64_t i64;
 
 typedef const char* cstring;
+
+// get reader and writer
+
+FILE * get_reader_end();
+FILE * get_writer_end();
 
 #endif//XVM_ARENA_COMMON_HPP

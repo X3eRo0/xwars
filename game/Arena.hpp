@@ -10,6 +10,9 @@
 
 class Arena : public wxPanel{
 public:
+    
+    // read and write end FILE ptrs;
+    
     Arena(wxWindow *parent);
 
     // write normal text in the terminal

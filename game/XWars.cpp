@@ -18,6 +18,9 @@
 
 static xwars *xwars_instance = nullptr;
 
+// writer_e and reader_e
+extern FILE * reader_e, * writer_e;
+
 // will create a new xwars_instance if not created already
 // and return the intance
 xwars* get_xwars_instance(){
@@ -77,7 +80,7 @@ void xwars::display_registers(xbot *bot1, xbot *bot2){
 void xwars::display_disassembly(xbot *bot1, xbot *bot2){
     section_entry * text = find_section_entry_by_name(bot1->bin->x_section, ".text");
     xasm_disassemble_bytes(
-        stdout,
+        get_writer_end(),
         bot1->bin,
         (char *) get_reference(bot1->bin->x_section, bot1->cpu->regs.pc, PERM_EXEC),
         text->v_size - (bot1->cpu->regs.pc - text->v_addr),
@@ -86,7 +89,7 @@ void xwars::display_disassembly(xbot *bot1, xbot *bot2){
     );
 
     xasm_disassemble_bytes(
-        stdout,
+        get_writer_end(),
         bot2->bin,
         (char *) get_reference(bot2->bin->x_section, bot2->cpu->regs.pc, PERM_EXEC),
         text->v_size - (bot2->cpu->regs.pc - text->v_addr),
