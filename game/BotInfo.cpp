@@ -27,8 +27,8 @@ BotInfo::BotInfo(wxWindow* parent, cstring botname) : wxPanel(parent){
 
     // add displays for sizing
     m_mainSizer->Add(m_headingPanel, 1, wxEXPAND | wxALL);
-    m_mainSizer->Add(m_registerDisplay, 5, wxEXPAND | wxALL);
-    m_mainSizer->Add(m_instructionDisplay, 10, wxEXPAND | wxALL);
+    m_mainSizer->Add(m_registerDisplay, 5, wxEXPAND | wxALL, 5);
+    m_mainSizer->Add(m_instructionDisplay, 10, wxEXPAND | wxALL, 5);
 }
 
 // change botname text display text color

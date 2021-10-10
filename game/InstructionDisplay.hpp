@@ -13,18 +13,24 @@
 #define XVM_ARENA_INSTRUCTION_DISPLAY_HPP
 
 #include "Common.hpp"
+#include <wx/listctrl.h>
 
 class InstructionDisplay : public wxPanel{
 public:
     InstructionDisplay(wxWindow *parent);
+
 private:
-    wxColour m_bgColor = wxColour(0, 100, 100);
+    wxColour m_bgColor = wxColour(32, 16, 32);
     // main sizer
     wxSizer *m_mainSizer;
     // this box will contain all our objects
     wxStaticBox *m_parentBox;
+    // parent box colour 
+    wxColour m_parentBoxFGColour = *wxCYAN;
     // sizer for sizing objects in parent box
     wxBoxSizer *m_parentBoxSizer;
+    // list to display our instructions
+    wxListView *m_instructionList;
 };
 
 #endif//XVM_ARENA_INSTRUCTION_DISPLAY_HPP

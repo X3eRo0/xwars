@@ -32,7 +32,5 @@ add_executable(xwars
     BotInfo.cpp
 )
 
-message(STATUS "DEBUG1")
-
 target_link_libraries(xwars libxvm ${wxWidgets_LIBRARIES})
 target_include_directories(xwars PUBLIC ${wxWidgets_INCLUDE_DIRS})

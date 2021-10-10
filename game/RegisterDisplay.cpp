@@ -24,6 +24,7 @@ RegisterDisplay::RegisterDisplay(wxWindow* parent) : wxPanel(parent){
 
     // create static box to contain register display areas and set it to span whole space
     m_parentBox = new wxStaticBox(this, wxID_ANY, "Registers");
+    m_parentBox->SetForegroundColour(m_parentBoxFGColour);
     m_mainSizer->Add(m_parentBox, 1, wxEXPAND | wxALL, 10);
     
     // initialize grid sizer for arranging gprs

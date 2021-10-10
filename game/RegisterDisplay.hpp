@@ -21,13 +21,15 @@ public:
     RegisterDisplay(wxWindow* parent);
 
 private:
-    wxColour m_bgColor = wxColour(16, 16, 16);
+    wxColour m_bgColor = wxColour(32, 16, 32);
     // main sizer
     wxSizer *m_mainSizer;
     // this box will contain all our objects
     wxStaticBox *m_parentBox;
     // sizer for sizing objects in parent box
     wxBoxSizer *m_parentBoxSizer;
+    // parent box label colour
+    wxColour m_parentBoxFGColour = *wxCYAN;
     // registers will be shown in a grid inside the parent box
     wxGridSizer *m_regGridSizer;
     // handle to each register display item
