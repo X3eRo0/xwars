@@ -41,6 +41,10 @@ public:
         m_instructionDisplay->Print(str, args...);
     }
 
+    //void ResetInstructionDisplay(){
+        //m_instructionDisplay->SetInsertionPoint(-1);
+    //}
+
     void ClearInstructionDisplay(){
         m_instructionDisplay->ClearDisplay();
     }

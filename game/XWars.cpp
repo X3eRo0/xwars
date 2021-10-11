@@ -102,10 +102,6 @@ void xwars::display_registers(xbot *bot1, xbot *bot2){
     fprintf(bot1->reg_writer_e, "$pc=0x%.8x\n", bot1->cpu->regs.pc);
     fflush(bot1->reg_writer_e);
 
-
-    auto cur_time = wxGetUTCTimeUSec();
-    printf("POSTING REGISTER EVENT FOR BOT1 @ [%ld ns]\n", cur_time.ToLong());
-    
     // post event
     // wxCommandEvent e1(REGISTER_DISPLAY_UPDATE_EVENT);
     // e1.SetClientData((void *)bot1);
@@ -134,8 +130,6 @@ void xwars::display_registers(xbot *bot1, xbot *bot2){
     fprintf(bot2->reg_writer_e, "$pc=0x%.8x\n", bot2->cpu->regs.pc);
     fflush(bot2->reg_writer_e);
 
-    cur_time = wxGetUTCTimeUSec();
-    printf("POSTING REGISTER EVENT FOR BOT2 @ [%ld ns]\n", cur_time.ToLong());
     
     // post event
     // wxCommandEvent e2(REGISTER_DISPLAY_UPDATE_EVENT);
@@ -162,8 +156,6 @@ void xwars::display_disassembly(xbot *bot1, xbot *bot2){
         20
     );
 
-    auto cur_time = wxGetUTCTimeUSec();
-    printf("POSTING INSTRUCTION UPDATE EVENT FOR BOT1 @ [%ld ns]\n", cur_time.ToLong());
     
     // post event
     // wxCommandEvent e1(INSTRUCTION_DISPLAY_UPDATE_EVENT);
@@ -183,8 +175,6 @@ void xwars::display_disassembly(xbot *bot1, xbot *bot2){
         20
     );
 
-    cur_time = wxGetUTCTimeUSec();
-    printf("POSTING INSTRUCTION UPDATE EVENT FOR BOT2 @ [%ld ns]\n", cur_time.ToLong());
 
     // post event
     // wxCommandEvent e2(INSTRUCTION_DISPLAY_UPDATE_EVENT);
@@ -271,20 +261,14 @@ u32 xwars::battle(xbot *bot1, xbot *bot2){
     u32 counter = 0; // number of instructions executed
     std::string winner = "";
 
-    auto cur_time = wxGetUTCTimeUSec();
-    printf("ENTERING GAME LOOP @ [%ld ns]\n", cur_time.ToLong());
-    
     while (
         (counter < MAX_INSTR_EXECS) &&
         get_RF(bot1->cpu) &&
         get_RF(bot2->cpu)
     ){
 
-      // record start time
-    auto beg_time = wxGetUTCTimeUSec();
-      
         display_registers(bot1, bot2);
-	display_disassembly(bot1, bot2);
+    	display_disassembly(bot1, bot2);
 	
         bot1->step();
         
@@ -308,13 +292,8 @@ u32 xwars::battle(xbot *bot1, xbot *bot2){
             break;
         }
         counter++;
-
-	auto end_time = wxGetUTCTimeUSec();
-	printf("LOOP ITER[%d] TOOK [%ld ns]\n", counter, end_time.ToLong() - beg_time.ToLong());      
     }
 
-    cur_time = wxGetUTCTimeUSec();
-    printf("GAME FINISHED @ [%ld ns]\n", cur_time.ToLong());      
     printf("Winner: %s in %d instructions\n", winner.c_str(), counter);
     return counter;
 }

@@ -28,7 +28,7 @@ public:
     void Print(fmtype str, argstype... args){
         wxString writestr;
         writestr.Printf(str, args...);
-        m_displayTextCtrl->AppendText(writestr);
+        m_displayTextCtrl->WriteText(writestr);
 
         // WARNING : ----------------------------------------
         // this is a hack to give the main thread some time :
@@ -39,7 +39,7 @@ public:
     }
 
     void ClearDisplay(){
-        m_displayTextCtrl->SetLabelText(wxEmptyString);
+        m_displayTextCtrl->Clear();
     }
 private:
     wxColour m_bgColor = wxColour(32, 16, 32);

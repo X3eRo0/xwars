@@ -72,17 +72,14 @@ void BotInfo::UpdateRegisterDisplay(xbot *bot){
     }
     for (i32 i = 0; i < 16; i++){
         getline(&lineptr, &n, reader);
-	// change register values here
-	printf("register: %s", lineptr);
+		//// change register values here
+        //printf("register: %s", lineptr);
     }
-
-    auto cur_time = wxGetUTCTimeUSec();
-    printf("REACHED REGISTER UPDATE @ [%ld ns]\n", cur_time.ToLong());
 }
 
 // register update event handler
 void BotInfo::UpdateInstructionDisplay(xbot *bot){
-    printf("wrting instructions in display\n");
+    //printf("wrting instructions in display\n");
     char * lineptr = NULL;
     size_t n = 0;
     FILE * reader = bot->dis_reader_e;
@@ -91,13 +88,15 @@ void BotInfo::UpdateInstructionDisplay(xbot *bot){
         puts("bot register reader fucked");
         return;
     }
+    ClearInstructionDisplay();
+    wxTheApp->Yield(false);
+    std::string disassembly = "";
     for (i32 i = 0; i < 20; i++){
         getline(&lineptr, &n, reader);
-        PrintInstruction("%s", lineptr);
-	printf("%s", lineptr);
+        printf("LineNo: %d\n", i);
+        disassembly += lineptr;
     }
+    PrintInstruction("%s", disassembly);
+    wxTheApp->Yield(false);
     free(lineptr);
-
-    auto cur_time = wxGetUTCTimeUSec();
-    printf("REACHED INSTRUCTION UPDATE @ [%ld ns]\n", cur_time.ToLong());
 }
