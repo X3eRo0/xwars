@@ -31,8 +31,6 @@ MainWindow::MainWindow(wxWindow* parent, wxWindowID id, const wxString& title, c
 
     // set colors for panels to tell them apart
     leftPanel->SetBackgroundColour(*wxBLACK);
-    midPanel->SetBackgroundColour(wxColour(64, 64, 64));
+    midPanel->SetBackgroundColour(wxColour(32, 64, 32));
     rightPanel->SetBackgroundColour(*wxBLACK);
-   
-    leftPanel->PrintInstruction("Something %s", "Is working well");
 }

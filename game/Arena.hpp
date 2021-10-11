@@ -57,7 +57,7 @@ private:
     // our control buttons
     wxButton *m_btnLoad, *m_btnStart, *m_btnPlus, *m_btnMinus, *m_btnPause;
     // terminal font
-    wxFont m_terminalFont = wxFont(12, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM);
+    wxFont m_terminalFont = wxFont(10, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM);
 
     DECLARE_EVENT_TABLE();
 };

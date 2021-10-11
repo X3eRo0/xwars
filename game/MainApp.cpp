@@ -3,9 +3,11 @@
 #include "MainApp.hpp"
 #include "MainWindow.hpp"
 
+MainWindow *mainWindow = nullptr;
+
 bool MainApp::OnInit(){
     // this will be our main window
-    MainWindow *mainWindow = new MainWindow(nullptr, wxID_ANY, _("XVM XWars - Arena"),
+    mainWindow = new MainWindow(nullptr, wxID_ANY, _("XVM XWars - Arena"),
                             wxDefaultPosition, wxSize(MAIN_WINDOW_WIDTH, MAIN_WINDOW_WIDTH));
     mainWindow->Show();
     mainWindow->SetFocus();
@@ -17,6 +19,11 @@ bool MainApp::OnInit(){
 
     // everything's ok dude ;-)
     return true;
+}
+
+wxFrame* GetMainWindow(){
+    if(!mainWindow) wxPuts("Main Window NULLPTR hai!");
+    return mainWindow;
 }
 
 wxIMPLEMENT_APP(MainApp);

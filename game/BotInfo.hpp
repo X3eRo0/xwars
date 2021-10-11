@@ -40,6 +40,7 @@ public:
     void PrintInstruction(fmtype str, argstype... args){
         m_instructionDisplay->Print(str, args...);
     }
+
     // fg color setters
     void SetBotNameColour(const wxColour& c);
     void SetRegisterDisplayFGColour(const wxColour& c);

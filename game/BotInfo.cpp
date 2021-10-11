@@ -14,6 +14,7 @@
 #include "BotInfo.hpp"
 #include <wx/gdicmn.h>
 #include <wx/sizer.h>
+#include <wx/utils.h>
 
 // define custom event type
 wxDEFINE_EVENT(REGISTER_DISPLAY_UPDATE_EVENT, wxCommandEvent);
@@ -31,11 +32,12 @@ BotInfo::BotInfo(wxWindow* parent, cstring botname) : wxPanel(parent){
 
     // add displays for sizing
     m_mainSizer->Add(m_headingPanel, 1, wxEXPAND | wxALL);
-    m_mainSizer->Add(m_registerDisplay, 3, wxEXPAND | wxALL, 3);
-    m_mainSizer->Add(m_instructionDisplay, 12, wxEXPAND | wxALL, 3);
+    m_mainSizer->Add(m_registerDisplay, 5, wxEXPAND | wxALL, 3);
+    m_mainSizer->Add(m_instructionDisplay, 10, wxEXPAND | wxALL, 3);
 
     Connect(REGISTER_DISPLAY_UPDATE_EVENT, wxCommandEventHandler(BotInfo::OnRegisterUpdate));
     Connect(INSTRUCTION_DISPLAY_UPDATE_EVENT, wxCommandEventHandler(BotInfo::OnInstructionUpdate));
+
 }
 
 // change botname text display text color
@@ -82,6 +84,7 @@ void BotInfo::OnInstructionUpdate(wxCommandEvent &event){
     for (i32 i = 0; i < 20; i++){
         getline(&lineptr, &n, reader);
         PrintInstruction("%s", lineptr); 
+        wxTheApp->SafeYield(GetMainWindow(), false);
     }
     free(lineptr);
 }

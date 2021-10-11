@@ -2,6 +2,8 @@
 #include "../xasm/xasm.h"
 #include "Common.hpp"
 #include <cstdio>
+#include <unistd.h>
+#include <wx/app.h>
 #include <wx/event.h>
 
 // Created by X3eRo0 on 6/7/2021.
@@ -245,7 +247,7 @@ u32 xwars::battle(xbot *bot1, xbot *bot2){
         display_disassembly(bot1, bot2);
         
         bot1->step();
-
+        
         if (signal_abort(bot1->cpu->errors, bot1->cpu) == E_ERR){
             winner = bot2->botname;
             break;
@@ -267,6 +269,7 @@ u32 xwars::battle(xbot *bot1, xbot *bot2){
         }
         counter++;
 
+        // wxTheApp->Yield();
     }
     printf("Winner: %s in %d instructions\n", winner.c_str(), counter);
     return counter;

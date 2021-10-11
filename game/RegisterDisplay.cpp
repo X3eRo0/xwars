@@ -28,7 +28,7 @@ RegisterDisplay::RegisterDisplay(wxWindow* parent) : wxPanel(parent){
     m_mainSizer->Add(m_parentBox, 1, wxEXPAND | wxALL, 10);
     
     // initialize grid sizer for arranging gprs
-    m_regGridSizer = new wxGridSizer(4, 4, 1, 1);
+    m_regGridSizer = new wxGridSizer(6, 3, 1, 1);
     m_parentBox->SetSizer(m_regGridSizer);
 
     // initialize gen purpose regs
