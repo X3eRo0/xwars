@@ -5,6 +5,9 @@
 #include <unistd.h>
 #include <wx/app.h>
 #include <wx/event.h>
+#include <wx/time.h>
+#include <wx/utils.h>
+#include "Factory.hpp"
 
 // Created by X3eRo0 on 6/7/2021.
 //
@@ -100,11 +103,17 @@ void xwars::display_registers(xbot *bot1, xbot *bot2){
     fflush(bot1->reg_writer_e);
 
 
+    auto cur_time = wxGetUTCTimeUSec();
+    printf("POSTING REGISTER EVENT FOR BOT1 @ [%ld ns]\n", cur_time.ToLong());
+    
     // post event
-    wxCommandEvent e1(REGISTER_DISPLAY_UPDATE_EVENT);
-    e1.SetClientData((void *)bot1);
-    if(!m_botInfos.first) puts("No bot panel set!");
-    wxPostEvent(m_botInfos.first, e1);
+    // wxCommandEvent e1(REGISTER_DISPLAY_UPDATE_EVENT);
+    // e1.SetClientData((void *)bot1);
+    // if(!m_botInfos.first) puts("No bot panel set!");
+    // wxPostEvent(m_botInfos.first, e1);
+
+    // direct call for update
+    FactoryGetLeftBotInfo()->UpdateRegisterDisplay(bot1);
     
     // update registers
     fprintf(bot2->reg_writer_e, "$r0=0x%.8x\n", bot2->cpu->regs.r0);
@@ -125,14 +134,25 @@ void xwars::display_registers(xbot *bot1, xbot *bot2){
     fprintf(bot2->reg_writer_e, "$pc=0x%.8x\n", bot2->cpu->regs.pc);
     fflush(bot2->reg_writer_e);
 
+    cur_time = wxGetUTCTimeUSec();
+    printf("POSTING REGISTER EVENT FOR BOT2 @ [%ld ns]\n", cur_time.ToLong());
+    
     // post event
-    wxCommandEvent e2(REGISTER_DISPLAY_UPDATE_EVENT);
-    e2.SetClientData((void *)bot2);
-    if(!m_botInfos.second) puts("No bot panel set!");
-    wxPostEvent(m_botInfos.second, e2);
+    // wxCommandEvent e2(REGISTER_DISPLAY_UPDATE_EVENT);
+    // e2.SetClientData((void *)bot2);
+    // if(!m_botInfos.second) puts("No bot panel set!");
+    // wxPostEvent(m_botInfos.second, e2);
+
+    // direct call for update
+    FactoryGetRightBotInfo()->UpdateRegisterDisplay(bot2);
+    
+    // wait for all events to complete
+    //wxTheApp->Yield();
 }
+
 void xwars::display_disassembly(xbot *bot1, xbot *bot2){
     section_entry * text = find_section_entry_by_name(bot1->bin->x_section, ".text");
+    
     xasm_disassemble_bytes(
         bot1->dis_writer_e,
         bot1->bin,
@@ -142,12 +162,18 @@ void xwars::display_disassembly(xbot *bot1, xbot *bot2){
         20
     );
 
+    auto cur_time = wxGetUTCTimeUSec();
+    printf("POSTING INSTRUCTION UPDATE EVENT FOR BOT1 @ [%ld ns]\n", cur_time.ToLong());
+    
     // post event
-    wxCommandEvent e1(INSTRUCTION_DISPLAY_UPDATE_EVENT);
-    e1.SetClientData((void *)bot1);
-    if(!m_botInfos.first) puts("No bot panel set!");
-    wxPostEvent(m_botInfos.first, e1);
+    // wxCommandEvent e1(INSTRUCTION_DISPLAY_UPDATE_EVENT);
+    // e1.SetClientData((void *)bot1);
+    // if(!m_botInfos.first) puts("No bot panel set!");
+    // wxPostEvent(m_botInfos.first, e1);
 
+    // direct call for update
+    FactoryGetLeftBotInfo()->UpdateInstructionDisplay(bot1);
+    
     xasm_disassemble_bytes(
         bot2->dis_writer_e,
         bot2->bin,
@@ -155,13 +181,21 @@ void xwars::display_disassembly(xbot *bot1, xbot *bot2){
         text->v_size - (bot2->cpu->regs.pc - text->v_addr),
         bot2->cpu->regs.pc,
         20
-    ); 
+    );
+
+    cur_time = wxGetUTCTimeUSec();
+    printf("POSTING INSTRUCTION UPDATE EVENT FOR BOT2 @ [%ld ns]\n", cur_time.ToLong());
 
     // post event
-    wxCommandEvent e2(INSTRUCTION_DISPLAY_UPDATE_EVENT);
-    e2.SetClientData((void *)bot2);
-    if(!m_botInfos.second) puts("No bot panel set!");
-    wxPostEvent(m_botInfos.second, e2);
+    // wxCommandEvent e2(INSTRUCTION_DISPLAY_UPDATE_EVENT);
+    // e2.SetClientData((void *)bot2);
+    // if(!m_botInfos.second) puts("No bot panel set!");
+    // wxPostEvent(m_botInfos.second, e2);
+
+    FactoryGetRightBotInfo()->UpdateInstructionDisplay(bot2);
+    
+    // wait for all events to comp
+    //    wxTheApp->Yield();
 }
 
 // load bots into text section at random placesx
@@ -237,15 +271,21 @@ u32 xwars::battle(xbot *bot1, xbot *bot2){
     u32 counter = 0; // number of instructions executed
     std::string winner = "";
 
+    auto cur_time = wxGetUTCTimeUSec();
+    printf("ENTERING GAME LOOP @ [%ld ns]\n", cur_time.ToLong());
+    
     while (
         (counter < MAX_INSTR_EXECS) &&
         get_RF(bot1->cpu) &&
         get_RF(bot2->cpu)
     ){
-        
+
+      // record start time
+    auto beg_time = wxGetUTCTimeUSec();
+      
         display_registers(bot1, bot2);
-        display_disassembly(bot1, bot2);
-        
+	display_disassembly(bot1, bot2);
+	
         bot1->step();
         
         if (signal_abort(bot1->cpu->errors, bot1->cpu) == E_ERR){
@@ -269,8 +309,12 @@ u32 xwars::battle(xbot *bot1, xbot *bot2){
         }
         counter++;
 
-        // wxTheApp->Yield();
+	auto end_time = wxGetUTCTimeUSec();
+	printf("LOOP ITER[%d] TOOK [%ld ns]\n", counter, end_time.ToLong() - beg_time.ToLong());      
     }
+
+    cur_time = wxGetUTCTimeUSec();
+    printf("GAME FINISHED @ [%ld ns]\n", cur_time.ToLong());      
     printf("Winner: %s in %d instructions\n", winner.c_str(), counter);
     return counter;
 }

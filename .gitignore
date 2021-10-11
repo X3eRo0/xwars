@@ -6,3 +6,6 @@
 /pygui/__pycache__
 *.swp
 .cache/
+*.hpp~
+*.cpp~
+*~

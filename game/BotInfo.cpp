@@ -12,32 +12,35 @@
 
 #include "Common.hpp"
 #include "BotInfo.hpp"
+#include "Factory.hpp"
+#include <chrono>
+#include <wx/app.h>
 #include <wx/gdicmn.h>
 #include <wx/sizer.h>
+#include <wx/time.h>
 #include <wx/utils.h>
 
 // define custom event type
-wxDEFINE_EVENT(REGISTER_DISPLAY_UPDATE_EVENT, wxCommandEvent);
-wxDEFINE_EVENT(INSTRUCTION_DISPLAY_UPDATE_EVENT, wxCommandEvent);
+// wxDEFINE_EVENT(REGISTER_DISPLAY_UPDATE_EVENT, wxCommandEvent);
+// wxDEFINE_EVENT(INSTRUCTION_DISPLAY_UPDATE_EVENT, wxCommandEvent);
 
-BotInfo::BotInfo(wxWindow* parent, cstring botname) : wxPanel(parent){
+BotInfo::BotInfo(wxWindow* parent, const std::string& botname) : wxPanel(parent){
     // create main sizer for our window
     m_mainSizer = new wxBoxSizer(wxVERTICAL);
     this->SetSizer(m_mainSizer);
 
     // create register and instruction dislay
     m_headingPanel = new BotNameDisplay(this, botname);
-    m_registerDisplay = new RegisterDisplay(this);
-    m_instructionDisplay = new InstructionDisplay(this);
+    m_registerDisplay = FactoryCreateLeftRegisterDisplay(this);
+    m_instructionDisplay = FactoryCreateRightInstructionDisplay(this);
 
     // add displays for sizing
     m_mainSizer->Add(m_headingPanel, 1, wxEXPAND | wxALL);
     m_mainSizer->Add(m_registerDisplay, 5, wxEXPAND | wxALL, 3);
     m_mainSizer->Add(m_instructionDisplay, 10, wxEXPAND | wxALL, 3);
-
-    Connect(REGISTER_DISPLAY_UPDATE_EVENT, wxCommandEventHandler(BotInfo::OnRegisterUpdate));
-    Connect(INSTRUCTION_DISPLAY_UPDATE_EVENT, wxCommandEventHandler(BotInfo::OnInstructionUpdate));
-
+    
+    // Connect(REGISTER_DISPLAY_UPDATE_EVENT, wxCommandEventHandler(BotInfo::OnRegisterUpdate));
+    // Connect(INSTRUCTION_DISPLAY_UPDATE_EVENT, wxCommandEventHandler(BotInfo::OnInstructionUpdate));
 }
 
 // change botname text display text color
@@ -58,33 +61,43 @@ void BotInfo::SetInstructionDisplayFGColour(const wxColour &c){
 }
 
 // register update event handler
-void BotInfo::OnRegisterUpdate(wxCommandEvent &event){
+void BotInfo::UpdateRegisterDisplay(xbot *bot){
     char * lineptr = NULL;
     size_t n = 0;
-    FILE * reader = ((xbot *)event.GetClientData())->reg_reader_e;
+    FILE * reader = bot->reg_reader_e;
+    
     if (!reader){
         puts("bot register reader fucked");
         return;
     }
     for (i32 i = 0; i < 16; i++){
         getline(&lineptr, &n, reader);
-        printf("register: %s", lineptr);
+	// change register values here
+	printf("register: %s", lineptr);
     }
+
+    auto cur_time = wxGetUTCTimeUSec();
+    printf("REACHED REGISTER UPDATE @ [%ld ns]\n", cur_time.ToLong());
 }
 
 // register update event handler
-void BotInfo::OnInstructionUpdate(wxCommandEvent &event){
+void BotInfo::UpdateInstructionDisplay(xbot *bot){
+    printf("wrting instructions in display\n");
     char * lineptr = NULL;
     size_t n = 0;
-    FILE * reader = ((xbot *)event.GetClientData())->dis_reader_e;
+    FILE * reader = bot->dis_reader_e;
+    
     if (!reader){
         puts("bot register reader fucked");
         return;
     }
     for (i32 i = 0; i < 20; i++){
         getline(&lineptr, &n, reader);
-        PrintInstruction("%s", lineptr); 
-        wxTheApp->SafeYield(GetMainWindow(), false);
+        PrintInstruction("%s", lineptr);
+	printf("%s", lineptr);
     }
     free(lineptr);
+
+    auto cur_time = wxGetUTCTimeUSec();
+    printf("REACHED INSTRUCTION UPDATE @ [%ld ns]\n", cur_time.ToLong());
 }

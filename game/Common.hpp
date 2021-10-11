@@ -11,6 +11,7 @@
 #include <cstdint>
 #include <wx/utils.h>
 #include <unistd.h>
+#include <chrono>
 
 typedef uint8_t  u8;
 typedef uint16_t u16;
@@ -29,6 +30,6 @@ FILE * get_reader_end();
 FILE * get_writer_end();
 
 // this is defined in MainApp.cpp
-wxFrame* GetMainWindow();
+// wxFrame* GetMainWindow();
 
 #endif//XVM_ARENA_COMMON_HPP

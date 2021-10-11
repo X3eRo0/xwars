@@ -31,6 +31,7 @@ add_executable(xwars
     Register.cpp
     BotNameDisplay.cpp
     BotInfo.cpp
+    Factory.cpp
 )
 
 target_link_libraries(xwars libxvm ${wxWidgets_LIBRARIES})

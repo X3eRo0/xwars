@@ -13,9 +13,12 @@
 #define XVM_ARENA_INSTRUCTION_DISPLAY_HPP
 
 #include "Common.hpp"
+#include <ostream>
+#include <streambuf>
 #include <wx/font.h>
 #include <wx/gdicmn.h>
 #include <wx/listctrl.h>
+#include <wx/stream.h>
 
 class InstructionDisplay : public wxPanel{
 public:
@@ -26,6 +29,17 @@ public:
         wxString writestr;
         writestr.Printf(str, args...);
         m_displayTextCtrl->AppendText(writestr);
+
+        // WARNING : ----------------------------------------
+        // this is a hack to give the main thread some time :
+        // to write things onto the display area            :
+        // --------------------------------------------------
+        // wxTheApp->SafeYield(GetMainWindow(), false);
+	// wxTheApp->Yield();
+    }
+
+    void ClearDisplay(){
+        m_displayTextCtrl->SetLabelText(wxEmptyString);
     }
 private:
     wxColour m_bgColor = wxColour(32, 16, 32);

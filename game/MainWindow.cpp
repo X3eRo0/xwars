@@ -1,5 +1,6 @@
 #include "MainWindow.hpp"
 #include "XWars.hpp"
+#include "Factory.hpp"
 #include <wx/gdicmn.h>
 
 MainWindow::MainWindow(wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size) 
@@ -17,9 +18,9 @@ MainWindow::MainWindow(wxWindow* parent, wxWindowID id, const wxString& title, c
     // left panel will show information about bots
     // right panel will show memory space
     BotInfo *leftPanel, *rightPanel;
-    leftPanel = new BotInfo(parentPanel, "Khiladi One");
-    midPanel = new MiddlePanel(parentPanel);
-    rightPanel = new BotInfo(parentPanel, "Khiladi Two");
+    leftPanel = FactoryCreateLeftBotInfo(parentPanel, "Khiladi One");
+    midPanel = FactoryCreateMiddlePanel(parentPanel);
+    rightPanel = FactoryCreateRightBotInfo(parentPanel, "Khiladi Two");
 
     // register the two bot infos to xwars
     get_xwars_instance()->register_bot_info(leftPanel, rightPanel);

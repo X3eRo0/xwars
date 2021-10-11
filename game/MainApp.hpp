@@ -9,7 +9,6 @@
 #define MAIN_WINDOW_WIDTH 1240 
 #define MAIN_WINDOW_HEIGHT 720
 
-
 class MainApp : public wxApp{
 public:
     // on init is our "main"

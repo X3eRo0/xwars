@@ -21,6 +21,13 @@ public:
         wxString str;
         str.Printf(fmt, _args...);
         m_terminal->AppendText(str);
+
+        // WARNING : ----------------------------------------
+        // this is a hack to give the main thread some time :
+        // to write things onto the display area            :
+        // --------------------------------------------------
+        // wxTheApp->SafeYield(GetMainWindow(), false);
+        wxTheApp->Yield();
     }
 
     // write error text into the terminal

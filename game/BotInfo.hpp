@@ -27,18 +27,22 @@ wxDECLARE_EVENT(REGISTER_DISPLAY_UPDATE_EVENT, wxCommandEvent);
 
 class BotInfo : public wxPanel{
 public:
-    BotInfo(wxWindow *parent, cstring botname);
+    BotInfo(wxWindow *parent, const std::string& botname);
 
     // event handlers
-    void OnRegisterUpdate(wxCommandEvent& event);
-    void OnInstructionUpdate(wxCommandEvent& event);
-
+    void UpdateRegisterDisplay(xbot *bot);
+    void UpdateInstructionDisplay(xbot *bot);
+  
     // change name of register
     void ChangeRegisterValue(const std::string& regname);
-    
+
     template<typename fmtype = wxString, typename... argstype>
     void PrintInstruction(fmtype str, argstype... args){
         m_instructionDisplay->Print(str, args...);
+    }
+
+    void ClearInstructionDisplay(){
+        m_instructionDisplay->ClearDisplay();
     }
 
     // fg color setters
