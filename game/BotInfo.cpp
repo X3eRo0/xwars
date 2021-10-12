@@ -93,6 +93,14 @@ void BotInfo::UpdateInstructionDisplay(xbot *bot){
     
     // add junk at the end of file
     // in order to realize this is really eof
+    // since we dont know when the stream really ends
+    // we needed some method to check that
+    // each line by default will contain atleast one address string
+    // address is atleast longer than 5 chars
+    // so we exploit that and append something smaller than that
+    // since we know that xvm won't return something smaller than that
+    // we assume that we've reached the end of file!
+    // this is just a hack to get over a really irritating bug
     FILE *writer = bot->dis_writer_e;
     if(!writer){
 	puts("connection with backend failed [ writer end not visible ]");
