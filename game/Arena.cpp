@@ -136,5 +136,5 @@ void Arena::OnStart(wxCommandEvent& WXUNUSED(event)){
         Print("Bots: %p\n", bots[i]);
     }
     
-    get_xwars_instance()->battle(bots[0], bots[1]);
+    get_xwars_instance()->battle(bots[1], bots[2]);
 }

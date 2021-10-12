@@ -14,6 +14,7 @@
 #include "BotInfo.hpp"
 #include "Factory.hpp"
 #include <chrono>
+#include <cstdio>
 #include <wx/app.h>
 #include <wx/gdicmn.h>
 #include <wx/sizer.h>
@@ -67,7 +68,7 @@ void BotInfo::UpdateRegisterDisplay(xbot *bot){
     FILE * reader = bot->reg_reader_e;
     
     if (!reader){
-        puts("bot register reader fucked");
+        puts("connection with backend failed [ reader end not visible ]");
         return;
     }
     for (i32 i = 0; i < 16; i++){
@@ -80,22 +81,37 @@ void BotInfo::UpdateRegisterDisplay(xbot *bot){
 // register update event handler
 void BotInfo::UpdateInstructionDisplay(xbot *bot){
     //printf("wrting instructions in display\n");
-    char * lineptr = NULL;
+    char *lineptr = NULL;
     size_t n = 0;
-    FILE * reader = bot->dis_reader_e;
-    
+
+    // get reader end from bot and check if visible
+    FILE *reader = bot->dis_reader_e;
     if (!reader){
-        puts("bot register reader fucked");
+        puts("connection with backend failed [ reader end not visible ]");
         return;
     }
+    
+    // add junk at the end of file
+    // in order to realize this is really eof
+    FILE *writer = bot->dis_writer_e;
+    if(!writer){
+	puts("connection with backend failed [ writer end not visible ]");
+	return;
+    }
+    std::string junk = "x\n";
+    fwrite(junk.c_str(), 1, 2, writer);
+    fflush(writer);
+    
     ClearInstructionDisplay();
     wxTheApp->Yield(false);
     std::string disassembly = "";
-    for (i32 i = 0; i < 20; i++){
-        getline(&lineptr, &n, reader);
-        printf("LineNo: %d\n", i);
-        disassembly += lineptr;
+    u32 i = 0;
+    while(getline(&lineptr, &n, reader) > 2){
+        // getline(&lineptr, &n, reader);
+        printf("LineNo: %d\n", ++i);
+	disassembly += lineptr;
     }
+    
     PrintInstruction("%s", disassembly);
     wxTheApp->Yield(false);
     free(lineptr);
