@@ -273,7 +273,6 @@ u32 xwars::battle(xbot *bot1, xbot *bot2){
 
         display_registers(bot1, bot2);
     	display_disassembly(bot1, bot2);
-	
         bot1->step();
         
         if (signal_abort(bot1->cpu->errors, bot1->cpu) == E_ERR){

@@ -1,6 +1,6 @@
 .section .bot #0x400000 #0x400 rwx
 _start:
-	mov $r3, [$sp]
+	lea $r3, [$pc]
 	mov $r0, $r3
 	mov $r1, $r0
 	and $r1, #0xfffff000

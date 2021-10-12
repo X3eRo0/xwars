@@ -74,16 +74,14 @@ void BotInfo::UpdateRegisterDisplay(xbot *bot){
     
     for (i32 i = 0; i < 16; i++){
         getline(&lineptr, &n, reader);
-	lineptr+=4;
-	m_registerDisplay->SetRegisterValue(Register::RegisterNames[i], lineptr);
+	    lineptr+=4;
+	    m_registerDisplay->SetRegisterValue(Register::RegisterNames[i], lineptr);
     }
 }
 
 // register update event handler
 void BotInfo::UpdateInstructionDisplay(xbot *bot){
     ClearInstructionDisplay();
-
-    //printf("wrting instructions in display\n");
     char *lineptr = NULL;
     size_t n = 0;
 
@@ -94,32 +92,17 @@ void BotInfo::UpdateInstructionDisplay(xbot *bot){
         return;
     }
     
-    // add junk at the end of file
-    // in order to realize this is really eof
-    // since we dont know when the stream really ends
-    // we needed some method to check that
-    // each line by default will contain atleast one address string
-    // address is atleast longer than 5 chars
-    // so we exploit that and append something smaller than that
-    // since we know that xvm won't return something smaller than that
-    // we assume that we've reached the end of file!
-    // this is just a hack to get over a really irritating bug
-    FILE *writer = bot->dis_writer_e;
-    if(!writer){
-	puts("connection with backend failed [ writer end not visible ]");
-	return;
-    }
-    std::string junk = "x\n";
-    fwrite(junk.c_str(), 1, 2, writer);
-    // fflush(writer);
-    
-    wxTheApp->Yield(false);
-    std::string disassembly = "";
-    u32 i = 0;
-    while(getline(&lineptr, &n, reader) > 2){
-        // getline(&lineptr, &n, reader);
-        printf("LineNo: %d\n", ++i);
-	disassembly += lineptr;
+    getline(&lineptr, &n, reader);
+
+    std::string disassembly = "\n";
+    disassembly += "Actual Instruction: ";
+    disassembly += lineptr+16;
+    disassembly += "\n";
+
+    for (u32 i = 0; i < 19; i++){
+        getline(&lineptr, &n, reader);
+        //printf("LineNo: %d\n", ++i);
+	    disassembly += lineptr;
     }
     
     PrintInstruction("%s", disassembly);
