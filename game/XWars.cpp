@@ -225,6 +225,10 @@ void xwars::copy_bots(xbot *bot1, xbot *bot2){
 
 
 u32 xwars::battle(xbot *bot1, xbot *bot2){
+    // set bot names
+    FactoryGetLeftBotInfo()->SetBotName(bot1->botname);
+    FactoryGetRightBotInfo()->SetBotName(bot2->botname);
+    
     // allocate a common text region
     section_entry * temp = NULL;
     section_entry * text = init_section_entry();

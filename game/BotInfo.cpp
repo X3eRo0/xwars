@@ -71,15 +71,18 @@ void BotInfo::UpdateRegisterDisplay(xbot *bot){
         puts("connection with backend failed [ reader end not visible ]");
         return;
     }
+    
     for (i32 i = 0; i < 16; i++){
         getline(&lineptr, &n, reader);
-		//// change register values here
-        //printf("register: %s", lineptr);
+	lineptr+=4;
+	m_registerDisplay->SetRegisterValue(Register::RegisterNames[i], lineptr);
     }
 }
 
 // register update event handler
 void BotInfo::UpdateInstructionDisplay(xbot *bot){
+    ClearInstructionDisplay();
+
     //printf("wrting instructions in display\n");
     char *lineptr = NULL;
     size_t n = 0;
@@ -110,7 +113,6 @@ void BotInfo::UpdateInstructionDisplay(xbot *bot){
     fwrite(junk.c_str(), 1, 2, writer);
     // fflush(writer);
     
-    ClearInstructionDisplay();
     wxTheApp->Yield(false);
     std::string disassembly = "";
     u32 i = 0;
@@ -123,4 +125,8 @@ void BotInfo::UpdateInstructionDisplay(xbot *bot){
     PrintInstruction("%s", disassembly);
     wxTheApp->Yield(false);
     free(lineptr);
+}
+
+void BotInfo::SetBotName(const std::string &name){
+    m_headingPanel->SetBotName(name);
 }

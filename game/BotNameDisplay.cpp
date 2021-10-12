@@ -57,14 +57,12 @@ void BotNameDisplay::SetNameColour(const wxColour &c){
 }
 
 
-const wxColour& BotNameDisplay::GetReadColour(){
-    return m_rColour;
-}
+const wxColour &BotNameDisplay::GetReadColour() { return m_rColour; }
 
-const wxColour& BotNameDisplay::GetWriteColour(){
-    return m_wColour;
-}
+const wxColour &BotNameDisplay::GetWriteColour() { return m_wColour; }
 
-const wxColour& BotNameDisplay::GetExecuteColour(){
-    return m_xColour;
+const wxColour &BotNameDisplay::GetExecuteColour() { return m_xColour; }
+
+void BotNameDisplay::SetBotName(const std::string &name){
+    m_botnameText->SetLabelText(name);
 }

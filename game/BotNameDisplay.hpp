@@ -30,12 +30,15 @@ public:
                     Execute = GREEN
     */
 
+    // set botname
+    void SetBotName(const std::string& name);
+    
     // setters
     void SetReadColour(const wxColour& c);
     void SetWriteColour(const wxColour& c);
     void SetExecuteColour(const wxColour& c);
     void SetNameColour(const wxColour& c);
-
+    
     // getters
     const wxColour& GetReadColour();
     const wxColour& GetWriteColour();

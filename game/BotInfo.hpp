@@ -29,6 +29,9 @@ class BotInfo : public wxPanel{
 public:
     BotInfo(wxWindow *parent, const std::string& botname);
 
+    // set bot name for this panel
+    void SetBotName(const std::string& name);
+    
     // event handlers
     void UpdateRegisterDisplay(xbot *bot);
     void UpdateInstructionDisplay(xbot *bot);
@@ -36,15 +39,13 @@ public:
     // change name of register
     void ChangeRegisterValue(const std::string& regname);
 
+    // print formatted text to instruction display area
     template<typename fmtype = wxString, typename... argstype>
     void PrintInstruction(fmtype str, argstype... args){
         m_instructionDisplay->Print(str, args...);
     }
 
-    //void ResetInstructionDisplay(){
-        //m_instructionDisplay->SetInsertionPoint(-1);
-    //}
-
+    // clear instruction display area
     void ClearInstructionDisplay(){
         m_instructionDisplay->ClearDisplay();
     }
