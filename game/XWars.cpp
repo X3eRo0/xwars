@@ -100,7 +100,7 @@ void xwars::display_registers(xbot *bot1, xbot *bot2){
     fprintf(bot1->reg_writer_e, "$sp=0x%.8x\n", bot1->cpu->regs.sp);
     fprintf(bot1->reg_writer_e, "$bp=0x%.8x\n", bot1->cpu->regs.bp);
     fprintf(bot1->reg_writer_e, "$pc=0x%.8x\n", bot1->cpu->regs.pc);
-    fflush(bot1->reg_writer_e);
+    // fflush(bot1->reg_writer_e);
 
     // post event
     // wxCommandEvent e1(REGISTER_DISPLAY_UPDATE_EVENT);
@@ -128,7 +128,7 @@ void xwars::display_registers(xbot *bot1, xbot *bot2){
     fprintf(bot2->reg_writer_e, "$sp=0x%.8x\n", bot2->cpu->regs.sp);
     fprintf(bot2->reg_writer_e, "$bp=0x%.8x\n", bot2->cpu->regs.bp);
     fprintf(bot2->reg_writer_e, "$pc=0x%.8x\n", bot2->cpu->regs.pc);
-    fflush(bot2->reg_writer_e);
+    // fflush(bot2->reg_writer_e);
 
     
     // post event

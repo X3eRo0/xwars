@@ -100,7 +100,7 @@ void BotInfo::UpdateInstructionDisplay(xbot *bot){
     }
     std::string junk = "x\n";
     fwrite(junk.c_str(), 1, 2, writer);
-    fflush(writer);
+    // fflush(writer);
     
     ClearInstructionDisplay();
     wxTheApp->Yield(false);
