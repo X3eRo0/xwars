@@ -7,7 +7,7 @@ set(CMAKE_C_STANDARD 11)
 # for arena
 # arena is written in cpp
 set(CMAKE_CXX_STANDARD 17)
-
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
 
 # c binaries exec flag setup

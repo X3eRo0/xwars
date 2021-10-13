@@ -4,8 +4,12 @@
 /build/
 /.idea
 /pygui/__pycache__
+/.cache/
 *.swp
 .cache/
+GTAGS
+GPATH
+GRTAGS
 *.hpp~
 *.cpp~
 *~
