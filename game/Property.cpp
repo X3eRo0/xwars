@@ -23,8 +23,11 @@ TextProperty::TextProperty(wxWindow *parent, const wxString &label,
     m_mainSizer->Add(m_labelText, 2, wxEXPAND | wxALL);
 
     // create text edit (entry)
-    m_valueEntry = new wxTextCtrl(this, wxID_ANY, m_defaultValue, wxDefaultPosition, wxSize(160, 40));
+    m_valueEntry = new wxTextCtrl(this, wxID_ANY, m_defaultValue,
+				  wxDefaultPosition, wxSize(160, 40),
+				  wxALIGN_RIGHT);
     m_valueEntry->SetFont(m_font);
+    m_mainSizer->AddSpacer(90);
     m_mainSizer->Add(m_valueEntry, 1, wxEXPAND | wxALL);
 }
 
@@ -92,6 +95,7 @@ OptionProperty::OptionProperty(wxWindow *parent, const wxString &label,
 				  m_options.size(), m_options.begin(),
 				  wxCB_DROPDOWN | wxCB_READONLY);
     m_optionList->SetFont(m_font);
+    m_mainSizer->AddSpacer(90);
     m_mainSizer->Add(m_optionList, 1, wxEXPAND | wxALL);
 }
 
@@ -140,8 +144,9 @@ ColourProperty::ColourProperty(wxWindow *parent, const wxString &label,
     // create color picker
     m_colorPicker = new wxColourPickerCtrl(this, wxID_ANY, m_defaultColour,
 					   wxDefaultPosition, wxSize(160, 40),
-					   wxCLRP_SHOW_LABEL|wxCLRP_USE_TEXTCTRL);
+					   wxCLRP_SHOW_LABEL | wxCLRP_USE_TEXTCTRL);
     m_colorPicker->SetFont(m_font);
+    m_mainSizer->AddSpacer(90);
     m_mainSizer->Add(m_colorPicker, 1, wxEXPAND | wxALL);
 }
 
