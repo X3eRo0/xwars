@@ -7,11 +7,14 @@
 
 #include "SettingsDialog.hpp"
 #include <wx/event.h>
+#include <wx/filedlg.h>
 #include <wx/gdicmn.h>
 #include <wx/generic/panelg.h>
 #include <wx/sizer.h>
+#include <wx/stringimpl.h>
 #include <wx/textctrl.h>
 #include <wx/utils.h>
+#include <wx/xml/xml.h>
 
 enum ButtonsPanelIDs {
     WIDGET_SELECTOR_ID = 1,
@@ -93,8 +96,23 @@ SettingsDialog::SettingsDialog(wxWindow *parent, wxWindowID id,
     m_bottomPanelSizer->Add(m_cancelBtn, 1, wxEXPAND | wxALL);
 }
 
-void SettingsDialog::OnImportBtnClicked(wxCommandEvent &e) {wxPuts("triggered");}
-void SettingsDialog::OnExportBtnClicked(wxCommandEvent &e) {wxPuts("triggered");}
+void SettingsDialog::OnImportBtnClicked(wxCommandEvent &e) {}
+
+void SettingsDialog::OnExportBtnClicked(wxCommandEvent &WXUNUSED(e)) {
+    wxFileDialog *fd = new wxFileDialog(this, "Export Theme",
+					wxEmptyString, wxEmptyString,
+					"XML Files (*.xml)|*.xml",
+					wxFD_SAVE | wxFD_CHANGE_DIR |
+					wxFD_OVERWRITE_PROMPT);
+    if(fd->ShowModal() == wxOK){
+	wxString filename = fd->GetPath();
+	wxXmlDocument xmldoc(filename);
+    }
+
+    fd->Destroy();
+}
+
+
 void SettingsDialog::OnOkBtnClicked(wxCommandEvent &e) {wxPuts("triggered");}
 void SettingsDialog::OnApplyBtnClicked(wxCommandEvent &e) {wxPuts("triggered");}
 void SettingsDialog::OnCancelBtnClicked(wxCommandEvent &e) {wxPuts("triggered");}

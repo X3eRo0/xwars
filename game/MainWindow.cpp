@@ -6,6 +6,7 @@
 #include <wx/gdicmn.h>
 #include <wx/msgdlg.h>
 #include <wx/wxcrt.h>
+#include <wx/aboutdlg.h>
 
 // event handler ids
 enum MainWindowEventHandlerIDs{
@@ -67,7 +68,13 @@ MainWindow::MainWindow(wxWindow *parent, wxWindowID id, const wxString &title,
 
 // handle event
 void MainWindow::OnAbout(wxCommandEvent &event) {
-    wxMessageBox("XWars is a R2Wars like game but written for XVM", "About XWars", wxOK | wxICON_INFORMATION);
+    wxAboutDialogInfo info;
+    info.SetName("XVM - XWars");
+    info.SetVersion("0.1 Alpha");
+    info.SetDescription("XWars is inspired by R2Wars but runs on XVM. Written by @X3eRo0 & @brightprogrammer.");
+    info.SetCopyright("MIT License ;-)");
+    
+    wxAboutBox(info);
 }
 
 // handle event
