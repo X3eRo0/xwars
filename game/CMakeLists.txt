@@ -32,6 +32,10 @@ add_executable(xwars
     BotNameDisplay.cpp
     BotInfo.cpp
     Factory.cpp
+    Property.cpp
+    PropertyDataWidgets.cpp
+    PropertyDisplay.cpp
+    SettingsDialog.cpp
 )
 
 target_link_libraries(xwars libxvm ${wxWidgets_LIBRARIES})

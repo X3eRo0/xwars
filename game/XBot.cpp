@@ -38,9 +38,7 @@ void xbot::add_section(section_entry* sxn){
     bin->x_section->n_sections++;
 }
 
-u32 xbot::step(){
-    return do_execute(cpu, bin);
-}
+u32 xbot::step() { return do_execute(cpu, bin); }
 
 
 // // xlog is writing to logfifo2

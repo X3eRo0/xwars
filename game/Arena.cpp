@@ -40,7 +40,7 @@ Arena::Arena(wxWindow* parent) : wxPanel(parent){
     m_terminal->SetEditable(false);
     
     // add welcome text
-    Print("=-----------------[ XWARS ]----------------=\n[+] Authors: @X3eRo0, @brightprogrammer\n");
+    //    Print("=-----------------[ XWARS ]----------------=\n[+] Authors: @X3eRo0, @brightprogrammer\n");
     // create buttons panel and add to sizer
     m_buttonsPanel = new wxPanel(this);
     

@@ -8,6 +8,7 @@
 #include <wx/time.h>
 #include <wx/utils.h>
 #include "Factory.hpp"
+#include "MiddlePanel.hpp"
 
 // Created by X3eRo0 on 6/7/2021.
 //
@@ -297,7 +298,8 @@ u32 xwars::battle(xbot *bot1, xbot *bot2){
         counter++;
     }
 
-    printf("Winner: %s in %d instructions\n", winner.c_str(), counter);
+    // finally wintter text to terminal
+    FactoryGetMiddlePanel()->PrintToTerminal("Winner: %s in %d instructions\n", winner.c_str(), counter);
     return counter;
 }
 

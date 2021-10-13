@@ -2,6 +2,8 @@
 #define XVM_ARENA_MIDDLE_PANEL_HPP
 
 #include "Common.hpp"
+#include "Arena.hpp"
+#include "MemoryGrid.hpp"
 #include <array>
 
 
@@ -9,17 +11,22 @@ class MiddlePanel : public wxPanel{
 public:
     MiddlePanel(wxWindow *parent);
 
+    // print instruction in the arena terminal
+    template<typename fmttype, typename... argtypes>
+    void PrintToTerminal(fmttype fmtstr, argtypes... args){
+	m_arenaTerminal->Print(fmtstr, args...);
+    }
 private:
     // main sizer to arrage items in middle panel
     wxBoxSizer *m_mainSizer;
     
     // top panel will contiain the memory grid
-    wxPanel *m_topPanel;
+    MemoryGrid *m_memoryGrid;
     // wxBoxSizer *m_topPanelVSizer;
     // std::array<wxBoxSizer*, 64> m_topPanelHSizers;
 
     // bottom panel will show game terminal
-    wxPanel *m_bottomPanel;
+    Arena *m_arenaTerminal;
 
     // memory grid will display current state of memory and
     // for this we will need a grid sizer to arrange items in grid

@@ -45,6 +45,7 @@ RegisterDisplay* FactoryCreateRightRegisterDisplay(wxWindow *parent);
 InstructionDisplay* FactoryCreateLeftInstructionDisplay(wxWindow *parent);
 InstructionDisplay* FactoryCreateRightInstructionDisplay(wxWindow *parent);
 
+// create 
 
 // ------------------------- SETTERS --------------------------
 

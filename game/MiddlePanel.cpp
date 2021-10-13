@@ -11,14 +11,14 @@ MiddlePanel::MiddlePanel(wxWindow* parent) : wxPanel(parent){
     this->SetSizer(m_mainSizer);
 
     // create panels within middle panel
-    MemoryGrid *m_topPanel = new MemoryGrid(this);
-    Arena *m_bottomPanel = new Arena(this);
+    m_memoryGrid = new MemoryGrid(this);
+    m_arenaTerminal = new Arena(this);
 
     // add items to main sizer
-    m_mainSizer->Add(m_topPanel, 2, wxEXPAND | wxALL);
-    m_mainSizer->Add(m_bottomPanel, 1, wxEXPAND | wxALL);
+    m_mainSizer->Add(m_memoryGrid, 2, wxEXPAND | wxALL);
+    m_mainSizer->Add(m_arenaTerminal, 1, wxEXPAND | wxALL);
 
     // bottom panel will be black
-    m_bottomPanel->SetBackgroundColour(wxColour(10, 10, 10));
-    m_topPanel->SetBackgroundColour(wxColour(32, 32, 32));
+    m_memoryGrid->SetBackgroundColour(wxColour(10, 10, 10));
+    m_arenaTerminal->SetBackgroundColour(wxColour(32, 32, 32));
 }
