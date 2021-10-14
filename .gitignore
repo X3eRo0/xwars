@@ -7,6 +7,9 @@
 /.cache/
 *.swp
 .cache/
+/game/GTAGS
+/game/GPATH
+/game/GRTAGS
 GTAGS
 GPATH
 GRTAGS
