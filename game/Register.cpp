@@ -12,8 +12,6 @@
 
 #include "Register.hpp"
 #include <wx/gdicmn.h>
-#include <wx/gtk/stattext.h>
-#include <wx/gtk/window.h>
 #include <wx/sizer.h>
 
 Register::Register(wxWindow *parent, const std::string& name)
@@ -23,14 +21,22 @@ Register::Register(wxWindow *parent, const std::string& name)
     this->SetSizer(m_mainSizer);
 
     // create label and value static texts
-    m_registerNameText = new wxStaticText(this, wxID_ANY, "$"+m_registerName, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER);
-    m_delimiterText = new wxStaticText(this, wxID_ANY, m_delimiterString, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER);
-    m_registerValueText = new wxStaticText(this, wxID_ANY, "0x00000000", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER);
+    m_registerNameText = new wxStaticText(this, wxID_ANY,
+					  "$"+m_registerName, wxDefaultPosition,
+					  wxDefaultSize, wxALIGN_CENTER);
+    
+    m_delimiterText = new wxStaticText(this, wxID_ANY,
+				       m_delimiterString, wxDefaultPosition,
+				       wxDefaultSize, wxALIGN_CENTER);
+
+    m_registerValueText = new wxStaticText(this, wxID_ANY,
+					   "0x00000000", wxDefaultPosition,
+					   wxDefaultSize, wxALIGN_CENTER);
 
     // set font
-    m_registerNameText->SetFont(m_registerNameFont);
-    m_delimiterText->SetFont(wxFont(9, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
-    m_registerValueText->SetFont(m_registerValueFont);
+    m_registerNameText->SetFont(properties.GetFont());
+    m_delimiterText->SetFont(properties.GetFont());
+    m_registerValueText->SetFont(properties.GetFont());
     
     // set Colour
     m_registerNameText->SetForegroundColour(m_registerNameFGColour);

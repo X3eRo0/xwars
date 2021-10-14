@@ -19,7 +19,7 @@ public:
     SettingsDialog(wxWindow *parent = nullptr, wxWindowID id= wxID_ANY,
 		   const wxString& name = "Settings - XVM - XWars",
 		   const wxPoint& pos = wxDefaultPosition,
-		   const wxSize& size = wxSize(600, 600));
+		   const wxSize& size = wxSize(600, 500));
     
     DECLARE_EVENT_TABLE();
 private:
@@ -29,10 +29,11 @@ private:
     void OnOkBtnClicked(wxCommandEvent& e);
     void OnApplyBtnClicked(wxCommandEvent& e);
     void OnCancelBtnClicked(wxCommandEvent& e);
+    void OnWidgetTypeChanged(wxCommandEvent& e);
     
     wxBoxSizer *m_mainSizer;
     wxComboBox *m_widgetTypeSelector;
-    PropertiesDisplay *m_propertyDisplay;
+    PropertiesDisplay *m_propertiesDisplay;
     wxPanel *m_bottomPanel;
     wxBoxSizer *m_bottomPanelSizer;
     wxButton *m_exportBtn, *m_importBtn, *m_okBtn, *m_applyBtn, *m_cancelBtn;

@@ -5,6 +5,7 @@
 #include <wx/combobox.h>
 #include <wx/clrpicker.h>
 #include <wx/font.h>
+#include <wx/gtk/colour.h>
 
 // -------------------------------- PROPERTY -----------------------------------
 // -----------------------------------------------------------------------------
@@ -27,6 +28,9 @@ public:
 
     // set default value
     void SetDefaultValue(const wxString& defaultValue);
+
+    // set current value
+    void SetValue(const wxString& value);
     
     // get value as numbers
     u32 GetValueU32() const;
@@ -51,14 +55,18 @@ public:
     OptionProperty(wxWindow *parent, const wxString& label,
 		   const wxArrayString& options, size_t defaultOption = 0);
 
-    virtual void ResetValue();
-    virtual wxString GetValueStr() const;
+    void ResetValue();
+    wxString GetValueStr() const;
 
     void SetDefaultSelection(size_t n);
     size_t GetDefaultSelection() const;
+
+    void SetSelection(size_t n);
+    void SetValue(const wxString& v);
     
     // get index of selected option
-    size_t GetSelectionIndex() const;
+    size_t GetSelection() const;
+    wxString GetValue() const;
 public:
     wxString m_label;
     size_t m_defaultOption;
@@ -78,12 +86,15 @@ public:
     ColourProperty(wxWindow *parent, const wxString& label,
 		   const wxColour& defaultColour);
 
-    virtual void ResetValue();
-    virtual wxString GetValueStr() const;
+    void ResetValue();
+    wxString GetValueStr() const;
 
     // get and set default colour
     void SetDefaultColour(const wxColour& defaultColour);
     wxColour GetDefaultColour() const;
+
+    void SetValue(const wxColour& v);
+    wxColour GetValue() const;
 
     // get selected colour
     wxColour GetColour() const;

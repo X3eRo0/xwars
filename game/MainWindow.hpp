@@ -3,18 +3,19 @@
 
 #include "Common.hpp"
 #include "MiddlePanel.hpp"
+#include "PropertyData.hpp"
 #include "BotInfo.hpp"
 #include <wx/event.h>
+#include <wx/font.h>
 #include <wx/gdicmn.h>
+#include <wx/gtk/colour.h>
 #include <wx/sizer.h>
 #include <wx/stringimpl.h>
 
 class MainWindow : public wxFrame{
 public:
     MainWindow(wxWindow* parent, wxWindowID id = wxID_ANY,
-	       const wxString& title = wxEmptyString,
-	       const wxPoint& pos = wxDefaultPosition,
-	       const wxSize& size = wxDefaultSize);
+	       const wxString& title = wxEmptyString);
 
     // on about button clicked event handler
     void OnAbout(wxCommandEvent& event);
@@ -22,6 +23,20 @@ public:
     // on settings button clicked event handler
     void OnSettings(wxCommandEvent& event);
 
+    // properties
+    PropertyData properties = PropertyData{
+	.fontSize = 12,
+	.fontFamily = wxFONTFAMILY_MODERN,
+	.fontStyle = wxFONTSTYLE_NORMAL,
+	.fontWeight = wxFONTWEIGHT_NORMAL,
+	.bgColour = *wxBLACK,
+	.fgColour = *wxWHITE,
+	.size = wxSize(1366,768)
+    };
+
+    // call this after changing properties
+    void UpdateSelf();
+    
     DECLARE_EVENT_TABLE()
 private:
     // main panel that spans whole window

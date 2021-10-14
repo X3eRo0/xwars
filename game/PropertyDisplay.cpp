@@ -8,15 +8,16 @@
 
 #include "PropertyData.hpp"
 #include "PropertyDisplay.hpp"
+#include <string>
 #include <wx/arrstr.h>
+#include <wx/font.h>
 #include <wx/gdicmn.h>
-#include <wx/gtk/statbox.h>
+#include <wx/log.h>
 #include <wx/sizer.h>
 #include <wx/utils.h>
 
-PropertiesDisplay::PropertiesDisplay(wxWindow *parent,
-                                     const PropertyData &defaultProperties)
-    : wxPanel(parent), m_defaultProperties(defaultProperties){
+PropertiesDisplay::PropertiesDisplay(wxWindow *parent)
+    : wxPanel(parent){
     // change background colour
     SetBackgroundColour(*wxBLACK);
     
@@ -57,12 +58,6 @@ PropertiesDisplay::PropertiesDisplay(wxWindow *parent,
     m_widgets.fontStyle = new OptionProperty(m_fontBox, "Style", fontstyle);
     m_widgets.fontWeight = new OptionProperty(m_fontBox, "Weight", fontweight);
 
-    // add to sizer for sizing
-    // m_fontBoxSizer->Add(m_widgets.fontSize, 1, wxEXPAND | wxALL);
-    // m_fontBoxSizer->Add(m_widgets.fontFamily, 1, wxEXPAND | wxALL);
-    // m_fontBoxSizer->Add(m_widgets.fontStyle, 1, wxEXPAND | wxALL);
-    // m_fontBoxSizer->Add(m_widgets.fontWeight, 1, wxEXPAND | wxALL);
-
     m_fontBoxSizer->Add(m_widgets.fontSize);
     m_fontBoxSizer->Add(m_widgets.fontFamily);
     m_fontBoxSizer->Add(m_widgets.fontStyle);
@@ -79,10 +74,6 @@ PropertiesDisplay::PropertiesDisplay(wxWindow *parent,
     m_widgets.bgColour = new ColourProperty(m_colourBox, "Background", *wxBLACK);
     m_widgets.fgColour = new ColourProperty(m_colourBox, "Foreground", *wxGREEN);
 
-    // add to sizer for sizing
-    // m_colourBoxSizer->Add(m_widgets.bgColour, 1, wxEXPAND | wxALL);
-    // m_colourBoxSizer->Add(m_widgets.fgColour, 1, wxEXPAND | wxALL);
-
     m_colourBoxSizer->Add(m_widgets.bgColour);
     m_colourBoxSizer->Add(m_widgets.fgColour);
     
@@ -91,23 +82,121 @@ PropertiesDisplay::PropertiesDisplay(wxWindow *parent,
     m_sizeBox->SetBackgroundColour(m_boxBGColour);
     m_sizeBoxSizer = new wxBoxSizer(wxVERTICAL);
     m_sizeBox->SetSizer(m_sizeBoxSizer);
-    m_mainSizer->Add(m_sizeBox, 3, wxEXPAND | wxALL, 5);
+    m_mainSizer->Add(m_sizeBox, 1, wxEXPAND | wxALL, 5);
 
+    wxArrayString sizeoptions;
+    sizeoptions.push_back("1366x768");
+    sizeoptions.push_back("1600x900");
+    sizeoptions.push_back("1920x1080");
+    
     // create widgets
-    m_widgets.minSize = new TextProperty(m_sizeBox, "Minimum", "400");
-    m_widgets.size = new TextProperty(m_sizeBox, "Current", "400");
-    m_widgets.maxSize = new TextProperty(m_sizeBox, "Maximum", "400");
-    m_widgets.spanRatioInParent = new TextProperty(m_sizeBox, "Span Ration In Parent", "1");
-
-    // add to sizer for sizing
-    // m_sizeBoxSizer->Add(m_widgets.minSize, 1, wxEXPAND | wxALL);
-    // m_sizeBoxSizer->Add(m_widgets.size, 1, wxEXPAND | wxALL);
-    // m_sizeBoxSizer->Add(m_widgets.maxSize, 1, wxEXPAND | wxALL);
-    // m_sizeBoxSizer->Add(m_widgets.spanRatioInParent, 1, wxEXPAND | wxALL);
-
-    m_sizeBoxSizer->Add(m_widgets.minSize);
+    m_widgets.size = new OptionProperty(m_sizeBox, "Window Size",
+					sizeoptions, 0);
+    
     m_sizeBoxSizer->Add(m_widgets.size);
-    m_sizeBoxSizer->Add(m_widgets.maxSize);
-    m_sizeBoxSizer->Add(m_widgets.spanRatioInParent);
 }
 
+void PropertiesDisplay::UpdateDisplay(const PropertyData &data){
+    // set font size
+    m_widgets.fontSize->SetValue(std::to_string(data.fontSize));
+
+    // set font family
+    wxString v;
+    switch (data.fontFamily) {
+    case wxFONTFAMILY_MODERN : v = "Modern";
+    case wxFONTFAMILY_DEFAULT : v = "Default";
+    case wxFONTFAMILY_ROMAN : v = "Roman";
+    case wxFONTFAMILY_SWISS : v = "Swiss";
+    case wxFONTFAMILY_SCRIPT : v = "Script";
+    case wxFONTFAMILY_TELETYPE : v = "Teletype";
+    case wxFONTFAMILY_DECORATIVE : v = "Decorative";
+    default : wxLogMessage("Unknown Font Family!");
+    }
+    m_widgets.fontFamily->SetValue(v);
+
+    // change font style
+    switch (data.fontStyle) {
+    case wxFONTSTYLE_ITALIC : v = "Italic";
+    case wxFONTSTYLE_NORMAL : v = "Normal";
+    case wxFONTSTYLE_SLANT : v = "Slant";
+    default : wxLogMessage("Unknown Font Style");
+    }
+    m_widgets.fontFamily->SetValue(v);
+
+    // change font weight
+    switch (data.fontWeight) {
+    case wxFONTWEIGHT_BOLD : v = "Bold";
+    case wxFONTWEIGHT_NORMAL : v = "Normal";
+    case wxFONTWEIGHT_LIGHT : v = "Light";
+    default: wxLogMessage("Unknown Font Weight");
+    }
+    m_widgets.fontWeight->SetValue(v);
+
+    // change bg & fg colour
+    m_widgets.bgColour->SetValue(data.bgColour);
+    m_widgets.fgColour->SetValue(data.fgColour);
+
+    // change width
+    m_widgets.size->SetValue(data.size);
+}
+
+u32 PropertiesDisplay::GetFontSize() const{
+    return m_widgets.fontSize->GetValueU32();
+}
+
+wxFontFamily PropertiesDisplay::GetFontFamily() const{
+    wxString v = m_widgets.fontFamily->GetValue();
+
+    if(v == "Modern") { return wxFONTFAMILY_MODERN; }
+    else if(v == "Default") { return wxFONTFAMILY_DEFAULT; }
+    else if(v == "Decorative") { return wxFONTFAMILY_DECORATIVE; }
+    else if(v == "Roman") { return wxFONTFAMILY_ROMAN; }
+    else if(v == "Swiss") { return wxFONTFAMILY_SWISS; }
+    else if(v == "Script") { return wxFONTFAMILY_SCRIPT; }
+    else { return wxFONTFAMILY_TELETYPE; }
+}
+
+wxFontStyle PropertiesDisplay::GetFontStyle() const{
+    wxString v = m_widgets.fontStyle->GetValue();
+
+    if(v == "Normal") { return wxFONTSTYLE_NORMAL; }
+    else if(v == "Italic") { return wxFONTSTYLE_ITALIC; }
+    else { return wxFONTSTYLE_SLANT; }
+}
+
+wxFontWeight PropertiesDisplay::GetFontWeight() const{
+    wxString v = m_widgets.fontWeight->GetValue();
+
+    if(v == "Bold") { return wxFONTWEIGHT_BOLD; }
+    else if(v == "Normal") { return wxFONTWEIGHT_NORMAL; }
+    else { return wxFONTWEIGHT_LIGHT; }
+}
+
+wxColour PropertiesDisplay::GetBGColour() const{
+    return m_widgets.bgColour->GetColour();
+}
+
+wxColour PropertiesDisplay::GetFGColour() const{
+    return m_widgets.fgColour->GetColour();
+}
+
+wxSize PropertiesDisplay::GetSize() const{
+    wxString v = m_widgets.size->GetValue();
+    
+    u32 w = std::stoul(v.BeforeFirst('x').GetData().AsChar());
+    u32 h = std::stoul(v.AfterFirst('x').GetData().AsChar());
+
+    return wxSize(w, h);
+}
+
+PropertyData PropertiesDisplay::GetPropertyData() const{
+    return PropertyData{
+	.fontSize = GetFontSize(),
+	.fontFamily = GetFontFamily(),
+	.fontStyle = GetFontStyle(),
+	.fontWeight = GetFontWeight(),
+	.bgColour = GetBGColour(),
+	.fgColour = GetFGColour(),
+	.size = GetSize()
+    };
+}

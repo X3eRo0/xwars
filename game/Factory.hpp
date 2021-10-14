@@ -18,8 +18,7 @@ class InstructionDisplay;
 // create main window
 // this returns the main window pointer
 MainWindow *FactoryCreateMainWindow(wxWindow *parent,
-                                    wxWindowID id, const wxString &title,
-                                    const wxPoint &pos, const wxSize &size);
+                                    wxWindowID id, const wxString &title);
 
 // create bot info panel (left and right panel in main window)
 // this returns the bot info panel pointer

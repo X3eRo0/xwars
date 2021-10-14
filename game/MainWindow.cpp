@@ -83,3 +83,18 @@ void MainWindow::OnSettings(wxCommandEvent &event) {
     dialog->ShowModal();
     dialog->Destroy();
 }
+
+void MainWindow::UpdateSelf(){
+    // change font
+    SetFont(wxFont(properties.fontSize, properties.fontFamily,
+		   properties.fontStyle, properties.fontWeight));
+
+    // change colours
+    SetBackgroundColour(properties.bgColour);
+    SetForegroundColour(properties.fgColour);
+
+    // change size
+    SetMaxSize(properties.size);
+    SetSize(properties.size);
+    SetMinClientSize(properties.size);
+}

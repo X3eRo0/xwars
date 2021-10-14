@@ -20,10 +20,7 @@ struct PropertyDataWidgets{
     wxFontWeight GetFontWeight();
     wxColour GetBGColour();
     wxColour GetFGColour();
-    u32 GetSpanRatioInParent();
-    u32 GetMinSize();
     u32 GetSize();
-    u32 GetMaxSize();
     
     TextProperty *fontSize;
     OptionProperty *fontFamily;
@@ -31,10 +28,7 @@ struct PropertyDataWidgets{
     OptionProperty *fontWeight;
     ColourProperty *bgColour;
     ColourProperty *fgColour;
-    TextProperty *spanRatioInParent;
-    TextProperty *minSize;
-    TextProperty *size;
-    TextProperty *maxSize;
+    OptionProperty *size;
 };
 
 #endif//XVM_ARENA_PROPERTY_DATA_WIDGETS_HPP

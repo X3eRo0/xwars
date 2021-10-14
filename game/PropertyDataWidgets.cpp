@@ -9,7 +9,7 @@ u32 PropertyDataWidgets::GetFontSize(){
 
 // get font family
 wxFontFamily PropertyDataWidgets::GetFontFamily(){
-    switch (fontFamily->GetSelectionIndex()){
+    switch (fontFamily->GetSelection()){
 	
     default: return wxFONTFAMILY_MODERN;
     };

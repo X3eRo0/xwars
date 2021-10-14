@@ -23,10 +23,8 @@ static Factory factory;
 // create main window and return ptr
 MainWindow *FactoryCreateMainWindow(wxWindow *parent = nullptr,
                                     wxWindowID id = wxID_ANY,
-                                    const wxString &title = wxEmptyString,
-                                    const wxPoint &pos = wxDefaultPosition,
-                                    const wxSize &size = wxDefaultSize){
-    factory.mainWindow = new MainWindow(parent, id, title, pos, size);
+                                    const wxString &title = wxEmptyString){
+    factory.mainWindow = new MainWindow(parent, id, title);
     return factory.mainWindow;
 }
 

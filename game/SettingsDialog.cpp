@@ -25,7 +25,9 @@ enum ButtonsPanelIDs {
     CANCEL_BUTTON_ID = 6
 };
 
+// define event table
 BEGIN_EVENT_TABLE(SettingsDialog, wxDialog)
+EVT_COMBOBOX(WIDGET_SELECTOR_ID, SettingsDialog::OnWidgetTypeChanged)
 EVT_BUTTON(IMPORT_BUTTON_ID, SettingsDialog::OnImportBtnClicked)
 EVT_BUTTON(EXPORT_BUTTON_ID, SettingsDialog::OnExportBtnClicked)
 EVT_BUTTON(OK_BUTTON_ID, SettingsDialog::OnOkBtnClicked)
@@ -44,10 +46,10 @@ SettingsDialog::SettingsDialog(wxWindow *parent, wxWindowID id,
     m_mainSizer = new wxBoxSizer(wxVERTICAL);
     this->SetSizer(m_mainSizer);
     
-    // create properties display
-    m_propertyDisplay = new PropertiesDisplay(this, {});
-    m_mainSizer->Add(m_propertyDisplay, 15, wxEXPAND | wxALL);
-
+    // create properties displays
+    m_propertiesDisplay = new PropertiesDisplay(this);
+    m_mainSizer->Add(m_propertiesDisplay, 15, wxEXPAND | wxALL, 5);
+    
     // create buttons panels
     m_bottomPanel = new wxPanel(this);
     m_bottomPanelSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -104,15 +106,38 @@ void SettingsDialog::OnExportBtnClicked(wxCommandEvent &WXUNUSED(e)) {
 					"XML Files (*.xml)|*.xml",
 					wxFD_SAVE | wxFD_CHANGE_DIR |
 					wxFD_OVERWRITE_PROMPT);
-    if(fd->ShowModal() == wxOK){
+    if(fd->ShowModal() != wxCANCEL){
+	wxPuts("writing...");
 	wxString filename = fd->GetPath();
-	wxXmlDocument xmldoc(filename);
+	wxXmlDocument *xmldoc = new wxXmlDocument;
+	wxXmlNode *root = new wxXmlNode(wxXML_ELEMENT_NODE, "ThemeRoot");
+	xmldoc->SetRoot(root);
+	
+	wxXmlNode *widget = new wxXmlNode(wxXML_ELEMENT_NODE, "MainWindow");
+	root->AddChild(widget);
+
+	// add size settings
+	wxXmlNode *size = new wxXmlNode(wxXML_ELEMENT_NODE, "Size");
+	widget->AddChild(size);
+
+	wxXmlAttribute *widthattr, *heightattr;
+	heightattr = new wxXmlAttribute("Height", "720", nullptr);
+	widthattr = new wxXmlAttribute("Width", "1240", heightattr);
+	size->AddAttribute(widthattr);
+	
+	xmldoc->Save(filename);
+
     }
 
     fd->Destroy();
 }
 
 
-void SettingsDialog::OnOkBtnClicked(wxCommandEvent &e) {wxPuts("triggered");}
+void SettingsDialog::OnOkBtnClicked(wxCommandEvent &e) { Close(); }
 void SettingsDialog::OnApplyBtnClicked(wxCommandEvent &e) {wxPuts("triggered");}
-void SettingsDialog::OnCancelBtnClicked(wxCommandEvent &e) {wxPuts("triggered");}
+void SettingsDialog::OnCancelBtnClicked(wxCommandEvent &e) { Close(); }
+
+void SettingsDialog::OnWidgetTypeChanged(wxCommandEvent& e){
+    // get selection
+    size_t selection = e.GetInt();
+}

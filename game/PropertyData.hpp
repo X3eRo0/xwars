@@ -35,6 +35,11 @@ enum class WidgetType {
 // provides common property types/fields for each widget
 // listed in widget type enum
 struct PropertyData{
+    // create font from explicit data
+    wxFont GetFont() const{
+	return wxFont(fontSize, fontFamily, fontStyle, fontWeight);
+    }
+
     WidgetType widgetType; // type of widget (for xml info)
     u32 fontSize; // size of font in +ve integers
     wxFontFamily fontFamily; // modern, normal etc...
@@ -42,10 +47,7 @@ struct PropertyData{
     wxFontWeight fontWeight; // bold, normal, thin etc...
     wxColour bgColour; // changes background colour
     wxColour fgColour; // changes properties like text color
-    u32 spanRatioInParent; // ratio used when widget is added to a sizer
-    u32 minSize; // min size of panel/window
-    u32 size; // current size of panel/window
-    u32 maxSize; // max size of panel/window
+    wxSize size; // current size of panel/window;
 };
 
 #endif//XVM_ARENA_PROPERTY_DATA_HPP

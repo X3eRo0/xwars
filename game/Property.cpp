@@ -1,9 +1,11 @@
 #include "Property.hpp"
 #include <wx/arrstr.h>
 #include <wx/clrpicker.h>
+#include <wx/font.h>
 #include <wx/gdicmn.h>
 #include <wx/gtk/colour.h>
 #include <wx/gtk/combobox.h>
+#include <wx/log.h>
 #include <wx/sizer.h>
 #include <wx/string.h>
 #include <wx/stringimpl.h>
@@ -49,6 +51,11 @@ const wxString& TextProperty::GetDefaultValue() const{
 // set default value
 void TextProperty::SetDefaultValue(const wxString& v){
     m_defaultValue = v;
+}
+
+// set value in text entry
+void TextProperty::SetValue(const wxString &value){
+    m_valueEntry->SetValue(value);
 }
 
 // get value as u32
@@ -117,11 +124,22 @@ size_t OptionProperty::GetDefaultSelection() const{
     return m_defaultOption;
 }
 
+void OptionProperty::SetSelection(size_t n){
+    m_optionList->SetSelection(n);
+}
+
+void OptionProperty::SetValue(const wxString& v){
+    m_optionList->ChangeValue(v);
+}
+
 // get index of current selection
-size_t OptionProperty::GetSelectionIndex() const{
+size_t OptionProperty::GetSelection() const{
     return m_optionList->GetCurrentSelection();
 }
 
+wxString OptionProperty::GetValue() const{
+    return m_optionList->GetValue();
+}
 // ----------------------------- OPTION PROPERTY -------------------------------
 // -----------------------------------------------------------------------------
 
@@ -170,6 +188,17 @@ wxColour ColourProperty::GetDefaultColour() const { return m_defaultColour; }
 wxColour ColourProperty::GetColour() const{
     return m_colorPicker->GetColour();
 }
+
+// set colour
+void ColourProperty::SetValue(const wxColour &v){
+    m_colorPicker->SetColour(v);
+}
+
+// get selected colour
+wxColour ColourProperty::GetValue() const{
+    return m_colorPicker->GetColour();
+}
+
 
 // ----------------------------- COLOUR PROPERTY -------------------------------
 // -----------------------------------------------------------------------------

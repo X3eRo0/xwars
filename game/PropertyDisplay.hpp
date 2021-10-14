@@ -17,19 +17,23 @@
 // this will show the actual properties on the screen.
 class PropertiesDisplay : public wxPanel{
 public:
-    PropertiesDisplay(wxWindow *parent, const PropertyData& defaultProperties);
+    PropertiesDisplay(wxWindow *parent);
 
-    // wxFontFamily GetFontFamily();
-    // wxFontStyle GetFontStyle();
-    // wxFontWeight GetFontWeight();
-    // wxColour GetBGColour();
-    // wxColour GetFGColour();
-    // u32 GetSpanRatioInParent();
-    // u32 GetMinSize();
-    // u32 GetSize();
-    // u32 GetMaxSize();
+    // update display with given data
+    void UpdateDisplay(const PropertyData& data);
+
+    // get property data
+    PropertyData GetPropertyData() const;
+
+    // get data
+    u32 GetFontSize() const;
+    wxFontFamily GetFontFamily() const;
+    wxFontStyle GetFontStyle() const;
+    wxFontWeight GetFontWeight() const;
+    wxColour GetBGColour() const;
+    wxColour GetFGColour() const;
+    wxSize GetSize() const;
 private:
-    PropertyData m_defaultProperties;
     PropertyDataWidgets m_widgets;
     wxBoxSizer* m_mainSizer, *m_fontBoxSizer, *m_colourBoxSizer, *m_sizeBoxSizer;
     wxStaticBox *m_fontBox, *m_colourBox, *m_sizeBox;

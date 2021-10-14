@@ -13,8 +13,8 @@
 #define XVM_ARENA_BOT_NAME_DISPLAY_HPP
 
 #include "Common.hpp"
+#include "PropertyData.hpp"
 #include <wx/gdicmn.h>
-#include <wx/gtk/colour.h>
 
 class BotNameDisplay : public wxPanel{
 public:
@@ -37,12 +37,25 @@ public:
     void SetReadColour(const wxColour& c);
     void SetWriteColour(const wxColour& c);
     void SetExecuteColour(const wxColour& c);
-    void SetNameColour(const wxColour& c);
     
     // getters
-    const wxColour& GetReadColour();
-    const wxColour& GetWriteColour();
-    const wxColour& GetExecuteColour();
+    const wxColour& GetReadColour() const;
+    const wxColour& GetWriteColour() const;
+    const wxColour& GetExecuteColour() const;
+
+    // properties
+    PropertyData properties = PropertyData{
+	.fontSize = 20,
+	.fontFamily = wxFONTFAMILY_MODERN,
+	.fontStyle = wxFONTSTYLE_NORMAL,
+	.fontWeight = wxFONTWEIGHT_NORMAL,
+	.bgColour = *wxBLACK,
+	.fgColour = *wxWHITE,
+	.size = wxSize(1366,768)
+    };
+
+    // call this after changing properties
+    void UpdateSelf();
     
 private:
     // main sizer for this panel
@@ -50,11 +63,7 @@ private:
     // botname
     std::string m_botname;
     // to show botname
-    wxStaticText *m_botnameText;
-    // text font
-    wxFont m_botnameTextFont = wxFont(24, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
-    // foreground color of botname
-    wxColour m_botnameTextColour;
+    wxStaticText *m_botnameText;;
     // buttons to show read, write, execute colours
     wxStaticText *m_rText, *m_wText, *m_xText;
     // read, write and execute colour
