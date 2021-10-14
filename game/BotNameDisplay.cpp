@@ -45,6 +45,10 @@ BotNameDisplay::BotNameDisplay(wxWindow* parent, const std::string& botname)
     m_mainSizer->Add(m_xText, 1, wxEXPAND | wxALL, 10);
 }
 
+// void BotNameDisplay::SetNameColour(const wxString &c){
+//     m_botnameText->SetForegroundColour(c);
+// }
+
 void BotNameDisplay::SetReadColour(const wxColour& c){
     m_rColour = c;
     m_rText->SetBackgroundColour(c);

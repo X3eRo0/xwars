@@ -21,9 +21,8 @@ EVT_MENU(MENU_SETTINGS_ID, MainWindow::OnSettings)
 END_EVENT_TABLE()
 
 // constructor
-MainWindow::MainWindow(wxWindow *parent, wxWindowID id, const wxString &title,
-                       const wxPoint &pos, const wxSize &size)
-: wxFrame(parent, id, title, pos, size){
+MainWindow::MainWindow(wxWindow *parent, wxWindowID id, const wxString &title)
+    : wxFrame(parent, id, title){
     // main panel to contain other panels
     // this will span this whole frame
     // as the direct child to main frame spans it while

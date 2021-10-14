@@ -136,8 +136,9 @@ void PropertiesDisplay::UpdateDisplay(const PropertyData &data){
     m_widgets.bgColour->SetValue(data.bgColour);
     m_widgets.fgColour->SetValue(data.fgColour);
 
-    // change width
-    m_widgets.size->SetValue(data.size);
+    // change size
+    wxString size = std::to_string(data.size.GetWidth()) + "x" + std::to_string(data.size.GetHeight());
+    m_widgets.size->SetValue(size);
 }
 
 u32 PropertiesDisplay::GetFontSize() const{

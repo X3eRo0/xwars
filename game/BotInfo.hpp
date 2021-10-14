@@ -51,7 +51,7 @@ public:
     }
 
     // fg color setters
-    void SetBotNameColour(const wxColour& c);
+    // void SetBotNameColour(const wxColour& c);
     void SetRegisterDisplayFGColour(const wxColour& c);
     void SetInstructionDisplayFGColour(const wxColour& c);
 

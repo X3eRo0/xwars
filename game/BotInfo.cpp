@@ -44,10 +44,10 @@ BotInfo::BotInfo(wxWindow* parent, const std::string& botname) : wxPanel(parent)
     // Connect(INSTRUCTION_DISPLAY_UPDATE_EVENT, wxCommandEventHandler(BotInfo::OnInstructionUpdate));
 }
 
-// change botname text display text color
-void BotInfo::SetBotNameColour(const wxColour &c){
-    m_headingPanel->SetNameColour(c);
-}
+// // change botname text display text color
+// void BotInfo::SetBotNameColour(const wxColour &c){
+//     m_headingPanel->SetNameColour(c);
+// }
 
 // change register display text color
 void BotInfo::SetRegisterDisplayFGColour(const wxColour &c){
@@ -72,7 +72,7 @@ void BotInfo::UpdateRegisterDisplay(xbot *bot){
         return;
     }
     
-    wxMilliSleep(25);
+    // wxMilliSleep(25);
     for (i32 i = 0; i < 16; i++){
         getline(&lineptr, &n, reader);
 	    lineptr+=4;

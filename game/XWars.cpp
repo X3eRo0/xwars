@@ -296,30 +296,32 @@ u32 xwars::battle(std::string Bot1Path, std::string Bot2Path){
         get_RF(bot2->cpu)
     ){
 
-        display_registers(bot1, bot2);
-    	display_disassembly(bot1, bot2);
-        bot1->step();
-        
-        if (signal_abort(bot1->cpu->errors, bot1->cpu) == E_ERR){
-            winner = bot2->botname;
-            break;
-        }
-        if (signal_abort(bot1->bin->x_section->errors, bot1->cpu) == E_ERR){
-            winner = bot2->botname;
-            break;
-        }
-
-        bot2->step();
-
-        if (signal_abort(bot2->cpu->errors, bot2->cpu) == E_ERR){
-            winner = bot1->botname;
-            break;
-        }
-        if (signal_abort(bot2->bin->x_section->errors, bot2->cpu) == E_ERR){
-            winner = bot1->botname;
-            break;
-        }
-        counter++;
+	if(wxGetUTCTimeMillis().ToLong() % 400 == 0){
+	    display_registers(bot1, bot2);
+	    display_disassembly(bot1, bot2);
+	    bot1->step();
+	    
+	    if (signal_abort(bot1->cpu->errors, bot1->cpu) == E_ERR){
+		winner = bot2->botname;
+		break;
+	    }
+	    if (signal_abort(bot1->bin->x_section->errors, bot1->cpu) == E_ERR){
+		winner = bot2->botname;
+		break;
+	    }
+	    
+	    bot2->step();
+	    
+	    if (signal_abort(bot2->cpu->errors, bot2->cpu) == E_ERR){
+		winner = bot1->botname;
+		break;
+	    }
+	    if (signal_abort(bot2->bin->x_section->errors, bot2->cpu) == E_ERR){
+		winner = bot1->botname;
+		break;
+	    }
+	    counter++;
+	}
     }
 
     // finally wintter text to terminal

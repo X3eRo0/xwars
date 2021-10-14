@@ -32,6 +32,9 @@ public:
 
     // set botname
     void SetBotName(const std::string& name);
+
+    // // set botname colour
+    // void SetNameColour(const wxString& c);
     
     // setters
     void SetReadColour(const wxColour& c);
