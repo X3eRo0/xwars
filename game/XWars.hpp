@@ -33,7 +33,7 @@ struct xwars{
     void copy_bots(xbot *bot1, xbot *bot2);
 
     // do battle b/w bots
-    u32 battle(xbot *bot1, xbot *bot2);
+    u32 battle(std::string Bot1Path, std::string Bot2Path);
 
     // -- README -- 
     // here I will explain working : 
@@ -41,12 +41,8 @@ struct xwars{
     // 2 - call load_bots with filenames to load bots into the "bots" vector
     // 3 - to copy any two bots into memory, call "copy_bots" 
 
-    // our bots
-    std::vector<xbot*> bots;
     // paths of all bots
     std::vector<std::string> botpaths;
-    // names of all bots
-    std::vector<std::string> botnames;
 private:
     // first - left
     // second - right

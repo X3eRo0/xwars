@@ -6,6 +6,7 @@
 #include <wx/gdicmn.h>
 #include <wx/sizer.h>
 #include <wx/stringimpl.h>
+#include <wx/time.h>
 #include <wx/wxcrt.h>
 #include <sys/types.h>
 #include <dirent.h>
@@ -101,7 +102,7 @@ void Arena::OnLoad(wxCommandEvent& WXUNUSED(event)){
     DIR * botdir = opendir(botFolder.GetData().AsChar());
     
     // get file names in the selected folder
-    std::vector<std::string> botpaths, botnames;
+    std::vector<std::string> botpaths;
     struct dirent *dp = NULL;
     while (botdir){
         if ((dp = readdir(botdir)) != NULL){
@@ -110,7 +111,6 @@ void Arena::OnLoad(wxCommandEvent& WXUNUSED(event)){
 
                 // assemble all bots
                 // bot paths must contain assembled bot paths
-                botnames.emplace_back(std::string(dp->d_name));
                 botpaths.emplace_back((botFolder + "/" + dp->d_name).ToStdString());
             }
         } else {
@@ -120,21 +120,24 @@ void Arena::OnLoad(wxCommandEvent& WXUNUSED(event)){
     }
 
     // create and load bots
-    get_xwars_instance()->load_bots(botpaths, botnames);
-
+    // get_xwars_instance()->load_bots(botpaths, botnames);
+    get_xwars_instance()->botpaths = botpaths;
     // check and print status
-    const auto& bots = get_xwars_instance()->bots;
-    for(size_t i = 0; i < bots.size(); i++){
-        if(!bots[i]) PrintError("[*] Failed to load Bot [ %s ]\n", botnames[i]);
-        else Print("[+] Loaded Bot [ %s ]\n", botnames[i]);
+    for(size_t i = 0; i < botpaths.size(); i++){
+        Print("[+] Loaded Bot [ %s ]\n", botpaths[i].substr(botpaths[i].find_last_of("/\\") + 1).c_str());
     }
 }
 
 void Arena::OnStart(wxCommandEvent& WXUNUSED(event)){
-    const auto& bots = get_xwars_instance()->bots;
+    const auto& bots = get_xwars_instance()->botpaths;
     for (size_t i = 0; i < bots.size(); i++){
         Print("Bots: %p\n", bots[i]);
     }
     
-    get_xwars_instance()->battle(bots[1], bots[2]);
+    for (u32 i = 0; i < bots.size(); i++){
+        for (u32 j = 0; j < bots.size(); j++){
+            get_xwars_instance()->battle(bots[i], bots[j]);
+            wxMilliSleep(5000);
+        }
+    }
 }

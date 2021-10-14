@@ -72,6 +72,7 @@ void BotInfo::UpdateRegisterDisplay(xbot *bot){
         return;
     }
     
+    wxMilliSleep(25);
     for (i32 i = 0; i < 16; i++){
         getline(&lineptr, &n, reader);
 	    lineptr+=4;

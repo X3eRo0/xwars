@@ -29,6 +29,7 @@ typedef const char* cstring;
 FILE * get_reader_end();
 FILE * get_writer_end();
 
+
 // this is defined in MainApp.cpp
 // wxFrame* GetMainWindow();
 

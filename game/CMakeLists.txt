@@ -1,5 +1,5 @@
 #include wxWidgets in your application
-find_package(wxWidgets REQUIRED base core gl OPTIONAL_COMPONENTS net)
+find_package(wxWidgets REQUIRED base core xml gl OPTIONAL_COMPONENTS net)
 include(${wxWidgets_USE_FILE})
 
 add_library(libxvm 

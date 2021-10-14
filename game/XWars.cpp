@@ -49,40 +49,41 @@ void shutdown_xwars(){
 xwars::xwars(){
 }
 
-void xwars::load_bots(const std::vector<std::string> &bot_paths, const std::vector<std::string>& bot_names){
-    // allocate memory space for all bots
-    bots.resize(bot_paths.size());
-    botpaths = bot_paths;
-    botnames = bot_names;
+//void xwars::load_bots(const std::vector<std::string> &bot_paths, const std::vector<std::string>& bot_names){
+    //// allocate memory space for all bots
+    //bots.resize(bot_paths.size());
+    //botpaths = bot_paths;
+    //botnames = bot_names;
     
-    // initialize every bot
-    for(size_t i = 0; i < bots.size(); i++){
-        // shorter names
-        xbot* &bot = bots[i];
-        std::string bot_path = bot_paths[i];
+    //// initialize every bot
+    //for(size_t i = 0; i < bots.size(); i++){
+        //// shorter names
+        //xbot* &bot = bots[i];
+        //std::string bot_path = bot_paths[i];
 
-        // initialize this bot
-        bot = new xbot;
+        //// initialize this bot
+        //bot = new xbot;
 
-        // set bot name
-        bot->botname = botnames[i];
+        //// set bot name
+        //bot->botname = botnames[i];
         
-        // add stacks for each bots
-        add_section(bot->bin->x_section, "stack", XVM_STACK_SIZE, XVM_DFLT_SP & 0xfffff000, PERM_READ | PERM_WRITE);
+        //// add stacks for each bots
+        //add_section(bot->bin->x_section, "stack", XVM_STACK_SIZE, XVM_DFLT_SP & 0xfffff000, PERM_READ | PERM_WRITE);
     
-        // initialize stack pointer to default value
-        bot->cpu->regs.sp = XVM_DFLT_SP;
+        //// initialize stack pointer to default value
+        //bot->cpu->regs.sp = XVM_DFLT_SP;
 
-        // load binary file
-        // load init and bot sections
-        xvm_bin_load_file(bot->bin, botpaths[i].c_str());
+        //// load binary file
+        //// load init and bot sections
+        //xvm_bin_load_file(bot->bin, botpaths[i].c_str());
 
-        // remove .text section
-        remove_section_by_name(bot->bin->x_section, ".text");
-    }
-}
+        //// remove .text section
+        //remove_section_by_name(bot->bin->x_section, ".text");
+    //}
+//}
 
 void xwars::display_registers(xbot *bot1, xbot *bot2){
+
     // update registers
     // update order must be same as Register::RegisterNames
     fprintf(bot1->reg_writer_e, "$r0=0x%.8x\n", bot1->cpu->regs.r0);
@@ -225,11 +226,34 @@ void xwars::copy_bots(xbot *bot1, xbot *bot2){
 }
 
 
-u32 xwars::battle(xbot *bot1, xbot *bot2){
+u32 xwars::battle(std::string Bot1Path, std::string Bot2Path){
+
+    xbot *bot1 = new xbot;
+    xbot *bot2 = new xbot;
+    
+    bot1->botname = Bot1Path.substr(Bot1Path.find_last_of("/\\") + 1).c_str(); 
+    bot2->botname = Bot2Path.substr(Bot2Path.find_last_of("/\\") + 1).c_str(); 
+
     // set bot names
     FactoryGetLeftBotInfo()->SetBotName(bot1->botname);
     FactoryGetRightBotInfo()->SetBotName(bot2->botname);
+
+    // allocate stack region for both bots
+    add_section(bot1->bin->x_section, "stack", XVM_STACK_SIZE, XVM_DFLT_SP & 0xfffff000, PERM_READ | PERM_WRITE | PERM_EXEC);
+    add_section(bot2->bin->x_section, "stack", XVM_STACK_SIZE, XVM_DFLT_SP & 0xfffff000, PERM_READ | PERM_WRITE | PERM_EXEC);
+
+    // set correct stack pointer
+    bot1->cpu->regs.sp = XVM_DFLT_SP;
+    bot2->cpu->regs.sp = XVM_DFLT_SP;
     
+    // load .bot sections
+    xvm_bin_load_file(bot1->bin, Bot1Path.c_str());
+    xvm_bin_load_file(bot2->bin, Bot2Path.c_str());
+
+    // remove the default .text section and allocate a new one.
+    remove_section_by_name(bot1->bin->x_section, ".text");
+    remove_section_by_name(bot2->bin->x_section, ".text");
+
     // allocate a common text region
     section_entry * temp = NULL;
     section_entry * text = init_section_entry();
@@ -308,9 +332,9 @@ xwars::~xwars(){
     // destroy bots
     // bots were alloc'd with new operator so
     // the must be dealloc'd with delete operator
-    for(xbot* bot : bots){
-        delete bot;
-    }
+    //for(xbot* bot : bots){
+        //delete bot;
+    //}
 }
 
 void xwars::register_bot_info(BotInfo *first, BotInfo *second){
