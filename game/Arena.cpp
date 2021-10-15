@@ -7,12 +7,12 @@
 #include <wx/sizer.h>
 #include <wx/stringimpl.h>
 #include <wx/time.h>
+#include <wx/timer.h>
 #include <wx/wxcrt.h>
 #include <sys/types.h>
 #include <dirent.h>
 #include <unistd.h>
 #include <stdio.h>
-
 
 enum xvmArenaButtonIDs{
     ID_LOAD  = wxID_HIGHEST + 1000,
@@ -24,8 +24,8 @@ enum xvmArenaButtonIDs{
 
 // event table
 BEGIN_EVENT_TABLE(Arena, wxPanel)
-    EVT_BUTTON(ID_LOAD, Arena::OnLoad)
-    EVT_BUTTON(ID_START, Arena::OnStart)
+EVT_BUTTON(ID_LOAD, Arena::OnLoad)
+EVT_BUTTON(ID_START, Arena::OnStart)
 END_EVENT_TABLE()
 
 Arena::Arena(wxWindow* parent) : wxPanel(parent){
@@ -33,7 +33,9 @@ Arena::Arena(wxWindow* parent) : wxPanel(parent){
     this->SetSizer(m_mainSizer);
 
     // create terminal view
-    m_terminal = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
+    m_terminal = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
+				wxDefaultPosition, wxDefaultSize,
+				wxTE_MULTILINE);
     // set terminal view theme
     m_terminal->SetBackgroundColour(m_terminalBGColour);
     m_terminal->SetForegroundColour(m_terminalFGColour);
@@ -41,7 +43,6 @@ Arena::Arena(wxWindow* parent) : wxPanel(parent){
     m_terminal->SetEditable(false);
     
     // add welcome text
-    //    Print("=-----------------[ XWARS ]----------------=\n[+] Authors: @X3eRo0, @brightprogrammer\n");
     // create buttons panel and add to sizer
     m_buttonsPanel = new wxPanel(this);
     
@@ -50,11 +51,16 @@ Arena::Arena(wxWindow* parent) : wxPanel(parent){
     m_buttonsPanel->SetSizer(m_btnsPanelHSizer);
 
     // create buttons
-    m_btnLoad = new wxButton(this, ID_LOAD, "Load", wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
-    m_btnStart = new wxButton(this, ID_START, "Start", wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
-    m_btnPause = new wxButton(this, ID_PAUSE, "Pause", wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
-    m_btnPlus = new wxButton(this, ID_PLUS, "+", wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
-    m_btnMinus = new wxButton(this, ID_MINUS, "-", wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
+    m_btnLoad = new wxButton(this, ID_LOAD, "Load", wxDefaultPosition,
+			     wxDefaultSize, wxBORDER_NONE);
+    m_btnStart = new wxButton(this, ID_START, "Start", wxDefaultPosition,
+			      wxDefaultSize, wxBORDER_NONE);
+    m_btnPause = new wxButton(this, ID_PAUSE, "Pause", wxDefaultPosition,
+			      wxDefaultSize, wxBORDER_NONE);
+    m_btnPlus = new wxButton(this, ID_PLUS, "+", wxDefaultPosition,
+			     wxDefaultSize, wxBORDER_NONE);
+    m_btnMinus = new wxButton(this, ID_MINUS, "-", wxDefaultPosition,
+			      wxDefaultSize, wxBORDER_NONE);
 
     // add for sizing
     m_btnsPanelHSizer->Add(m_btnLoad, 1);
@@ -66,7 +72,9 @@ Arena::Arena(wxWindow* parent) : wxPanel(parent){
     // add for sizing
     m_mainSizer->Add(m_buttonsPanel, 1, wxEXPAND | wxALL, 0);
     m_mainSizer->Add(m_terminal, 14, wxEXPAND | wxALL, 0);
-
+    
+    // bind our timer to this
+    m_timer.Bind(wxEVT_TIMER, &Arena::OnTimer, this);
 }
 
 // gets the actual bot name from reversed path
@@ -90,7 +98,7 @@ wxString GetBotNameFromFilePath(wxString filepath){
 // we will open a file selection dialog and read that file into memory
 void Arena::OnLoad(wxCommandEvent& WXUNUSED(event)){
     // create a new file dialog
-    wxDirDialog *fd = new wxDirDialog(this, "XVM XWars - Arena - Choose Bots Folder", wxEmptyString, wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST);
+    wxDirDialog *fd = new wxDirDialog(this,"XVM XWars - Arena - Choose Bots Folder", wxEmptyString, wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST);
     
     // check if file was selected or not
     if(fd->ShowModal() == wxID_CANCEL){
@@ -130,16 +138,37 @@ void Arena::OnLoad(wxCommandEvent& WXUNUSED(event)){
 
 void Arena::OnStart(wxCommandEvent& WXUNUSED(event)){
     const auto& bots = get_xwars_instance()->botpaths;
-    for (size_t i = 0; i < bots.size(); i++){
-        Print("Bots: %p\n", bots[i]);
-    }
-    
+    // for (size_t i = 0; i < bots.size(); i++){
+    //     Print("Bots: %p\n", bots[i]);
+    // }
+
+    // generate battle indices
+    m_battlePairs.clear();
+    m_battleIdx = 0;
     for (u32 i = 0; i < bots.size(); i++){
-        for (u32 j = 0; j < bots.size(); j++){
-            get_xwars_instance()->battle(bots[i], bots[j]);
-            wxMilliSleep(5000);
+        for (u32 j = i+1; j < bots.size(); j++){
+	    m_battlePairs.push_back({i, j});
         }
     }
+
+    // do first battle
+    const std::pair<int, int>& botpair = m_battlePairs[m_battleIdx++];
+    get_xwars_instance()->battle(bots[botpair.first], bots[botpair.second]);
+
+    // start timer
+    m_timer.Start(5000);
+}
+
+void Arena::OnTimer(wxTimerEvent& e){
+    if(m_battleIdx == m_battlePairs.size()){
+	m_timer.Stop();
+	return;
+    }
+
+    // do  battle
+    const auto& bots = get_xwars_instance()->botpaths;
+    const std::pair<int, int>& botpair = m_battlePairs[m_battleIdx++];
+    get_xwars_instance()->battle(bots[botpair.first], bots[botpair.second]);
 }
 
 void Arena::UpdateSelf(){
@@ -147,3 +176,4 @@ void Arena::UpdateSelf(){
     m_terminal->SetForegroundColour(properties.fgColour);
     m_terminal->SetFont(properties.GetFont());
 }
+

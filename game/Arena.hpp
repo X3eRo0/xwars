@@ -2,10 +2,12 @@
 #define XVM_ARENA_TERMINAL_HPP
 
 #include "Common.hpp"
+#include <vector>
 #include <wx/event.h>
 #include <wx/font.h>
 #include <wx/gdicmn.h>
 #include <wx/textctrl.h>
+#include <wx/timer.h>
 #include "PropertyData.hpp"
 
 class Arena : public wxPanel{
@@ -61,7 +63,8 @@ public:
 private:
     void OnLoad(wxCommandEvent& event);
     void OnStart(wxCommandEvent& event);
-
+    void OnTimer(wxTimerEvent& e);
+    
     // main sizer
     wxBoxSizer *m_mainSizer;
     // our awesome terminal will only show output
@@ -79,7 +82,14 @@ private:
     // our control buttons
     wxButton *m_btnLoad, *m_btnStart, *m_btnPlus, *m_btnMinus, *m_btnPause;
     // terminal font
-    wxFont m_terminalFont = wxFont(10, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM);
+    wxFont m_terminalFont = wxFont(10, wxFONTFAMILY_MODERN,
+				   wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM);
+    // timer for timed battles
+    wxTimer m_timer;
+    // battle pairs
+    std::vector<std::pair<u32, u32>> m_battlePairs;
+    // battle index
+    size_t m_battleIdx = 0;
 };
 
 #endif//XVM_ARENA_TERMINAL_HPP
