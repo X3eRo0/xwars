@@ -12,8 +12,8 @@ bool MainApp::OnInit(){
     mainWindow->SetFocus();
 
     // fixed size window
-    mainWindow->SetMaxSize(wxSize(MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT));
-    mainWindow->SetMinSize(wxSize(MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT));
+    //mainWindow->SetMaxSize(wxSize(MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT));
+    //mainWindow->SetMinSize(wxSize(MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT));
     
 
     // everything's ok dude ;-)
