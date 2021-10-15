@@ -28,20 +28,16 @@ public:
 
     // getters
     const std::string& GetName();
-    const std::string& GetValue();
+    const std::string& GetValue() const;
+    
+    // change the text color of each register
+    void SetFGColour(const wxColour& c);
+    void ResetFGColour();
+    void SetBGColour(const wxColour& c);
+    void ResetBGColour();
 
-        // properties
-    PropertyData properties = PropertyData{
-	.fontSize = 8,
-	.fontFamily = wxFONTFAMILY_MODERN,
-	.fontStyle = wxFONTSTYLE_NORMAL,
-	.fontWeight = wxFONTWEIGHT_NORMAL,
-	.bgColour = *wxBLACK,
-	.fgColour = *wxWHITE
-    };
-
-    // call this after changing properties
-    void UpdateSelf();
+    // set font
+    bool SetFont(const wxFont& font);
     
     // regiser names
     // one can use this as reference to set register name using the set name
@@ -52,12 +48,13 @@ public:
 	"r8", "r9", "ra", "rb",
 	"rc", "sp", "bp", "pc"};
 private:
+    // RegisterDisplay and Register, both must have same background colour
+    wxColour m_defaultColour = wxColour(32, 16, 32);
     // main sizer
     wxBoxSizer *m_mainSizer;
     // label name and value
     std::string m_registerName, m_registerValue = "0x00000000",
 	m_delimiterString = "=";
-    
     // panel will be like this [ <reg_name> : <reg_value> ]
     wxStaticText *m_registerNameText, *m_registerValueText, *m_delimiterText;
     // label and value fomt

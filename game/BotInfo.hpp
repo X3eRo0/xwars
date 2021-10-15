@@ -27,7 +27,9 @@ wxDECLARE_EVENT(REGISTER_DISPLAY_UPDATE_EVENT, wxCommandEvent);
 
 class BotInfo : public wxPanel{
 public:
-    BotInfo(wxWindow *parent, const std::string& botname);
+    // if left is true then it will be assumed that this is the left panel
+    // right panel assumed otherwise
+    BotInfo(wxWindow *parent, const std::string& botname, bool left = true);
 
     // set bot name for this panel
     void SetBotName(const std::string& name);
@@ -58,12 +60,15 @@ public:
     // bg color setters
     void SetRegisterDisplayBGColour(const wxColour& c);
     void SetInstructionDisplayBGColour(const wxColour& c);
+
+    // get bot name display
+    BotNameDisplay* GetBotNameDisplay();
 private:
     // our main sizer
     wxBoxSizer *m_mainSizer;
     // heading panel will contain bot name and some other stuffs
     // heading panel is at the top of bot info panel
-    BotNameDisplay* m_headingPanel;
+    BotNameDisplay* m_botNameDisplay;
     // register display will show current state of registers for this bot
     RegisterDisplay *m_registerDisplay;
     // register display colour

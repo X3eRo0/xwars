@@ -1,8 +1,8 @@
 /**
  * @file BotInfo.cpp
  * @author Siddharth Mishra
- * @brief This panel will how information such as current state of registers, current instruction
- *        being executed etc... for each bot.
+ * @brief This panel will how information such as current state of registers,
+ * current instruction being executed etc... for each bot.
  * @version 0.1
  * @date 2021-10-09
  * 
@@ -10,6 +10,7 @@
  * 
  */
 
+#include "BotNameDisplay.hpp"
 #include "Common.hpp"
 #include "BotInfo.hpp"
 #include "Factory.hpp"
@@ -21,33 +22,28 @@
 #include <wx/time.h>
 #include <wx/utils.h>
 
-// define custom event type
-// wxDEFINE_EVENT(REGISTER_DISPLAY_UPDATE_EVENT, wxCommandEvent);
-// wxDEFINE_EVENT(INSTRUCTION_DISPLAY_UPDATE_EVENT, wxCommandEvent);
-
-BotInfo::BotInfo(wxWindow* parent, const std::string& botname) : wxPanel(parent){
+BotInfo::BotInfo(wxWindow* parent, const std::string& botname, bool left) : wxPanel(parent){
     // create main sizer for our window
     m_mainSizer = new wxBoxSizer(wxVERTICAL);
     this->SetSizer(m_mainSizer);
 
     // create register and instruction dislay
-    m_headingPanel = new BotNameDisplay(this, botname);
-    m_registerDisplay = FactoryCreateLeftRegisterDisplay(this);
-    m_instructionDisplay = FactoryCreateRightInstructionDisplay(this);
+    m_botNameDisplay = new BotNameDisplay(this, botname);
 
-    // add displays for sizing
-    m_mainSizer->Add(m_headingPanel, 1, wxEXPAND | wxALL);
-    m_mainSizer->Add(m_registerDisplay, 5, wxEXPAND | wxALL, 3);
-    m_mainSizer->Add(m_instructionDisplay, 10, wxEXPAND | wxALL, 3);
+    if(left){
+	m_registerDisplay = FactoryCreateLeftRegisterDisplay(this);
+	m_instructionDisplay = FactoryCreateLeftInstructionDisplay(this);
+
+    }else{
+	m_registerDisplay = FactoryCreateRightRegisterDisplay(this);
+	m_instructionDisplay = FactoryCreateRightInstructionDisplay(this);
+    }
     
-    // Connect(REGISTER_DISPLAY_UPDATE_EVENT, wxCommandEventHandler(BotInfo::OnRegisterUpdate));
-    // Connect(INSTRUCTION_DISPLAY_UPDATE_EVENT, wxCommandEventHandler(BotInfo::OnInstructionUpdate));
+    // add displays for sizing
+    m_mainSizer->Add(m_botNameDisplay, 1, wxEXPAND | wxALL);
+    m_mainSizer->Add(m_registerDisplay, 5, wxEXPAND | wxALL, 3);
+    m_mainSizer->Add(m_instructionDisplay, 10, wxEXPAND | wxALL, 3);   
 }
-
-// // change botname text display text color
-// void BotInfo::SetBotNameColour(const wxColour &c){
-//     m_headingPanel->SetNameColour(c);
-// }
 
 // change register display text color
 void BotInfo::SetRegisterDisplayFGColour(const wxColour &c){
@@ -112,5 +108,9 @@ void BotInfo::UpdateInstructionDisplay(xbot *bot){
 }
 
 void BotInfo::SetBotName(const std::string &name){
-    m_headingPanel->SetBotName(name);
+    m_botNameDisplay->SetBotName(name);
+}
+
+BotNameDisplay* BotInfo::GetBotNameDisplay(){
+    return m_botNameDisplay;
 }

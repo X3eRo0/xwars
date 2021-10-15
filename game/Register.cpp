@@ -21,22 +21,22 @@ Register::Register(wxWindow *parent, const std::string& name)
     this->SetSizer(m_mainSizer);
 
     // create label and value static texts
-    m_registerNameText = new wxStaticText(this, wxID_ANY,
-					  "$"+m_registerName, wxDefaultPosition,
-					  wxDefaultSize, wxALIGN_CENTER);
+    m_registerNameText = new wxStaticText(this, wxID_ANY, "$"+m_registerName,
+					  wxDefaultPosition, wxDefaultSize,
+					  wxALIGN_CENTER);
     
-    m_delimiterText = new wxStaticText(this, wxID_ANY,
-				       m_delimiterString, wxDefaultPosition,
-				       wxDefaultSize, wxALIGN_CENTER);
+    m_delimiterText = new wxStaticText(this, wxID_ANY, m_delimiterString,
+				       wxDefaultPosition, wxDefaultSize,
+				       wxALIGN_CENTER);
 
-    m_registerValueText = new wxStaticText(this, wxID_ANY,
-					   "0x00000000", wxDefaultPosition,
-					   wxDefaultSize, wxALIGN_CENTER);
+    m_registerValueText = new wxStaticText(this, wxID_ANY, "0x00000000",
+					   wxDefaultPosition, wxDefaultSize,
+					   wxALIGN_CENTER);
 
     // set font
-    m_registerNameText->SetFont(properties.GetFont());
-    m_delimiterText->SetFont(properties.GetFont());
-    m_registerValueText->SetFont(properties.GetFont());
+    m_registerNameText->SetFont(m_font);
+    m_delimiterText->SetFont(m_font);
+    m_registerValueText->SetFont(m_font);
     
     // set Colour
     m_registerNameText->SetForegroundColour(m_registerNameFGColour);
@@ -62,6 +62,35 @@ const std::string& Register::GetName(){
     return m_registerName;
 }
 
-const std::string& Register::GetValue(){
+const std::string& Register::GetValue() const{
     return m_registerValue;
+}
+
+void Register::SetFGColour(const wxColour &c){
+    m_registerValueText->SetForegroundColour(c);
+}
+
+void Register::ResetFGColour(){
+    m_registerValueText->SetForegroundColour(*wxWHITE);
+}
+
+void Register::SetBGColour(const wxColour& c){
+    m_registerNameText->SetBackgroundColour(c);
+    m_delimiterText->SetBackgroundColour(c);
+    m_registerValueText->SetBackgroundColour(c);
+}
+
+void Register::ResetBGColour(){
+    SetBackgroundColour(m_defaultColour);
+    m_registerNameText->SetBackgroundColour(m_defaultColour);
+    m_delimiterText->SetBackgroundColour(m_defaultColour);
+    m_registerValueText->SetBackgroundColour(m_defaultColour);
+}
+
+bool Register::SetFont(const wxFont &font){
+    m_registerValueText->SetFont(font);
+    m_registerNameText->SetFont(font);
+    m_delimiterText->SetFont(font);
+
+    return true;
 }

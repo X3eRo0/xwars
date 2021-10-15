@@ -36,13 +36,13 @@ MiddlePanel *FactoryCreateMiddlePanel(wxWindow *parent){
 
 // create bot info for left and return ptr
 BotInfo *FactoryCreateLeftBotInfo(wxWindow *parent, const std::string &botname){
-    factory.lBotInfo = new BotInfo(parent, botname);
+    factory.lBotInfo = new BotInfo(parent, botname, true); // true means left
     return factory.lBotInfo;
 }
 
 // create bot info for right and return ptr
 BotInfo *FactoryCreateRightBotInfo(wxWindow *parent, const std::string &botname){
-    factory.rBotInfo = new BotInfo(parent, botname);
+    factory.rBotInfo = new BotInfo(parent, botname, false); // false means right
     return factory.rBotInfo;
 }
 
@@ -84,15 +84,16 @@ BotInfo *FactoryGetLeftBotInfo() { return factory.lBotInfo; }
 BotInfo *FactoryGetRightBotInfo() { return factory.rBotInfo; }
 
 // get already created register displays
-RegisterDisplay *FactoryGetLeftRegisgterDisplay() { return factory.lRegDisplay; }
-RegisterDisplay *FactoryGetRightRegisgterDisplay() { return factory.rRegDisplay;
+RegisterDisplay *FactoryGetLeftRegisterDisplay() { return factory.lRegDisplay; }
+RegisterDisplay *FactoryGetRightRegisterDisplay() { return factory.rRegDisplay;
 }
 
 // get already created instruction displays
 InstructionDisplay *FactoryGetLeftInstructionDisplay() {
-  return factory.lInstrDisplay;
+    if(!factory.lInstrDisplay) wxPuts("Wait!");
+    return factory.lInstrDisplay;
 }
 
 InstructionDisplay *FactoryGetRightInstructionDisplay() {
-  return factory.rInstrDisplay;
+    return factory.rInstrDisplay;
 }

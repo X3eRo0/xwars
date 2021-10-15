@@ -32,7 +32,13 @@ public:
     wxFontWeight GetFontWeight() const;
     wxColour GetBGColour() const;
     wxColour GetFGColour() const;
-    wxSize GetSize() const;
+    wxSize GetSelectedSize() const;
+
+    wxFont GetFont() const;
+    
+    // disable size option
+    void EnableSizeSelector();
+    void DisableSizeSelector();
 private:
     PropertyDataWidgets m_widgets;
     wxBoxSizer* m_mainSizer, *m_fontBoxSizer, *m_colourBoxSizer, *m_sizeBoxSizer;

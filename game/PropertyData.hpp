@@ -10,24 +10,19 @@
 
 #include "Common.hpp"
 #include <wx/font.h>
+#include <wx/xml/xml.h>
 
 // defines the type of widget
 // we wan't to use the property data for
 enum class WidgetType {
     // 2nd top left and right panels where register names are displayed
     RegisterDisplay,
-    // grid at the middle
-    MemoryGrid,
     // black terminal like thing in the middle where output will be shown
     ArenaTerminal,
     // bottom left and right where instructions are displayed
     InstructionDisplay, 
     // the main window that contains all widgets
     MainWindow,
-    // bot info panel in left and right that shows all info about a single bot
-    BotInfo,
-    // middle panel contains memorygrid and arenaterminal
-    MiddlePanel,
     // top left and right panel which displays bot name
     BotNameDisplay
 };
@@ -39,6 +34,9 @@ struct PropertyData{
     wxFont GetFont() const{
 	return wxFont(fontSize, fontFamily, fontStyle, fontWeight);
     }
+
+    // save properties for given widget in given xmldoc
+    void SaveXml(wxXmlDocument *xmldoc);
 
     WidgetType widgetType; // type of widget (for xml info)
     u32 fontSize; // size of font in +ve integers

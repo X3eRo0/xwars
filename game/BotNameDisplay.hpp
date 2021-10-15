@@ -48,6 +48,7 @@ public:
 
     // properties
     PropertyData properties = PropertyData{
+	.widgetType = WidgetType::BotNameDisplay,
 	.fontSize = 20,
 	.fontFamily = wxFONTFAMILY_MODERN,
 	.fontStyle = wxFONTSTYLE_NORMAL,

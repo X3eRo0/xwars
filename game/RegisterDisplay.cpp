@@ -47,6 +47,20 @@ RegisterDisplay::RegisterDisplay(wxWindow* parent)
 }
 
 // set register value
-void RegisterDisplay::SetRegisterValue(const std::string &regname, const std::string& val){
+void RegisterDisplay::SetRegisterValue(const std::string &regname,
+				       const std::string& val){
     m_registers[regname]->SetValue(val);
+}
+
+// update self properties
+void RegisterDisplay::UpdateSelf(){
+    // change self background
+    m_parentBox->SetBackgroundColour(properties.bgColour);
+
+    // change each registers background and properties
+    for(auto& [regname, reg] : m_registers){
+	reg->SetFont(properties.GetFont());
+	reg->SetBGColour(properties.bgColour);
+	reg->SetFGColour(properties.fgColour);
+    };
 }

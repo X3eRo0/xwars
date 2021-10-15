@@ -141,3 +141,9 @@ void Arena::OnStart(wxCommandEvent& WXUNUSED(event)){
         }
     }
 }
+
+void Arena::UpdateSelf(){
+    m_terminal->SetBackgroundColour(properties.bgColour);
+    m_terminal->SetForegroundColour(properties.fgColour);
+    m_terminal->SetFont(properties.GetFont());
+}

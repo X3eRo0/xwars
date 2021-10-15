@@ -6,10 +6,17 @@
 */
 
 #include "SettingsDialog.hpp"
+#include "Factory.hpp"
+#include "MainWindow.hpp"
+#include "Arena.hpp"
+#include "RegisterDisplay.hpp"
+#include "InstructionDisplay.hpp"
+#include "BotNameDisplay.hpp"
 #include <wx/event.h>
 #include <wx/filedlg.h>
 #include <wx/gdicmn.h>
 #include <wx/generic/panelg.h>
+#include <wx/log.h>
 #include <wx/sizer.h>
 #include <wx/stringimpl.h>
 #include <wx/textctrl.h>
@@ -96,7 +103,17 @@ SettingsDialog::SettingsDialog(wxWindow *parent, wxWindowID id,
     m_bottomPanelSizer->Add(m_okBtn, 1, wxEXPAND | wxALL);
     m_bottomPanelSizer->Add(m_applyBtn, 1, wxEXPAND | wxALL);
     m_bottomPanelSizer->Add(m_cancelBtn, 1, wxEXPAND | wxALL);
-}
+
+    
+    // store default properties
+    m_mainWindowData = FactoryGetMainWindow()->properties; 
+    m_botNameDisplayData = FactoryGetLeftBotInfo()->GetBotNameDisplay()->properties;
+    m_registerDisplayData = FactoryGetLeftRegisterDisplay()->properties;    
+    m_instructionDisplayData = FactoryGetLeftInstructionDisplay()->properties;
+    m_arenaTerminalData = FactoryGetMiddlePanel()->GetArena()->properties;
+
+    // update display
+    m_propertiesDisplay->UpdateDisplay(m_mainWindowData);}
 
 void SettingsDialog::OnImportBtnClicked(wxCommandEvent &e) {}
 
@@ -107,23 +124,18 @@ void SettingsDialog::OnExportBtnClicked(wxCommandEvent &WXUNUSED(e)) {
 					wxFD_SAVE | wxFD_CHANGE_DIR |
 					wxFD_OVERWRITE_PROMPT);
     if(fd->ShowModal() != wxCANCEL){
-	wxPuts("writing...");
 	wxString filename = fd->GetPath();
+	wxPuts("exporting theme \"" + filename + "\"");
+	
 	wxXmlDocument *xmldoc = new wxXmlDocument;
 	wxXmlNode *root = new wxXmlNode(wxXML_ELEMENT_NODE, "ThemeRoot");
 	xmldoc->SetRoot(root);
-	
-	wxXmlNode *widget = new wxXmlNode(wxXML_ELEMENT_NODE, "MainWindow");
-	root->AddChild(widget);
 
-	// add size settings
-	wxXmlNode *size = new wxXmlNode(wxXML_ELEMENT_NODE, "Size");
-	widget->AddChild(size);
-
-	wxXmlAttribute *widthattr, *heightattr;
-	heightattr = new wxXmlAttribute("Height", "720", nullptr);
-	widthattr = new wxXmlAttribute("Width", "1240", heightattr);
-	size->AddAttribute(widthattr);
+	m_mainWindowData.SaveXml(xmldoc);
+	m_botNameDisplayData.SaveXml(xmldoc);
+	m_registerDisplayData.SaveXml(xmldoc);
+	m_instructionDisplayData.SaveXml(xmldoc);
+	m_arenaTerminalData.SaveXml(xmldoc);
 	
 	xmldoc->Save(filename);
 
@@ -133,11 +145,154 @@ void SettingsDialog::OnExportBtnClicked(wxCommandEvent &WXUNUSED(e)) {
 }
 
 
-void SettingsDialog::OnOkBtnClicked(wxCommandEvent &e) { Close(); }
-void SettingsDialog::OnApplyBtnClicked(wxCommandEvent &e) {wxPuts("triggered");}
-void SettingsDialog::OnCancelBtnClicked(wxCommandEvent &e) { Close(); }
+// apply button will both save the settings to local buffers
+// and apply this changes
+void SettingsDialog::OnApplyBtnClicked(wxCommandEvent &e) {
+    UpdateDataFromDisplay();
 
-void SettingsDialog::OnWidgetTypeChanged(wxCommandEvent& e){
+    // update main window
+    MainWindow *mw = FactoryGetMainWindow();
+    mw->properties = m_mainWindowData;
+    mw->UpdateSelf();
+
+    // update bot name displays
+    BotNameDisplay* bnd = FactoryGetLeftBotInfo()->GetBotNameDisplay();
+    bnd->properties = m_botNameDisplayData;
+    bnd->UpdateSelf();
+    bnd = FactoryGetRightBotInfo()->GetBotNameDisplay();
+    bnd->properties = m_botNameDisplayData;
+    bnd->UpdateSelf();
+
+    // update register display
+    RegisterDisplay *rd = FactoryGetLeftRegisterDisplay();
+    rd->properties = m_registerDisplayData;
+    rd->UpdateSelf();
+    rd = FactoryGetRightRegisterDisplay();
+    rd->properties = m_registerDisplayData;
+    rd->UpdateSelf();
+
+    // update instructiondisplay
+    InstructionDisplay* id = FactoryGetLeftInstructionDisplay();
+    id->properties = m_instructionDisplayData;
+    id->UpdateSelf();
+    id = FactoryGetRightInstructionDisplay();
+    id->properties = m_instructionDisplayData;
+    id->UpdateSelf();
+
+    // update arena terminal
+    Arena* a = FactoryGetMiddlePanel()->GetArena();
+    a->properties = m_arenaTerminalData;
+    a->UpdateSelf();
+}
+
+// when widget type changes, we need to update the display with new properties
+void SettingsDialog::OnWidgetTypeChanged(wxCommandEvent &e) {
     // get selection
     size_t selection = e.GetInt();
+
+    // if main window is not selected then we don't want size selector
+    // but if main window then size slector is necessary
+    if(selection){
+	m_propertiesDisplay->DisableSizeSelector();
+    }else{
+	m_propertiesDisplay->EnableSizeSelector();
+    }
+
+    // settings for main window
+    if( selection == 0 ){
+	m_propertiesDisplay->UpdateDisplay(m_mainWindowData);
+    }
+
+    // settings for bot name display
+    else if( selection == 1 ){
+	m_propertiesDisplay->UpdateDisplay(m_botNameDisplayData);
+    }
+
+    // settings for register display
+    else if( selection == 2 ){
+	m_propertiesDisplay->UpdateDisplay(m_registerDisplayData);
+    }
+
+    // settings for instruction display
+    else if( selection == 3 ){
+	m_propertiesDisplay->UpdateDisplay(m_instructionDisplayData);
+    }
+
+    // settings for arena terminal
+    else{
+	m_propertiesDisplay->UpdateDisplay(m_arenaTerminalData);
+    }
+}
+
+// cancel button won't save anything and will just close the dialog
+void SettingsDialog::OnCancelBtnClicked(wxCommandEvent &e) { Close(); }
+
+
+// ok btn wont apply changes, it'll just save those buffers locally
+// to apply changes click apply
+void SettingsDialog::OnOkBtnClicked(wxCommandEvent& e){
+    UpdateDataFromDisplay();
+
+    // close this
+    Close();
+}
+
+void SettingsDialog::UpdateDataFromDisplay(){
+    // get selection
+    size_t selection = m_widgetTypeSelector->GetSelection();
+
+    // settings for main window
+    if( selection == 0 ){
+	m_mainWindowData.size = m_propertiesDisplay->GetSelectedSize();
+	m_mainWindowData.fontSize = m_propertiesDisplay->GetFontSize();
+	m_mainWindowData.fontFamily = m_propertiesDisplay->GetFontFamily();
+	m_mainWindowData.fontStyle = m_propertiesDisplay->GetFontStyle();
+	m_mainWindowData.fontWeight = m_propertiesDisplay->GetFontWeight();
+	m_mainWindowData.bgColour = m_propertiesDisplay->GetBGColour();
+	m_mainWindowData.fgColour = m_propertiesDisplay->GetFGColour();
+    }
+
+    // settings for bot name display
+    else if( selection == 1 ){
+	m_botNameDisplayData.size = m_propertiesDisplay->GetSelectedSize();
+	m_botNameDisplayData.fontSize = m_propertiesDisplay->GetFontSize();
+	m_botNameDisplayData.fontFamily = m_propertiesDisplay->GetFontFamily();
+	m_botNameDisplayData.fontStyle = m_propertiesDisplay->GetFontStyle();
+	m_botNameDisplayData.fontWeight = m_propertiesDisplay->GetFontWeight();
+	m_botNameDisplayData.bgColour = m_propertiesDisplay->GetBGColour();
+	m_botNameDisplayData.fgColour = m_propertiesDisplay->GetFGColour();
+    }
+
+    // settings for register display
+    else if( selection == 2 ){
+	m_registerDisplayData.size = m_propertiesDisplay->GetSelectedSize();
+	m_registerDisplayData.fontSize = m_propertiesDisplay->GetFontSize();
+	m_registerDisplayData.fontFamily = m_propertiesDisplay->GetFontFamily();
+	m_registerDisplayData.fontStyle = m_propertiesDisplay->GetFontStyle();
+	m_registerDisplayData.fontWeight = m_propertiesDisplay->GetFontWeight();
+	m_registerDisplayData.bgColour = m_propertiesDisplay->GetBGColour();
+	m_registerDisplayData.fgColour = m_propertiesDisplay->GetFGColour();
+    }
+
+    // settings for instruction display
+    else if( selection == 3 ){
+	m_instructionDisplayData.size = m_propertiesDisplay->GetSelectedSize();
+	m_instructionDisplayData.fontSize = m_propertiesDisplay->GetFontSize();
+	m_instructionDisplayData.fontFamily = m_propertiesDisplay->GetFontFamily();
+	m_instructionDisplayData.fontStyle = m_propertiesDisplay->GetFontStyle();
+	m_instructionDisplayData.fontWeight = m_propertiesDisplay->GetFontWeight();
+	m_instructionDisplayData.bgColour = m_propertiesDisplay->GetBGColour();
+	m_instructionDisplayData.fgColour = m_propertiesDisplay->GetFGColour();
+    }
+
+    // settings for arena terminal
+    else{
+	m_arenaTerminalData.size = m_propertiesDisplay->GetSelectedSize();
+	m_arenaTerminalData.fontSize = m_propertiesDisplay->GetFontSize();
+	m_arenaTerminalData.fontFamily = m_propertiesDisplay->GetFontFamily();
+	m_arenaTerminalData.fontStyle = m_propertiesDisplay->GetFontStyle();
+	m_arenaTerminalData.fontWeight = m_propertiesDisplay->GetFontWeight();
+	m_arenaTerminalData.bgColour = m_propertiesDisplay->GetBGColour();
+	m_arenaTerminalData.fgColour = m_propertiesDisplay->GetFGColour();
+    }
 }

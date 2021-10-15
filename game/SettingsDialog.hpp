@@ -23,6 +23,8 @@ public:
     
     DECLARE_EVENT_TABLE();
 private:
+    void UpdateDataFromDisplay();
+    
     // event handlers
     void OnImportBtnClicked(wxCommandEvent& e);
     void OnExportBtnClicked(wxCommandEvent& e);
@@ -34,6 +36,8 @@ private:
     wxBoxSizer *m_mainSizer;
     wxComboBox *m_widgetTypeSelector;
     PropertiesDisplay *m_propertiesDisplay;
+    PropertyData m_mainWindowData, m_botNameDisplayData,
+	m_registerDisplayData, m_instructionDisplayData, m_arenaTerminalData;
     wxPanel *m_bottomPanel;
     wxBoxSizer *m_bottomPanelSizer;
     wxButton *m_exportBtn, *m_importBtn, *m_okBtn, *m_applyBtn, *m_cancelBtn;

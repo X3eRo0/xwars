@@ -5,8 +5,8 @@
 #include <wx/event.h>
 #include <wx/font.h>
 #include <wx/gdicmn.h>
-#include <wx/gtk/colour.h>
 #include <wx/textctrl.h>
+#include "PropertyData.hpp"
 
 class Arena : public wxPanel{
 public:
@@ -43,6 +43,21 @@ public:
         m_terminal->SetForegroundColour(m_terminalFGColour);
     }
 
+    // properties
+    PropertyData properties = PropertyData{
+	.widgetType = WidgetType::ArenaTerminal,
+	.fontSize = 10,
+	.fontFamily = wxFONTFAMILY_MODERN,
+	.fontStyle = wxFONTSTYLE_NORMAL,
+	.fontWeight = wxFONTWEIGHT_NORMAL,
+	.bgColour = *wxBLACK,
+	.fgColour = *wxWHITE
+    };
+
+    // update theme after changing properties
+    void UpdateSelf();
+
+    DECLARE_EVENT_TABLE();
 private:
     void OnLoad(wxCommandEvent& event);
     void OnStart(wxCommandEvent& event);
@@ -65,8 +80,6 @@ private:
     wxButton *m_btnLoad, *m_btnStart, *m_btnPlus, *m_btnMinus, *m_btnPause;
     // terminal font
     wxFont m_terminalFont = wxFont(10, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM);
-
-    DECLARE_EVENT_TABLE();
 };
 
 #endif//XVM_ARENA_TERMINAL_HPP

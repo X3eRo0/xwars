@@ -63,6 +63,8 @@ MainWindow::MainWindow(wxWindow *parent, wxWindowID id, const wxString &title)
     fileMenu->Append(MENU_ABOUT_ID, "&About\tCtrl+A");
     fileMenu->AppendSeparator();
     fileMenu->Append(wxID_EXIT);
+
+    UpdateSelf();
 }
 
 // handle event
@@ -93,7 +95,7 @@ void MainWindow::UpdateSelf(){
     SetForegroundColour(properties.fgColour);
 
     // change size
-    SetMaxSize(properties.size);
+    // SetMaxSize(properties.size);
     SetSize(properties.size);
-    SetMinClientSize(properties.size);
+    // SetMinClientSize(properties.size);
 }

@@ -13,6 +13,7 @@
 #define XVM_ARENA_INSTRUCTION_DISPLAY_HPP
 
 #include "Common.hpp"
+#include "PropertyData.hpp"
 #include <ostream>
 #include <streambuf>
 #include <wx/font.h>
@@ -38,6 +39,21 @@ public:
 	// wxTheApp->Yield();
     }
 
+    // properties
+    PropertyData properties = PropertyData{
+	.widgetType = WidgetType::InstructionDisplay,
+	.fontSize = 8,
+	.fontFamily = wxFONTFAMILY_MODERN,
+	.fontStyle = wxFONTSTYLE_NORMAL,
+	.fontWeight = wxFONTWEIGHT_NORMAL,
+	.bgColour = *wxBLACK,
+	.fgColour = *wxGREEN
+    };
+
+    // update theme after changing properties to take effect
+    void UpdateSelf();
+
+    // clear the instruction display text ctrl
     void ClearDisplay(){
         m_displayTextCtrl->Clear();
     }

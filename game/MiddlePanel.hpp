@@ -16,6 +16,9 @@ public:
     void PrintToTerminal(fmttype fmtstr, argtypes... args){
 	m_arenaTerminal->Print(fmtstr, args...);
     }
+
+    // get arena terminal
+    Arena* GetArena() { return m_arenaTerminal; }
 private:
     // main sizer to arrage items in middle panel
     wxBoxSizer *m_mainSizer;

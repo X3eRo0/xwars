@@ -110,7 +110,7 @@ void PropertiesDisplay::UpdateDisplay(const PropertyData &data){
     case wxFONTFAMILY_SCRIPT : v = "Script";
     case wxFONTFAMILY_TELETYPE : v = "Teletype";
     case wxFONTFAMILY_DECORATIVE : v = "Decorative";
-    default : wxLogMessage("Unknown Font Family!");
+    default : v = "Modern";
     }
     m_widgets.fontFamily->SetValue(v);
 
@@ -119,7 +119,7 @@ void PropertiesDisplay::UpdateDisplay(const PropertyData &data){
     case wxFONTSTYLE_ITALIC : v = "Italic";
     case wxFONTSTYLE_NORMAL : v = "Normal";
     case wxFONTSTYLE_SLANT : v = "Slant";
-    default : wxLogMessage("Unknown Font Style");
+    default : v = "Normal";
     }
     m_widgets.fontFamily->SetValue(v);
 
@@ -128,7 +128,7 @@ void PropertiesDisplay::UpdateDisplay(const PropertyData &data){
     case wxFONTWEIGHT_BOLD : v = "Bold";
     case wxFONTWEIGHT_NORMAL : v = "Normal";
     case wxFONTWEIGHT_LIGHT : v = "Light";
-    default: wxLogMessage("Unknown Font Weight");
+    default: v = "Normal";
     }
     m_widgets.fontWeight->SetValue(v);
 
@@ -137,8 +137,12 @@ void PropertiesDisplay::UpdateDisplay(const PropertyData &data){
     m_widgets.fgColour->SetValue(data.fgColour);
 
     // change size
-    wxString size = std::to_string(data.size.GetWidth()) + "x" + std::to_string(data.size.GetHeight());
-    m_widgets.size->SetValue(size);
+    wxString size = std::to_string(data.size.GetWidth()) + "x" +
+	std::to_string(data.size.GetHeight());
+
+    if(data.widgetType == WidgetType::MainWindow){
+	m_widgets.size->SetValue(size);
+    }
 }
 
 u32 PropertiesDisplay::GetFontSize() const{
@@ -147,7 +151,7 @@ u32 PropertiesDisplay::GetFontSize() const{
 
 wxFontFamily PropertiesDisplay::GetFontFamily() const{
     wxString v = m_widgets.fontFamily->GetValue();
-
+    
     if(v == "Modern") { return wxFONTFAMILY_MODERN; }
     else if(v == "Default") { return wxFONTFAMILY_DEFAULT; }
     else if(v == "Decorative") { return wxFONTFAMILY_DECORATIVE; }
@@ -181,13 +185,18 @@ wxColour PropertiesDisplay::GetFGColour() const{
     return m_widgets.fgColour->GetColour();
 }
 
-wxSize PropertiesDisplay::GetSize() const{
+wxSize PropertiesDisplay::GetSelectedSize() const{
     wxString v = m_widgets.size->GetValue();
     
     u32 w = std::stoul(v.BeforeFirst('x').GetData().AsChar());
     u32 h = std::stoul(v.AfterFirst('x').GetData().AsChar());
 
     return wxSize(w, h);
+}
+
+wxFont PropertiesDisplay::GetFont() const{
+    return wxFont(GetFontSize(), GetFontFamily(),
+		  GetFontStyle(), GetFontWeight());
 }
 
 PropertyData PropertiesDisplay::GetPropertyData() const{
@@ -201,3 +210,6 @@ PropertyData PropertiesDisplay::GetPropertyData() const{
 	.size = GetSize()
     };
 }
+
+void PropertiesDisplay::EnableSizeSelector() { m_widgets.size->Enable(true); }
+void PropertiesDisplay::DisableSizeSelector() { m_widgets.size->Enable(false); }

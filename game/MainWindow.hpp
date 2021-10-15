@@ -8,7 +8,6 @@
 #include <wx/event.h>
 #include <wx/font.h>
 #include <wx/gdicmn.h>
-#include <wx/gtk/colour.h>
 #include <wx/sizer.h>
 #include <wx/stringimpl.h>
 
@@ -25,6 +24,7 @@ public:
 
     // properties
     PropertyData properties = PropertyData{
+	.widgetType = WidgetType::MainWindow,
 	.fontSize = 12,
 	.fontFamily = wxFONTFAMILY_MODERN,
 	.fontStyle = wxFONTSTYLE_NORMAL,
