@@ -33,9 +33,7 @@ Arena::Arena(wxWindow* parent) : wxPanel(parent){
     this->SetSizer(m_mainSizer);
 
     // create terminal view
-    m_terminal = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
-				wxDefaultPosition, wxDefaultSize,
-				wxTE_MULTILINE);
+    m_terminal = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
     // set terminal view theme
     m_terminal->SetBackgroundColour(m_terminalBGColour);
     m_terminal->SetForegroundColour(m_terminalFGColour);
@@ -51,16 +49,11 @@ Arena::Arena(wxWindow* parent) : wxPanel(parent){
     m_buttonsPanel->SetSizer(m_btnsPanelHSizer);
 
     // create buttons
-    m_btnLoad = new wxButton(this, ID_LOAD, "Load", wxDefaultPosition,
-			     wxDefaultSize, wxBORDER_NONE);
-    m_btnStart = new wxButton(this, ID_START, "Start", wxDefaultPosition,
-			      wxDefaultSize, wxBORDER_NONE);
-    m_btnPause = new wxButton(this, ID_PAUSE, "Pause", wxDefaultPosition,
-			      wxDefaultSize, wxBORDER_NONE);
-    m_btnPlus = new wxButton(this, ID_PLUS, "+", wxDefaultPosition,
-			     wxDefaultSize, wxBORDER_NONE);
-    m_btnMinus = new wxButton(this, ID_MINUS, "-", wxDefaultPosition,
-			      wxDefaultSize, wxBORDER_NONE);
+    m_btnLoad = new wxButton(this, ID_LOAD, "Load", wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
+    m_btnStart = new wxButton(this, ID_START, "Start", wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
+    m_btnPause = new wxButton(this, ID_PAUSE, "Pause", wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
+    m_btnPlus = new wxButton(this, ID_PLUS, "+", wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
+    m_btnMinus = new wxButton(this, ID_MINUS, "-", wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
 
     // add for sizing
     m_btnsPanelHSizer->Add(m_btnLoad, 1);
@@ -130,27 +123,27 @@ void Arena::OnStart(wxCommandEvent& WXUNUSED(event)){
     m_battleIdx = 0;
     for (u32 i = 0; i < bots.size(); i++){
         for (u32 j = i+1; j < bots.size(); j++){
-	    m_battlePairs.push_back({i, j});
+	        m_battlePairs.push_back({i, j});
         }
     }
 
-    wxPuts("Generated BattlePairs");
+    //wxPuts("Generated BattlePairs");
 
     // do first battle
     const std::pair<int, int>& botpair = m_battlePairs[m_battleIdx++];
     if(get_xwars_instance()->battle_init(bots[botpair.first],
 					 bots[botpair.second])){
-	m_iterTimer.Start(m_iterWaitTime);
-	wxPuts("Started iter timer");
+	    m_iterTimer.Start(m_iterWaitTime);
+		//wxPuts("Started iter timer");
     }
 }
 
 void Arena::OnIntervalTimer(wxTimerEvent& e){
-    wxPuts("Reached Interval Timer");
+    //wxPuts("Reached Interval Timer");
     
     if(m_battleIdx == m_battlePairs.size()){
-	m_intervTimer.Stop();
-	return;
+	    m_intervTimer.Stop();
+	    return;
     }
     
     // do  battle
@@ -159,19 +152,20 @@ void Arena::OnIntervalTimer(wxTimerEvent& e){
 
     // init battle and start iteration timer
     if(get_xwars_instance()->battle_init(bots[botpair.first], bots[botpair.second])){
-	m_iterTimer.Start(m_iterWaitTime);
+	    m_iterTimer.Start(m_iterWaitTime);
     }
 }
 
 void Arena::OnIterationTimer(wxTimerEvent& e){
-    wxPuts("Reached Iteration Timer");
+    //wxPuts("Reached Iteration Timer");
     
     if(!get_xwars_instance()->battle_step()){
-	wxPuts("Stopped iter timer and started interv timer");
-	m_iterTimer.Stop();
-	m_intervTimer.Start(m_interWaitTime);
-    }else{
-	wxPuts("NextStep()");
+        Print("[+] Winner %s in %d instructions\n", get_xwars_instance()->winner.c_str(), get_xwars_instance()->counter);
+		// wxPuts("Stopped iter timer and started interv timer");
+	    m_iterTimer.Stop();
+	    m_intervTimer.Start(m_interWaitTime);
+    //}else{
+       //wxPuts("NextStep()");
     }
 }
 

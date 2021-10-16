@@ -155,8 +155,7 @@ void xwars::display_disassembly(xbot *bot1, xbot *bot2){
     xasm_disassemble_bytes(
         bot1->dis_writer_e,
         bot1->bin,
-        (char *) get_reference(bot1->bin->x_section, bot1->cpu->regs.pc,
-			       PERM_EXEC),
+        (char *) get_reference(bot1->bin->x_section, bot1->cpu->regs.pc, PERM_EXEC),
         text->v_size - (bot1->cpu->regs.pc - text->v_addr),
         bot1->cpu->regs.pc,
         20
@@ -214,8 +213,6 @@ void xwars::copy_bots(xbot *bot1, xbot *bot2){
 
 
 bool xwars::battle_init(std::string Bot1Path, std::string Bot2Path){
-    
-
 
     // delete old bots
     if (m_currentBots.first && m_currentBots.second){
@@ -332,31 +329,31 @@ bool xwars::battle_step(){
         get_RF(bot1->cpu) &&
         get_RF(bot2->cpu)
     ){
-	    display_registers(bot1, bot2);
-	    display_disassembly(bot1, bot2);
-	    bot1->step();
-	    
-	    if (signal_abort(bot1->cpu->errors, bot1->cpu) == E_ERR){
-	        winner = bot2->botname;
-	        return false;
-	    }
-	    if (signal_abort(bot1->bin->x_section->errors, bot1->cpu) == E_ERR){
-	        winner = bot2->botname;
-	        return false;
-	    }
-	    
-	    bot2->step();
-	    
-	    if (signal_abort(bot2->cpu->errors, bot2->cpu) == E_ERR){
-	        winner = bot1->botname;
-	        return false;
-	    }
-	    if (signal_abort(bot2->bin->x_section->errors, bot2->cpu) == E_ERR){
-	        winner = bot1->botname;
-	        return false;
-	    }
-	
-	    counter++;
+        display_registers(bot1, bot2);
+        display_disassembly(bot1, bot2);
+        bot1->step();
+        
+        if (signal_abort(bot1->cpu->errors, bot1->cpu) == E_ERR){
+            winner = bot2->botname;
+            return false;
+        }
+        if (signal_abort(bot1->bin->x_section->errors, bot1->cpu) == E_ERR){
+            winner = bot2->botname;
+            return false;
+        }
+        
+        bot2->step();
+        
+        if (signal_abort(bot2->cpu->errors, bot2->cpu) == E_ERR){
+            winner = bot1->botname;
+            return false;
+        }
+        if (signal_abort(bot2->bin->x_section->errors, bot2->cpu) == E_ERR){
+            winner = bot1->botname;
+            return false;
+        }
+
+        counter++;
     	return true;
     }else{
         return false;

@@ -95,6 +95,7 @@ void BotInfo::UpdateInstructionDisplay(xbot *bot){
     disassembly += "Actual Instruction: ";
     disassembly += lineptr+16;
     disassembly += "\n";
+    disassembly += lineptr;
 
     for (u32 i = 0; i < 19; i++){
         getline(&lineptr, &n, reader);

@@ -52,7 +52,7 @@ struct xwars{
     std::vector<std::string> botpaths;
 
     // number of steps executed
-    size_t counter = 0;
+    u32 counter = 0;
 
     // winner of last battle
     std::string winner = "";
