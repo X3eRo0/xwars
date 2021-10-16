@@ -9,6 +9,7 @@
 #include <wx/textctrl.h>
 #include <wx/timer.h>
 #include "PropertyData.hpp"
+#include "XWars.hpp"
 
 class Arena : public wxPanel{
 public:
@@ -63,7 +64,8 @@ public:
 private:
     void OnLoad(wxCommandEvent& event);
     void OnStart(wxCommandEvent& event);
-    void OnTimer(wxTimerEvent& e);
+    void OnIntervalTimer(wxTimerEvent& e);
+    void OnIterationTimer(wxTimerEvent& e);
     
     // main sizer
     wxBoxSizer *m_mainSizer;
@@ -84,8 +86,10 @@ private:
     // terminal font
     wxFont m_terminalFont = wxFont(10, wxFONTFAMILY_MODERN,
 				   wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM);
+    // wait size for battle iteration
+    size_t m_iterWaitTime = 50, m_interWaitTime = 5000;
     // timer for timed battles
-    wxTimer m_timer;
+    wxTimer m_iterTimer, m_intervTimer;
     // battle pairs
     std::vector<std::pair<u32, u32>> m_battlePairs;
     // battle index

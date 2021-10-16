@@ -87,7 +87,7 @@ PropertiesDisplay::PropertiesDisplay(wxWindow *parent)
     wxArrayString sizeoptions;
     sizeoptions.push_back("1366x768");
     sizeoptions.push_back("1600x900");
-    sizeoptions.push_back("1920x1080");
+    // sizeoptions.push_back("1920x1080");
     
     // create widgets
     m_widgets.size = new OptionProperty(m_sizeBox, "Window Size",

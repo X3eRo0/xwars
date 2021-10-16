@@ -74,24 +74,8 @@ Arena::Arena(wxWindow* parent) : wxPanel(parent){
     m_mainSizer->Add(m_terminal, 14, wxEXPAND | wxALL, 0);
     
     // bind our timer to this
-    m_timer.Bind(wxEVT_TIMER, &Arena::OnTimer, this);
-}
-
-// gets the actual bot name from reversed path
-wxString GetBotNameFromFilePath(wxString filepath){
-    wxString botname = "";
-    size_t i = filepath.size() - 1;
-
-    // read till '/'
-    while((filepath[i] != '/') && i > 0){
-        botname += filepath[i];
-        i--;
-    }
-
-    // reverse botname
-    std::reverse(botname.begin(), botname.end());
-
-    return botname;
+    m_iterTimer.Bind(wxEVT_TIMER, &Arena::OnIterationTimer, this);
+    m_intervTimer.Bind(wxEVT_TIMER, &Arena::OnIntervalTimer, this);
 }
 
 // when load button is clicked
@@ -132,15 +116,14 @@ void Arena::OnLoad(wxCommandEvent& WXUNUSED(event)){
     get_xwars_instance()->botpaths = botpaths;
     // check and print status
     for(size_t i = 0; i < botpaths.size(); i++){
-        Print("[+] Loaded Bot [ %s ]\n", botpaths[i].substr(botpaths[i].find_last_of("/\\") + 1).c_str());
+        Print("[+] Loaded Bot [ %s ]\n",
+	      botpaths[i].substr(botpaths[i].find_last_of("/\\") + 1));
     }
 }
 
 void Arena::OnStart(wxCommandEvent& WXUNUSED(event)){
+    // shorter name for bots
     const auto& bots = get_xwars_instance()->botpaths;
-    // for (size_t i = 0; i < bots.size(); i++){
-    //     Print("Bots: %p\n", bots[i]);
-    // }
 
     // generate battle indices
     m_battlePairs.clear();
@@ -151,24 +134,45 @@ void Arena::OnStart(wxCommandEvent& WXUNUSED(event)){
         }
     }
 
+    wxPuts("Generated BattlePairs");
+
     // do first battle
     const std::pair<int, int>& botpair = m_battlePairs[m_battleIdx++];
-    get_xwars_instance()->battle(bots[botpair.first], bots[botpair.second]);
-
-    // start timer
-    m_timer.Start(5000);
+    if(get_xwars_instance()->battle_init(bots[botpair.first],
+					 bots[botpair.second])){
+	m_iterTimer.Start(m_iterWaitTime);
+	wxPuts("Started iter timer");
+    }
 }
 
-void Arena::OnTimer(wxTimerEvent& e){
+void Arena::OnIntervalTimer(wxTimerEvent& e){
+    wxPuts("Reached Interval Timer");
+    
     if(m_battleIdx == m_battlePairs.size()){
-	m_timer.Stop();
+	m_intervTimer.Stop();
 	return;
     }
-
+    
     // do  battle
     const auto& bots = get_xwars_instance()->botpaths;
     const std::pair<int, int>& botpair = m_battlePairs[m_battleIdx++];
-    get_xwars_instance()->battle(bots[botpair.first], bots[botpair.second]);
+
+    // init battle and start iteration timer
+    if(get_xwars_instance()->battle_init(bots[botpair.first], bots[botpair.second])){
+	m_iterTimer.Start(m_iterWaitTime);
+    }
+}
+
+void Arena::OnIterationTimer(wxTimerEvent& e){
+    wxPuts("Reached Iteration Timer");
+    
+    if(!get_xwars_instance()->battle_step()){
+	wxPuts("Stopped iter timer and started interv timer");
+	m_iterTimer.Stop();
+	m_intervTimer.Start(m_interWaitTime);
+    }else{
+	wxPuts("NextStep()");
+    }
 }
 
 void Arena::UpdateSelf(){
@@ -177,3 +181,6 @@ void Arena::UpdateSelf(){
     m_terminal->SetFont(properties.GetFont());
 }
 
+// OnStart - start iter timer
+// OnIterTimer - check if more step and start inter timer and stop iter timer
+// OnInterTimer - start iter timer

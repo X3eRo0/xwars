@@ -21,7 +21,8 @@ struct xwars{
 
     // this will allocate bots for the first time by loading
     // the assembly file(s) from locations in bot_paths
-    void load_bots(const std::vector<std::string>& bot_paths, const std::vector<std::string>& bot_names);
+    void load_bots(const std::vector<std::string>& bot_paths,
+		   const std::vector<std::string>& bot_names);
     
     // display registers in the ui
     void display_registers(xbot *bot1, xbot *bot2);
@@ -33,8 +34,14 @@ struct xwars{
     void copy_bots(xbot *bot1, xbot *bot2);
 
     // do battle b/w bots
-    u32 battle(std::string Bot1Path, std::string Bot2Path);
+    // this will return true if battle is initialized successfully
+    // also this will already take one step into the battle
+    bool battle_init(std::string Bot1Path, std::string Bot2Path);
 
+    // takes a next step into battle and returns whether bots can fight
+    // again or not, true means this must be called again, false otherwise
+    bool battle_step();
+    
     // -- README -- 
     // here I will explain working : 
     // 1 - get xwars global instance by calling get_xwars_instance()
@@ -43,10 +50,20 @@ struct xwars{
 
     // paths of all bots
     std::vector<std::string> botpaths;
+
+    // number of steps executed
+    size_t counter = 0;
+
+    // winner of last battle
+    std::string winner = "";
 private:
+    
     // first - left
     // second - right
     std::pair<BotInfo*, BotInfo*> m_botInfos;
+
+    // current fighting bots
+    std::pair<xbot*, xbot*> m_currentBots = {nullptr, nullptr};
 };
 
 // get xwars global instance
