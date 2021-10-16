@@ -180,15 +180,12 @@ void xwars::display_disassembly(xbot *bot1, xbot *bot2){
 // load bots into text section at random placesx
 void xwars::copy_bots(xbot *bot1, xbot *bot2){
     
-    section_entry * text = find_section_entry_by_name(bot1->bin->x_section,
-						      ".text");
+    section_entry * text = find_section_entry_by_name(bot1->bin->x_section, ".text");
     
-    bot1->bot_section = find_section_entry_by_name(bot1->bin->x_section,
-						   ".bot");
+    bot1->bot_section = find_section_entry_by_name(bot1->bin->x_section, ".bot");
     bot1->size = bot1->bot_section->m_ofst;
 
-    bot2->bot_section = find_section_entry_by_name(bot2->bin->x_section,
-						   ".bot");
+    bot2->bot_section = find_section_entry_by_name(bot2->bin->x_section, ".bot");
     bot2->size = bot2->bot_section->m_ofst;
 
     // random seed
@@ -211,17 +208,38 @@ void xwars::copy_bots(xbot *bot1, xbot *bot2){
     //printf("bot1 offset: 0x%x\n", bot1->offset);
     //printf("bot2 offset: 0x%x\n", bot2->offset);
 
-    memcpy(&(text->m_buff[bot1->offset]), bot1->bot_section->m_buff,
-	   bot1->size);
-    memcpy(&(text->m_buff[bot2->offset]), bot2->bot_section->m_buff,
-	   bot2->size);
+    memcpy(&(text->m_buff[bot1->offset]), bot1->bot_section->m_buff, bot1->size);
+    memcpy(&(text->m_buff[bot2->offset]), bot2->bot_section->m_buff, bot2->size);
 }
 
 
 bool xwars::battle_init(std::string Bot1Path, std::string Bot2Path){
+    
+
+
     // delete old bots
-    if(m_currentBots.first) delete m_currentBots.first;
-    if(m_currentBots.second) delete m_currentBots.second;
+    if (m_currentBots.first && m_currentBots.second){
+        section_entry* text = find_section_entry_by_name(m_currentBots.first->bin->x_section, ".text");
+        section_entry* temp = m_currentBots.first->bin->x_section->sections;
+
+        while (temp->next != text){
+            temp = temp->next;
+        }
+        temp->next = NULL;
+        m_currentBots.first->bin->x_section->n_sections--;
+
+        temp = m_currentBots.second->bin->x_section->sections;
+        while (temp->next != text){
+            temp = temp->next;
+        }
+
+        temp->next = NULL;
+        m_currentBots.second->bin->x_section->n_sections--;
+        
+        delete m_currentBots.first;
+        delete m_currentBots.second;
+        m_currentBots = {NULL, NULL};
+    }
     
     // create new bots
     xbot *bot1 = new xbot;
@@ -239,12 +257,8 @@ bool xwars::battle_init(std::string Bot1Path, std::string Bot2Path){
     FactoryGetRightBotInfo()->SetBotName(bot2->botname);
 
     // allocate stack region for both bots
-    add_section(bot1->bin->x_section, "stack", XVM_STACK_SIZE,
-		XVM_DFLT_SP & 0xfffff000,
-		PERM_READ | PERM_WRITE | PERM_EXEC);
-    add_section(bot2->bin->x_section, "stack", XVM_STACK_SIZE,
-		XVM_DFLT_SP & 0xfffff000,
-		PERM_READ | PERM_WRITE | PERM_EXEC);
+    add_section(bot1->bin->x_section, "stack", XVM_STACK_SIZE, XVM_DFLT_SP & 0xfffff000, PERM_READ | PERM_WRITE | PERM_EXEC);
+    add_section(bot2->bin->x_section, "stack", XVM_STACK_SIZE, XVM_DFLT_SP & 0xfffff000, PERM_READ | PERM_WRITE | PERM_EXEC);
 
     // set correct stack pointer
     bot1->cpu->regs.sp = XVM_DFLT_SP;
@@ -261,8 +275,7 @@ bool xwars::battle_init(std::string Bot1Path, std::string Bot2Path){
     // allocate a common text region
     section_entry * temp = NULL;
     section_entry * text = init_section_entry();
-    set_section_entry(text, ".text", 0x400, 0x1337000,
-		      PERM_READ | PERM_WRITE | PERM_EXEC);
+    set_section_entry(text, ".text", 0x400, 0x1337000, PERM_READ | PERM_WRITE | PERM_EXEC);
 
     // add the .text in bot1
     temp = bot1->bin->x_section->sections;
@@ -319,33 +332,33 @@ bool xwars::battle_step(){
         get_RF(bot1->cpu) &&
         get_RF(bot2->cpu)
     ){
-	display_registers(bot1, bot2);
-	display_disassembly(bot1, bot2);
-	bot1->step();
+	    display_registers(bot1, bot2);
+	    display_disassembly(bot1, bot2);
+	    bot1->step();
+	    
+	    if (signal_abort(bot1->cpu->errors, bot1->cpu) == E_ERR){
+	        winner = bot2->botname;
+	        return false;
+	    }
+	    if (signal_abort(bot1->bin->x_section->errors, bot1->cpu) == E_ERR){
+	        winner = bot2->botname;
+	        return false;
+	    }
+	    
+	    bot2->step();
+	    
+	    if (signal_abort(bot2->cpu->errors, bot2->cpu) == E_ERR){
+	        winner = bot1->botname;
+	        return false;
+	    }
+	    if (signal_abort(bot2->bin->x_section->errors, bot2->cpu) == E_ERR){
+	        winner = bot1->botname;
+	        return false;
+	    }
 	
-	if (signal_abort(bot1->cpu->errors, bot1->cpu) == E_ERR){
-	    winner = bot2->botname;
-	    return false;
-	}
-	if (signal_abort(bot1->bin->x_section->errors, bot1->cpu) == E_ERR){
-	    winner = bot2->botname;
-	    return false;
-	}
-	
-	bot2->step();
-	
-	if (signal_abort(bot2->cpu->errors, bot2->cpu) == E_ERR){
-	    winner = bot1->botname;
-	    return false;
-	}
-	if (signal_abort(bot2->bin->x_section->errors, bot2->cpu) == E_ERR){
-	    winner = bot1->botname;
-	    return false;
-	}
-	
-	counter++;
-	return true;
+	    counter++;
+    	return true;
     }else{
-	return false;
+        return false;
     }
 }

@@ -1,4 +1,5 @@
 #include wxWidgets in your application
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g -O0")
 find_package(wxWidgets REQUIRED base core xml gl OPTIONAL_COMPONENTS net)
 include(${wxWidgets_USE_FILE})
 
