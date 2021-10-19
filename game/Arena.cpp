@@ -121,11 +121,12 @@ void Arena::OnStart(wxCommandEvent& WXUNUSED(event)){
     // generate battle indices
     m_battlePairs.clear();
     m_battleIdx = 0;
-    for (u32 i = 0; i < bots.size(); i++){
+    for (u32 i = 0; i < bots.size() - 1; i++){
         for (u32 j = i+1; j < bots.size(); j++){
-	        m_battlePairs.push_back({i, j});
+	    m_battlePairs.push_back({i, j});
         }
     }
+    Print("Total number of combats = %ld\n", m_battlePairs.size());
 
     //wxPuts("Generated BattlePairs");
 
@@ -133,26 +134,23 @@ void Arena::OnStart(wxCommandEvent& WXUNUSED(event)){
     const std::pair<int, int>& botpair = m_battlePairs[m_battleIdx++];
     if(get_xwars_instance()->battle_init(bots[botpair.first],
 					 bots[botpair.second])){
-	    m_iterTimer.Start(m_iterWaitTime);
-		//wxPuts("Started iter timer");
+	m_iterTimer.Start(m_iterWaitTime);
     }
 }
 
 void Arena::OnIntervalTimer(wxTimerEvent& e){
-    //wxPuts("Reached Interval Timer");
-    
     if(m_battleIdx == m_battlePairs.size()){
-	    m_intervTimer.Stop();
-	    return;
+	m_intervTimer.Stop();
+	return;
     }
     
-    // do  battle
+    // do battle
     const auto& bots = get_xwars_instance()->botpaths;
     const std::pair<int, int>& botpair = m_battlePairs[m_battleIdx++];
 
     // init battle and start iteration timer
     if(get_xwars_instance()->battle_init(bots[botpair.first], bots[botpair.second])){
-	    m_iterTimer.Start(m_iterWaitTime);
+	m_iterTimer.Start(m_iterWaitTime);
     }
 }
 
@@ -161,11 +159,8 @@ void Arena::OnIterationTimer(wxTimerEvent& e){
     
     if(!get_xwars_instance()->battle_step()){
         Print("[+] Winner %s in %d instructions\n", get_xwars_instance()->winner.c_str(), get_xwars_instance()->counter);
-		// wxPuts("Stopped iter timer and started interv timer");
-	    m_iterTimer.Stop();
-	    m_intervTimer.Start(m_interWaitTime);
-    //}else{
-       //wxPuts("NextStep()");
+	m_iterTimer.Stop();
+	m_intervTimer.Start(m_interWaitTime);
     }
 }
 

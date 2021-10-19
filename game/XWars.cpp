@@ -213,7 +213,9 @@ void xwars::copy_bots(xbot *bot1, xbot *bot2){
 
 
 bool xwars::battle_init(std::string Bot1Path, std::string Bot2Path){
-
+    // reset counter
+    counter = 0;
+    
     // delete old bots
     if (m_currentBots.first && m_currentBots.second){
         section_entry* text = find_section_entry_by_name(m_currentBots.first->bin->x_section, ".text");

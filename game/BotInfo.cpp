@@ -97,10 +97,10 @@ void BotInfo::UpdateInstructionDisplay(xbot *bot){
     disassembly += "\n";
     disassembly += lineptr;
 
-    for (u32 i = 0; i < 19; i++){
+    for(size_t i = 0; i < 19; i++){
         getline(&lineptr, &n, reader);
         //printf("LineNo: %d\n", ++i);
-	    disassembly += lineptr;
+	disassembly += lineptr;
     }
     
     PrintInstruction("%s", disassembly);

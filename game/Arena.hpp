@@ -87,7 +87,7 @@ private:
     wxFont m_terminalFont = wxFont(10, wxFONTFAMILY_MODERN,
 				   wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM);
     // wait size for battle iteration
-    size_t m_iterWaitTime = 200, m_interWaitTime = 5000;
+    size_t m_iterWaitTime = 50, m_interWaitTime = 5000;
     // timer for timed battles
     wxTimer m_iterTimer, m_intervTimer;
     // battle pairs
