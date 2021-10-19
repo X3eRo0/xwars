@@ -117,6 +117,9 @@ const char* registers[XVM_NREGS] = {
 
 u32 xasm_disassemble_bytes(FILE *fp, xvm_bin * bin, const char * bytecode, u32 len, u32 address, u32 ninstr){
     if (bytecode == NULL || len == 0){
+        for (u32 i = 0; i < ninstr; i++){
+            fprintf(fp, "0x%-14.8XCannot access memory at address 0x%x\n", address+i, address+i);
+        }
         return E_ERR;
     }
 
