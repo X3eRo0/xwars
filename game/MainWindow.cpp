@@ -40,7 +40,7 @@ MainWindow::MainWindow(wxWindow *parent, wxWindowID id, const wxString &title)
     m_rBotInfo = FactoryCreateRightBotInfo(m_parentPanel, "Khiladi Two");
 
     // register the two bot infos to xwars
-    get_xwars_instance()->register_bot_info(m_lBotInfo, m_rBotInfo);
+    // get_xwars_instance()->register_bot_info(m_lBotInfo, m_rBotInfo);
 
     // add these panels to main sizer
     m_mainHSizer->Add(m_lBotInfo, 3, wxEXPAND | wxALL, 4);

@@ -13,8 +13,8 @@ struct xwars{
     xwars();
     ~xwars();
 
-    // register bot info panels that must be updated
-    void register_bot_info(BotInfo* first, BotInfo* second);
+    // // register bot info panels that must be updated
+    // void register_bot_info(BotInfo* first, BotInfo* second);
 
     // compile given bots
     void compile_bots(const std::vector<std::string>& bot_paths);

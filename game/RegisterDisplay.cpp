@@ -42,7 +42,7 @@ RegisterDisplay::RegisterDisplay(wxWindow* parent)
 	m_registers[Register::RegisterNames[i]]
 	    ->SetBackgroundColour(wxColour(32, 0, 32));
 
-	m_regGridSizer->Add(m_registers[Register::RegisterNames[i]]);
+	m_regGridSizer->Add(m_registers[Register::RegisterNames[i]], 1, wxEXPAND | wxALL);
     }
 }
 

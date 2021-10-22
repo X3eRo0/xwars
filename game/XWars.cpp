@@ -318,9 +318,9 @@ xwars::~xwars(){
     //}
 }
 
-void xwars::register_bot_info(BotInfo *first, BotInfo *second){
-    m_botInfos = {first, second};
-}
+// void xwars::register_bot_info(BotInfo *first, BotInfo *second){
+//     m_botInfos = {first, second};
+// }
 
 bool xwars::battle_step(){
     xbot* bot1 = m_currentBots.first;
