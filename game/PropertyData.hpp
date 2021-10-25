@@ -14,7 +14,7 @@
 
 // defines the type of widget
 // we wan't to use the property data for
-enum class WidgetType {
+enum class WidgetType : u32{
     // 2nd top left and right panels where register names are displayed
     RegisterDisplay,
     // black terminal like thing in the middle where output will be shown
@@ -36,8 +36,10 @@ struct PropertyData{
     }
 
     // save properties for given widget in given xmldoc
-    void SaveXml(wxXmlDocument *xmldoc);
-
+    void SaveTheme(wxXmlDocument *xmldoc) const;
+    // load properties from theme file
+    void LoadTheme(wxXmlDocument *xmldoc);
+    
     WidgetType widgetType; // type of widget (for xml info)
     u32 fontSize; // size of font in +ve integers
     wxFontFamily fontFamily; // modern, normal etc...
@@ -46,6 +48,10 @@ struct PropertyData{
     wxColour bgColour; // changes background colour
     wxColour fgColour; // changes properties like text color
     wxSize size; // current size of panel/window;
+
+ private:
+    // load properties from given xml node
+    void LoadProperties(wxXmlNode node);
 };
 
 #endif//XVM_ARENA_PROPERTY_DATA_HPP

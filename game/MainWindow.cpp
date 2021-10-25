@@ -64,6 +64,18 @@ MainWindow::MainWindow(wxWindow *parent, wxWindowID id, const wxString &title)
     fileMenu->AppendSeparator();
     fileMenu->Append(wxID_EXIT);
 
+    // setup properties
+    properties = {
+	.widgetType = WidgetType::MainWindow,
+	.fontSize = 12,
+	.fontFamily = wxFONTFAMILY_MODERN,
+	.fontStyle = wxFONTSTYLE_NORMAL,
+	.fontWeight = wxFONTWEIGHT_NORMAL,
+	.bgColour = *wxBLACK,
+	.fgColour = *wxWHITE,
+	.size = wxSize(1366,768)
+    };
+    
     UpdateSelf();
 }
 
@@ -87,8 +99,7 @@ void MainWindow::OnSettings(wxCommandEvent &event) {
 
 void MainWindow::UpdateSelf(){
     // change font
-    SetFont(wxFont(properties.fontSize, properties.fontFamily,
-		   properties.fontStyle, properties.fontWeight));
+    SetFont(properties.GetFont());
 
     // change colours
     SetBackgroundColour(properties.bgColour);

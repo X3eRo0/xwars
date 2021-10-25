@@ -23,16 +23,7 @@ public:
     void OnSettings(wxCommandEvent& event);
 
     // properties
-    PropertyData properties = PropertyData{
-	.widgetType = WidgetType::MainWindow,
-	.fontSize = 12,
-	.fontFamily = wxFONTFAMILY_MODERN,
-	.fontStyle = wxFONTSTYLE_NORMAL,
-	.fontWeight = wxFONTWEIGHT_NORMAL,
-	.bgColour = *wxBLACK,
-	.fgColour = *wxWHITE,
-	.size = wxSize(1366,768)
-    };
+    PropertyData properties;
 
     // call this after changing properties
     void UpdateSelf();

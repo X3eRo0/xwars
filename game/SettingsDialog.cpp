@@ -21,6 +21,7 @@
 #include <wx/stringimpl.h>
 #include <wx/textctrl.h>
 #include <wx/utils.h>
+#include <wx/wxcrt.h>
 #include <wx/xml/xml.h>
 
 enum ButtonsPanelIDs {
@@ -115,7 +116,38 @@ SettingsDialog::SettingsDialog(wxWindow *parent, wxWindowID id,
     // update display
     m_propertiesDisplay->UpdateDisplay(m_mainWindowData);}
 
-void SettingsDialog::OnImportBtnClicked(wxCommandEvent &e) {}
+void SettingsDialog::OnImportBtnClicked(wxCommandEvent &e) {
+    wxFileDialog *fd = new wxFileDialog(this, "Import Theme",
+					wxEmptyString, wxEmptyString,
+					"XML Files (*.xml)|*.xml",
+					wxFD_OPEN | wxFD_CHANGE_DIR);
+
+    if(fd->ShowModal() != wxCANCEL){
+	wxString filename = fd->GetPath();
+        wxPuts("importing theme\"" + filename + "\"");
+
+        wxXmlDocument *xmldoc = new wxXmlDocument;
+        xmldoc->Load(filename);
+
+        m_mainWindowData.LoadTheme(xmldoc);
+        m_botNameDisplayData.LoadTheme(xmldoc);
+        m_registerDisplayData.LoadTheme(xmldoc);
+        m_instructionDisplayData.LoadTheme(xmldoc);
+        m_arenaTerminalData.LoadTheme(xmldoc);
+
+        if(m_widgetTypeSelector->GetSelection() == 0){
+            m_propertiesDisplay->UpdateDisplay(m_mainWindowData);
+        }else if(m_widgetTypeSelector->GetSelection() == 1){
+            m_propertiesDisplay->UpdateDisplay(m_botNameDisplayData);
+        }else if(m_widgetTypeSelector->GetSelection() == 2){
+            m_propertiesDisplay->UpdateDisplay(m_registerDisplayData);
+        }else if(m_widgetTypeSelector->GetSelection() == 3){
+            m_propertiesDisplay->UpdateDisplay(m_instructionDisplayData);
+        }else{
+            m_propertiesDisplay->UpdateDisplay(m_arenaTerminalData);
+        }        
+    }
+}
 
 void SettingsDialog::OnExportBtnClicked(wxCommandEvent &WXUNUSED(e)) {
     wxFileDialog *fd = new wxFileDialog(this, "Export Theme",
@@ -131,11 +163,11 @@ void SettingsDialog::OnExportBtnClicked(wxCommandEvent &WXUNUSED(e)) {
 	wxXmlNode *root = new wxXmlNode(wxXML_ELEMENT_NODE, "ThemeRoot");
 	xmldoc->SetRoot(root);
 
-	m_mainWindowData.SaveXml(xmldoc);
-	m_botNameDisplayData.SaveXml(xmldoc);
-	m_registerDisplayData.SaveXml(xmldoc);
-	m_instructionDisplayData.SaveXml(xmldoc);
-	m_arenaTerminalData.SaveXml(xmldoc);
+	m_mainWindowData.SaveTheme(xmldoc);
+	m_botNameDisplayData.SaveTheme(xmldoc);
+	m_registerDisplayData.SaveTheme(xmldoc);
+	m_instructionDisplayData.SaveTheme(xmldoc);
+	m_arenaTerminalData.SaveTheme(xmldoc);
 	
 	xmldoc->Save(filename);
 

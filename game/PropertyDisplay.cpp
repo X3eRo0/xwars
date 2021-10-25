@@ -121,7 +121,7 @@ void PropertiesDisplay::UpdateDisplay(const PropertyData &data){
     case wxFONTSTYLE_SLANT : v = "Slant";
     default : v = "Normal";
     }
-    m_widgets.fontFamily->SetValue(v);
+    m_widgets.fontStyle->SetValue(v);
 
     // change font weight
     switch (data.fontWeight) {
