@@ -1,6 +1,4 @@
 #include "MemoryGrid.hpp"
-#include <wx/gtk/stattext.h>
-#include <wx/gtk/window.h>
 
 MemoryGrid::MemoryGrid(wxWindow* parent) : wxPanel(parent){
     // create grid sizer for memory grid and set it as sizer for "this" panel
