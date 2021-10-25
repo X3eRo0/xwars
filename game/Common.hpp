@@ -29,8 +29,4 @@ typedef const char* cstring;
 FILE * get_reader_end();
 FILE * get_writer_end();
 
-
-// this is defined in MainApp.cpp
-// wxFrame* GetMainWindow();
-
 #endif//XVM_ARENA_COMMON_HPP

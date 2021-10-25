@@ -14,5 +14,9 @@ MemoryGrid::MemoryGrid(wxWindow* parent) : wxPanel(parent){
             elem->SetBackgroundColour(m_gridElementColour);
             m_memGridSizer->Add(elem, 1, wxEXPAND | wxALL, 1);
         }
-    }   
+    }
+}
+
+void MemoryGrid::UpdateGrid(size_t x, size_t y, BotID bid, Permission pm){
+    
 }
