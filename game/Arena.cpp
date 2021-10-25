@@ -55,6 +55,18 @@ Arena::Arena(wxWindow* parent) : wxPanel(parent){
     m_btnPlus = new wxButton(this, ID_PLUS, "+", wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
     m_btnMinus = new wxButton(this, ID_MINUS, "-", wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
 
+    // change background and foreground colors
+    m_btnLoad->SetForegroundColour(*wxWHITE);
+    m_btnLoad->SetBackgroundColour(*wxBLACK);
+    m_btnStart->SetForegroundColour(*wxWHITE);
+    m_btnStart->SetBackgroundColour(*wxBLACK);
+    m_btnPause->SetForegroundColour(*wxWHITE);
+    m_btnPause->SetBackgroundColour(*wxBLACK);
+    m_btnPlus->SetForegroundColour(*wxWHITE);
+    m_btnPlus->SetBackgroundColour(*wxBLACK);
+    m_btnMinus->SetForegroundColour(*wxWHITE);
+    m_btnMinus->SetBackgroundColour(*wxBLACK);
+
     // add for sizing
     m_btnsPanelHSizer->Add(m_btnLoad, 1);
     m_btnsPanelHSizer->Add(m_btnStart, 1);
