@@ -24,7 +24,7 @@ Register::Register(wxWindow *parent, const std::string& name)
     m_registerNameText = new wxStaticText(this, wxID_ANY, "$"+m_registerName,
 					  wxDefaultPosition, wxDefaultSize,
 					  wxALIGN_CENTER);
-    
+
     m_delimiterText = new wxStaticText(this, wxID_ANY, m_delimiterString,
 				       wxDefaultPosition, wxDefaultSize,
 				       wxALIGN_CENTER);
@@ -37,11 +37,11 @@ Register::Register(wxWindow *parent, const std::string& name)
     m_registerNameText->SetFont(m_font);
     m_delimiterText->SetFont(m_font);
     m_registerValueText->SetFont(m_font);
-    
+
     // set Colour
     m_registerNameText->SetForegroundColour(m_registerNameFGColour);
     m_registerValueText->SetForegroundColour(m_registerValueFGColour);
-    
+
     // add for sizing
     m_mainSizer->Add(m_registerNameText, 3, wxEXPAND | wxALL);
     m_mainSizer->Add(m_delimiterText, 1, wxEXPAND | wxALL);

@@ -67,7 +67,7 @@ MainWindow::MainWindow(wxWindow *parent, wxWindowID id, const wxString &title)
     // setup properties
     properties = {
         .widgetType = WidgetType::MainWindow,
-        .fontSize = 12,
+        .fontSize = 9,
         .fontFamily = wxFONTFAMILY_MODERN,
         .fontStyle = wxFONTSTYLE_NORMAL,
         .fontWeight = wxFONTWEIGHT_NORMAL,
@@ -75,7 +75,7 @@ MainWindow::MainWindow(wxWindow *parent, wxWindowID id, const wxString &title)
         .fgColour = *wxWHITE,
         .size = wxSize(1366,768)
     };
-    
+
     UpdateSelf();
 }
 
@@ -86,7 +86,7 @@ void MainWindow::OnAbout(wxCommandEvent &event) {
     info.SetVersion("0.1 Alpha");
     info.SetDescription("XWars is inspired by R2Wars but runs on XVM. Written by @X3eRo0 & @brightprogrammer.");
     info.SetCopyright("MIT License ;-)");
-    
+
     wxAboutBox(info);
 }
 
@@ -113,7 +113,6 @@ void MainWindow::UpdateSelf(){
 
 void MainWindow::ApplyTheme(wxString config){
     // apply choosen theme.
-
     wxXmlDocument * theme = new wxXmlDocument;
 
     PropertyData m_mainWindowData = FactoryGetMainWindow()->properties; 
@@ -129,22 +128,25 @@ void MainWindow::ApplyTheme(wxString config){
     m_registerDisplayData.LoadTheme(theme);
     m_instructionDisplayData.LoadTheme(theme);
     m_arenaTerminalData.LoadTheme(theme);
-    
 
     FactoryGetMainWindow()->properties = m_mainWindowData;
     FactoryGetMainWindow()->UpdateSelf();
+
     FactoryGetLeftBotInfo()->GetBotNameDisplay()->properties = m_botNameDisplayData;
     FactoryGetLeftBotInfo()->GetBotNameDisplay()->UpdateSelf();
     FactoryGetRightBotInfo()->GetBotNameDisplay()->properties = m_botNameDisplayData;
     FactoryGetRightBotInfo()->GetBotNameDisplay()->UpdateSelf();
+
     FactoryGetLeftRegisterDisplay()->properties = m_registerDisplayData;
     FactoryGetLeftRegisterDisplay()->UpdateSelf();
     FactoryGetRightRegisterDisplay()->properties = m_registerDisplayData;
     FactoryGetRightRegisterDisplay()->UpdateSelf();
+
     FactoryGetLeftInstructionDisplay()->properties = m_instructionDisplayData;
     FactoryGetLeftInstructionDisplay()->UpdateSelf();
     FactoryGetRightInstructionDisplay()->properties = m_instructionDisplayData;
     FactoryGetRightInstructionDisplay()->UpdateSelf();
+
     FactoryGetMiddlePanel()->GetArena()->properties = m_arenaTerminalData;
     FactoryGetMiddlePanel()->GetArena()->UpdateSelf();
 

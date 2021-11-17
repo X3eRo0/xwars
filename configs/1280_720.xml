@@ -3,7 +3,7 @@
   <MainWindow>
     <Font Size="12" Family="wxFONTFAMILY_TELETYPE" Style="wxFONTSTYLE_NORMAL" Weight="wxFONTWEIGHT_LIGHT"/>
     <Colour BackgroundColour="rgb(26, 95, 180)" ForegroundColour="white"/>
-    <Size Width="1240" Height="720"/>
+    <Size Width="1366" Height="720"/>
   </MainWindow>
   <BotNameDisplay>
     <Font Size="20" Family="wxFONTFAMILY_TELETYPE" Style="wxFONTSTYLE_NORMAL" Weight="wxFONTWEIGHT_NORMAL"/>
