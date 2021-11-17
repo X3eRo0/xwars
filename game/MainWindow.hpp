@@ -29,7 +29,7 @@ public:
     void UpdateSelf();
 
     void ApplyTheme(wxString config);
-    
+
     DECLARE_EVENT_TABLE()
 private:
     // main panel that spans whole window

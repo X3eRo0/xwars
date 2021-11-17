@@ -48,17 +48,20 @@ public:
 
     // properties
     PropertyData properties = PropertyData{
-	.widgetType = WidgetType::ArenaTerminal,
-	.fontSize = 10,
-	.fontFamily = wxFONTFAMILY_MODERN,
-	.fontStyle = wxFONTSTYLE_NORMAL,
-	.fontWeight = wxFONTWEIGHT_NORMAL,
-	.bgColour = *wxBLACK,
-	.fgColour = *wxWHITE
+		.widgetType = WidgetType::ArenaTerminal,
+		.fontSize = 10,
+		.fontFamily = wxFONTFAMILY_MODERN,
+		.fontStyle = wxFONTSTYLE_NORMAL,
+		.fontWeight = wxFONTWEIGHT_NORMAL,
+		.bgColour = *wxBLACK,
+		.fgColour = *wxWHITE
     };
 
     // update theme after changing properties
     void UpdateSelf();
+
+	// load bots from path
+	void LoadBots(const wxString& botsFolder);
 
     DECLARE_EVENT_TABLE();
 private:

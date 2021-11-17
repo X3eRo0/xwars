@@ -14,7 +14,7 @@ public:
     // print instruction in the arena terminal
     template<typename fmttype, typename... argtypes>
     void PrintToTerminal(fmttype fmtstr, argtypes... args){
-	m_arenaTerminal->Print(fmtstr, args...);
+		m_arenaTerminal->Print(fmtstr, args...);
     }
 
     // get arena terminal

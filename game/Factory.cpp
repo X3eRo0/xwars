@@ -71,6 +71,8 @@ InstructionDisplay *FactoryCreateRightInstructionDisplay(wxWindow *parent){
     return factory.rInstrDisplay;
 }
 
+
+
 // ------------------------- GETTERS --------------------------
 
 // get already created main window

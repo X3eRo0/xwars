@@ -20,13 +20,8 @@ bool MainApp::OnInit(){
     }
 
     if (BotsFolder != "" && wxDirExists(BotsFolder)){
-        /* Found a bots folder */
+		FactoryGetMiddlePanel()->GetArena()->LoadBots(BotsFolder);
     }
-
-    // fixed size window
-    //mainWindow->SetMaxSize(wxSize(MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT));
-    //mainWindow->SetMinSize(wxSize(MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT));
-    
 
     // everything's ok dude ;-)
     return true;
@@ -43,7 +38,7 @@ bool MainApp::OnCmdLineParsed(wxCmdLineParser& parser)
 {
     parser.Found("c", &ConfigFile); /* Config File */
     parser.Found("b", &BotsFolder); /* Bots Folder */
-    
+
     return true;
 }
 

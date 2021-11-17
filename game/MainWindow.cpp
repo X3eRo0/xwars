@@ -151,3 +151,4 @@ void MainWindow::ApplyTheme(wxString config){
     delete theme;
 }
 
+

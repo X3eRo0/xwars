@@ -39,11 +39,11 @@ Arena::Arena(wxWindow* parent) : wxPanel(parent){
     m_terminal->SetForegroundColour(m_terminalFGColour);
     m_terminal->SetFont(m_terminalFont);
     m_terminal->SetEditable(false);
-    
+
     // add welcome text
     // create buttons panel and add to sizer
     m_buttonsPanel = new wxPanel(this);
-    
+
     // create buttons panel sizer
     m_btnsPanelHSizer = new wxBoxSizer(wxHORIZONTAL);
     m_buttonsPanel->SetSizer(m_btnsPanelHSizer);
@@ -77,7 +77,7 @@ Arena::Arena(wxWindow* parent) : wxPanel(parent){
     // add for sizing
     m_mainSizer->Add(m_buttonsPanel, 1, wxEXPAND | wxALL, 0);
     m_mainSizer->Add(m_terminal, 14, wxEXPAND | wxALL, 0);
-    
+
     // bind our timer to this
     m_iterTimer.Bind(wxEVT_TIMER, &Arena::OnIterationTimer, this);
     m_intervTimer.Bind(wxEVT_TIMER, &Arena::OnIntervalTimer, this);
@@ -88,7 +88,7 @@ Arena::Arena(wxWindow* parent) : wxPanel(parent){
 void Arena::OnLoad(wxCommandEvent& WXUNUSED(event)){
     // create a new file dialog
     wxDirDialog *fd = new wxDirDialog(this,"XVM XWars - Arena - Choose Bots Folder", wxEmptyString, wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST);
-    
+
     // check if file was selected or not
     if(fd->ShowModal() == wxID_CANCEL){
         return;
@@ -96,32 +96,7 @@ void Arena::OnLoad(wxCommandEvent& WXUNUSED(event)){
 
     // get the selected directory path
     wxString botFolder = fd->GetPath();
-    DIR * botdir = opendir(botFolder.GetData().AsChar());
-    
-    // get file names in the selected folder
-    std::vector<std::string> botpaths;
-    struct dirent *dp = NULL;
-    while (botdir){
-        if ((dp = readdir(botdir)) != NULL){
-            if (!strncmp(strchr(dp->d_name, '.'), ".bot", 4)){
-                // assemble all bots
-                // bot paths must contain assembled bot paths
-                botpaths.emplace_back((botFolder + "/" + dp->d_name).ToStdString());
-            }
-        } else {
-            closedir(botdir);
-            break;
-        }
-    }
-
-    // create and load bots
-    // get_xwars_instance()->load_bots(botpaths, botnames);
-    get_xwars_instance()->botpaths = botpaths;
-    // check and print status
-    for(size_t i = 0; i < botpaths.size(); i++){
-        Print("[+] Loaded Bot [ %s ]\n",
-	      botpaths[i].substr(botpaths[i].find_last_of("/\\") + 1));
-    }
+	LoadBots(botFolder);
 }
 
 void Arena::OnStart(wxCommandEvent& WXUNUSED(event)){
@@ -133,7 +108,7 @@ void Arena::OnStart(wxCommandEvent& WXUNUSED(event)){
     m_battleIdx = 0;
     for (u32 i = 0; i < bots.size() - 1; i++){
         for (u32 j = i+1; j < bots.size(); j++){
-	    m_battlePairs.push_back({i, j});
+			m_battlePairs.push_back({i, j});
         }
     }
     //wxPuts("Generated BattlePairs");
@@ -142,33 +117,33 @@ void Arena::OnStart(wxCommandEvent& WXUNUSED(event)){
     const std::pair<int, int>& botpair = m_battlePairs[m_battleIdx++];
     if(get_xwars_instance()->battle_init(bots[botpair.first],
 					 bots[botpair.second])){
-	m_iterTimer.Start(m_iterWaitTime);
+		m_iterTimer.Start(m_iterWaitTime);
     }
 }
 
 void Arena::OnIntervalTimer(wxTimerEvent& e){
     if(m_battleIdx == m_battlePairs.size()){
-	m_intervTimer.Stop();
-	return;
+		m_intervTimer.Stop();
+		return;
     }
-    
+
     // do battle
     const auto& bots = get_xwars_instance()->botpaths;
     const std::pair<int, int>& botpair = m_battlePairs[m_battleIdx++];
 
     // init battle and start iteration timer
     if(get_xwars_instance()->battle_init(bots[botpair.first], bots[botpair.second])){
-	m_iterTimer.Start(m_iterWaitTime);
+		m_iterTimer.Start(m_iterWaitTime);
     }
 }
 
 void Arena::OnIterationTimer(wxTimerEvent& e){
     //wxPuts("Reached Iteration Timer");
-    
+
     if(!get_xwars_instance()->battle_step()){
         Print("[+] Winner %s in %d instructions\n", get_xwars_instance()->winner.c_str(), get_xwars_instance()->counter);
-	m_iterTimer.Stop();
-	m_intervTimer.Start(m_interWaitTime);
+		m_iterTimer.Stop();
+		m_intervTimer.Start(m_interWaitTime);
     }
 }
 
@@ -176,6 +151,35 @@ void Arena::UpdateSelf(){
     m_terminal->SetBackgroundColour(properties.bgColour);
     m_terminal->SetForegroundColour(properties.fgColour);
     m_terminal->SetFont(properties.GetFont());
+}
+
+// load bots abstraction
+void Arena::LoadBots(const wxString& BotsFolder){
+	DIR * botdir = opendir(BotsFolder.GetData().AsChar());
+
+	// get file names in the selected folder
+	std::vector<std::string> botpaths;
+	struct dirent *dp = NULL;
+	while (botdir){
+		if ((dp = readdir(botdir)) != NULL){
+			if (!strncmp(strchr(dp->d_name, '.'), ".bot", 4)){
+				// assemble all bots
+				// bot paths must contain assembled bot paths
+				botpaths.emplace_back((BotsFolder + "/" + dp->d_name).ToStdString());
+			}
+		} else {
+			closedir(botdir);
+			break;
+		}
+	}
+
+	// create and load bots
+	// get_xwars_instance()->load_bots(botpaths, botnames);
+	get_xwars_instance()->botpaths = botpaths;
+	// check and print status
+	for(size_t i = 0; i < botpaths.size(); i++){
+		Print("[+] Loaded Bot [ %s ]\n", botpaths[i].substr(botpaths[i].find_last_of("/\\") + 1));
+	}
 }
 
 // OnStart - start iter timer

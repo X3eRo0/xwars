@@ -3,8 +3,6 @@
 #include <wx/clrpicker.h>
 #include <wx/font.h>
 #include <wx/gdicmn.h>
-#include <wx/gtk/colour.h>
-#include <wx/gtk/combobox.h>
 #include <wx/log.h>
 #include <wx/sizer.h>
 #include <wx/string.h>
