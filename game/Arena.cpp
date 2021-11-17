@@ -104,8 +104,6 @@ void Arena::OnLoad(wxCommandEvent& WXUNUSED(event)){
     while (botdir){
         if ((dp = readdir(botdir)) != NULL){
             if (!strncmp(strchr(dp->d_name, '.'), ".bot", 4)){
-                Print("[+] Loading [ %s ]\n", dp->d_name);
-
                 // assemble all bots
                 // bot paths must contain assembled bot paths
                 botpaths.emplace_back((botFolder + "/" + dp->d_name).ToStdString());
@@ -138,8 +136,6 @@ void Arena::OnStart(wxCommandEvent& WXUNUSED(event)){
 	    m_battlePairs.push_back({i, j});
         }
     }
-    Print("Total number of combats = %ld\n", m_battlePairs.size());
-
     //wxPuts("Generated BattlePairs");
 
     // do first battle

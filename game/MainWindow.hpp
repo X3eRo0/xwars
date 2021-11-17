@@ -27,6 +27,8 @@ public:
 
     // call this after changing properties
     void UpdateSelf();
+
+    void ApplyTheme(wxString config);
     
     DECLARE_EVENT_TABLE()
 private:

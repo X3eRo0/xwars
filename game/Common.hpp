@@ -2,6 +2,7 @@
 #define XVM_ARENA_COMMON_HPP
 
 #include <wx/wxprec.h>
+#include <wx/cmdline.h>
 #ifndef WX_PRECOMP
     #include <wx/wx.h>
 #endif//WX_PRECOMP

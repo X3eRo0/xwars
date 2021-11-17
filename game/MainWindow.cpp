@@ -66,14 +66,14 @@ MainWindow::MainWindow(wxWindow *parent, wxWindowID id, const wxString &title)
 
     // setup properties
     properties = {
-	.widgetType = WidgetType::MainWindow,
-	.fontSize = 12,
-	.fontFamily = wxFONTFAMILY_MODERN,
-	.fontStyle = wxFONTSTYLE_NORMAL,
-	.fontWeight = wxFONTWEIGHT_NORMAL,
-	.bgColour = *wxBLACK,
-	.fgColour = *wxWHITE,
-	.size = wxSize(1366,768)
+        .widgetType = WidgetType::MainWindow,
+        .fontSize = 12,
+        .fontFamily = wxFONTFAMILY_MODERN,
+        .fontStyle = wxFONTSTYLE_NORMAL,
+        .fontWeight = wxFONTWEIGHT_NORMAL,
+        .bgColour = *wxBLACK,
+        .fgColour = *wxWHITE,
+        .size = wxSize(1366,768)
     };
     
     UpdateSelf();
@@ -110,3 +110,44 @@ void MainWindow::UpdateSelf(){
     SetSize(properties.size);
     // SetMinClientSize(properties.size);
 }
+
+void MainWindow::ApplyTheme(wxString config){
+    // apply choosen theme.
+
+    wxXmlDocument * theme = new wxXmlDocument;
+
+    PropertyData m_mainWindowData = FactoryGetMainWindow()->properties; 
+    PropertyData m_botNameDisplayData = FactoryGetLeftBotInfo()->GetBotNameDisplay()->properties;
+    PropertyData m_registerDisplayData = FactoryGetLeftRegisterDisplay()->properties;    
+    PropertyData m_instructionDisplayData = FactoryGetLeftInstructionDisplay()->properties;
+    PropertyData m_arenaTerminalData = FactoryGetMiddlePanel()->GetArena()->properties;
+
+    theme->Load(config);
+
+    m_mainWindowData.LoadTheme(theme);
+    m_botNameDisplayData.LoadTheme(theme);
+    m_registerDisplayData.LoadTheme(theme);
+    m_instructionDisplayData.LoadTheme(theme);
+    m_arenaTerminalData.LoadTheme(theme);
+    
+
+    FactoryGetMainWindow()->properties = m_mainWindowData;
+    FactoryGetMainWindow()->UpdateSelf();
+    FactoryGetLeftBotInfo()->GetBotNameDisplay()->properties = m_botNameDisplayData;
+    FactoryGetLeftBotInfo()->GetBotNameDisplay()->UpdateSelf();
+    FactoryGetRightBotInfo()->GetBotNameDisplay()->properties = m_botNameDisplayData;
+    FactoryGetRightBotInfo()->GetBotNameDisplay()->UpdateSelf();
+    FactoryGetLeftRegisterDisplay()->properties = m_registerDisplayData;
+    FactoryGetLeftRegisterDisplay()->UpdateSelf();
+    FactoryGetRightRegisterDisplay()->properties = m_registerDisplayData;
+    FactoryGetRightRegisterDisplay()->UpdateSelf();
+    FactoryGetLeftInstructionDisplay()->properties = m_instructionDisplayData;
+    FactoryGetLeftInstructionDisplay()->UpdateSelf();
+    FactoryGetRightInstructionDisplay()->properties = m_instructionDisplayData;
+    FactoryGetRightInstructionDisplay()->UpdateSelf();
+    FactoryGetMiddlePanel()->GetArena()->properties = m_arenaTerminalData;
+    FactoryGetMiddlePanel()->GetArena()->UpdateSelf();
+
+    delete theme;
+}
+

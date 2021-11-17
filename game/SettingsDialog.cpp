@@ -122,8 +122,8 @@ void SettingsDialog::OnImportBtnClicked(wxCommandEvent &e) {
 					"XML Files (*.xml)|*.xml",
 					wxFD_OPEN | wxFD_CHANGE_DIR);
 
-    if(fd->ShowModal() != wxCANCEL){
-	wxString filename = fd->GetPath();
+    if(fd->ShowModal() != wxID_CANCEL){
+        wxString filename = fd->GetPath();
         wxPuts("importing theme\"" + filename + "\"");
 
         wxXmlDocument *xmldoc = new wxXmlDocument;
@@ -146,6 +146,8 @@ void SettingsDialog::OnImportBtnClicked(wxCommandEvent &e) {
         }else{
             m_propertiesDisplay->UpdateDisplay(m_arenaTerminalData);
         }        
+
+        delete xmldoc;
     }
 }
 
@@ -156,20 +158,20 @@ void SettingsDialog::OnExportBtnClicked(wxCommandEvent &WXUNUSED(e)) {
 					wxFD_SAVE | wxFD_CHANGE_DIR |
 					wxFD_OVERWRITE_PROMPT);
     if(fd->ShowModal() != wxCANCEL){
-	wxString filename = fd->GetPath();
-	wxPuts("exporting theme \"" + filename + "\"");
-	
-	wxXmlDocument *xmldoc = new wxXmlDocument;
-	wxXmlNode *root = new wxXmlNode(wxXML_ELEMENT_NODE, "ThemeRoot");
-	xmldoc->SetRoot(root);
+        wxString filename = fd->GetPath();
+        wxPuts("exporting theme \"" + filename + "\"");
+        
+        wxXmlDocument *xmldoc = new wxXmlDocument;
+        wxXmlNode *root = new wxXmlNode(wxXML_ELEMENT_NODE, "ThemeRoot");
+        xmldoc->SetRoot(root);
 
-	m_mainWindowData.SaveTheme(xmldoc);
-	m_botNameDisplayData.SaveTheme(xmldoc);
-	m_registerDisplayData.SaveTheme(xmldoc);
-	m_instructionDisplayData.SaveTheme(xmldoc);
-	m_arenaTerminalData.SaveTheme(xmldoc);
-	
-	xmldoc->Save(filename);
+        m_mainWindowData.SaveTheme(xmldoc);
+        m_botNameDisplayData.SaveTheme(xmldoc);
+        m_registerDisplayData.SaveTheme(xmldoc);
+        m_instructionDisplayData.SaveTheme(xmldoc);
+        m_arenaTerminalData.SaveTheme(xmldoc);
+        
+        xmldoc->Save(filename);
 
     }
 

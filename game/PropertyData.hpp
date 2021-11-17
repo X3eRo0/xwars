@@ -32,7 +32,7 @@ enum class WidgetType : u32{
 struct PropertyData{
     // create font from explicit data
     wxFont GetFont() const{
-	return wxFont(fontSize, fontFamily, fontStyle, fontWeight);
+	    return wxFont(fontSize, fontFamily, fontStyle, fontWeight);
     }
 
     // save properties for given widget in given xmldoc
