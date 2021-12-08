@@ -26,6 +26,8 @@ add_executable(xvm
     common/loader.h
     common/sections.c
     common/sections.h
+    common/bitmap.c
+    common/bitmap.h
     xvm/syscall.c
     common/signals.c
     common/signals.h)
