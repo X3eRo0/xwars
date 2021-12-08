@@ -17,7 +17,7 @@ public:
     MemoryGrid(wxWindow* parent);
 
     // update element of memory grid
-    void UpdateGrid(size_t offset, BotID bid, Permission pm);
+    void UpdateGrid();
 private:
     // bot1 read/write/execute colours
     wxColour bot1ReadColour = wxColour(31, 255, 240);

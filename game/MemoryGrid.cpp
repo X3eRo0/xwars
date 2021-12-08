@@ -1,4 +1,5 @@
 #include "MemoryGrid.hpp"
+#include "../common/bitmap.h"
 
 MemoryGrid::MemoryGrid(wxWindow* parent) : wxPanel(parent){
     // create grid sizer for memory grid and set it as sizer for "this" panel
@@ -15,31 +16,53 @@ MemoryGrid::MemoryGrid(wxWindow* parent) : wxPanel(parent){
     }
 }
 
-void MemoryGrid::UpdateGrid(size_t offset,  BotID bid, Permission pm){
-    // calculate position in memory grid
-    size_t y = offset / NUM_ROWS_IN_MEM_GRID;
-    size_t x = offset - y * NUM_ROWS_IN_MEM_GRID;
+void MemoryGrid::UpdateGrid(){
+    for(size_t i = 0; i < 1024; i++){
+        // calculate coordinates in mem grid
+        size_t x = i / NUM_COLS_IN_MEM_GRID;
+        size_t y = i - x * NUM_COLS_IN_MEM_GRID;
 
-    std::cout << "updating mem grid at position [" << x << " " << y << "]" << std::endl;
+        u8 op = get_oprn_at_idx(i);
+        bool pm_read = op & oprn::oprn_r;
+        bool pm_write = op & oprn::oprn_w;
+        bool pm_exec = op & oprn::oprn_x;
+        bool bot_id = op & oprn::oprn_b;
 
-    wxColour highlightColour;
+        if(check_oprn_valid(op)){
+            wxColour colour;
+            if(bot_id){
+                char pm;
 
-    // decide hightlight colour based on given data
-    if(bid == BotID::Bot1){
-        if(pm == Permission::Read) highlightColour = bot1ReadColour;
-        else if(pm == Permission::Write) highlightColour = bot1WriteColour;
-        else highlightColour = bot1ExecColour;
+                if(pm_read){
+                    colour = bot1ReadColour;
+                    pm = 'r';
+                }else if(pm_write){
+                    colour = bot1WriteColour;
+                    pm = 'w';
+                }else{
+                    colour = bot1ExecColour;
+                    pm = 'x';
+                }
 
-        // highlight
-        m_memGrid[x][y]->SetForegroundColour(highlightColour);
-        m_memGrid[x][y]->SetLabelText("1");
-    }else{
-        if(pm == Permission::Read) highlightColour = bot2ReadColour;
-        else if(pm == Permission::Write) highlightColour = bot2WriteColour;
-        else highlightColour = bot2ExecColour;
+                m_memGrid[x][y]->SetForegroundColour(colour);
+                m_memGrid[x][y]->SetLabelText(pm);
+            }else{
+                char pm;
 
-        // highlight
-        m_memGrid[x][y]->SetForegroundColour(highlightColour);
-        m_memGrid[x][y]->SetLabelText("2");
+                if(pm_read){
+                    colour = bot2ReadColour;
+                    pm = 'r';
+                }else if(pm_write){
+                    colour = bot2WriteColour;
+                    pm = 'w';
+                }else{
+                    colour = bot2ExecColour;
+                    pm = 'x';
+                }
+
+                m_memGrid[x][y]->SetForegroundColour(colour);
+                m_memGrid[x][y]->SetLabelText(pm);
+            }
+        }
     }
 }

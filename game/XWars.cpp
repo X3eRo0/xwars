@@ -335,8 +335,15 @@ bool xwars::battle_step()
         (counter < MAX_INSTR_EXECS) && get_RF(bot1->cpu) && get_RF(bot2->cpu)) {
         display_registers(bot1, bot2);
         display_disassembly(bot1, bot2);
+
+        // tell backend this is bot 1
         set_current_bitmap_bot(0);
+
+        // next step
         bot1->step();
+
+        // upadte memory grid for bot 1
+        FactoryGetMiddlePanel()->GetMemoryGrid()->UpdateGrid();
 
         if (signal_abort(bot1->cpu->errors, bot1->cpu) == E_ERR) {
             winner = bot2->botname;
@@ -347,8 +354,14 @@ bool xwars::battle_step()
             return false;
         }
 
+        // tell backend this is bot 2
         set_current_bitmap_bot(1);
+
+        // next step
         bot2->step();
+
+        // update memory grid for bot 2
+        FactoryGetMiddlePanel()->GetMemoryGrid()->UpdateGrid();
 
         // check which won
         if (signal_abort(bot2->cpu->errors, bot2->cpu) == E_ERR) {
@@ -360,12 +373,6 @@ bool xwars::battle_step()
             winner = bot1->botname;
             return false;
         }
-
-        // upadte memory grid for bot 1
-        FactoryGetMiddlePanel()->GetMemoryGrid()->UpdateGrid(bot1->cpu->regs.pc & 0xfff, BotID::Bot1, Permission::Write);
-
-        // update memory grid for bot 2
-        FactoryGetMiddlePanel()->GetMemoryGrid()->UpdateGrid(bot2->cpu->regs.pc & 0xfff, BotID::Bot2, Permission::Write);
 
         counter++;
         return true;

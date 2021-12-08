@@ -4,6 +4,10 @@
 
 #include "bitmap.h"
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 /*
  * oprn_t
  * R W X B we need 4 bits to know which bot
@@ -51,3 +55,11 @@ void set_current_bitmap_bot(u8 botid)
 {
     bot_id = botid;
 }
+
+u8 check_oprn_valid(u8 oprn){
+    return (oprn & 0x7) != 0; 
+}
+
+#if defined(__cplusplus)
+}
+#endif

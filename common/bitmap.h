@@ -7,7 +7,16 @@
 
 #include "const.h"
 
-#define make_oprn(b, p) b | (1 << p)
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
+#define make_oprn(b, p) (b) | (1 << ((p)+1))
+
+// 000, 000 - invalid
+// 010 - valid
+// 100 - valid
+// 001 - valid
 
 enum oprn{
     oprn_r = 0,
@@ -21,5 +30,13 @@ void set_oprn_at_idx(u32 idx, u8 value);  // set oprn at index in bitmap
 
 u8 get_current_bitmap_bot();
 void set_current_bitmap_bot(u8 botid);
+
+u8 check_oprn_valid(u8 oprn);
+
+
+#if defined(__cplusplus)
+}
+#endif
+
 
 #endif

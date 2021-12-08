@@ -45,6 +45,7 @@ add_executable(xasm
     common/loader.h
     common/signals.c
     common/signals.h
+    common/bitmap.c
 )
 
 add_executable(xinfo
@@ -57,6 +58,7 @@ add_executable(xinfo
     common/sections.h
     common/signals.c
     common/signals.h
+    common/bitmap.c
 )
 
 add_executable(xdis
@@ -71,6 +73,7 @@ add_executable(xdis
     common/sections.h
     common/signals.c
     common/signals.h
+    common/bitmap.c
 )
 
 # build xwars
