@@ -19,10 +19,13 @@ public:
 
     // get arena terminal
     Arena* GetArena() { return m_arenaTerminal; }
+
+    // get memory grid
+    MemoryGrid* GetMemoryGrid() { return m_memoryGrid; }
 private:
     // main sizer to arrage items in middle panel
     wxBoxSizer *m_mainSizer;
-    
+
     // top panel will contiain the memory grid
     MemoryGrid *m_memoryGrid;
     // wxBoxSizer *m_topPanelVSizer;

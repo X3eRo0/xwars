@@ -16,9 +16,19 @@ class MemoryGrid : public wxPanel{
 public:
     MemoryGrid(wxWindow* parent);
 
-    // update (x, y) element of memory grid
-    void UpdateGrid(size_t x, size_t y, BotID bid, Permission pm);
+    // update element of memory grid
+    void UpdateGrid(size_t offset, BotID bid, Permission pm);
 private:
+    // bot1 read/write/execute colours
+    wxColour bot1ReadColour = wxColour(31, 255, 240);
+    wxColour bot1WriteColour = wxColour(10, 245, 14);
+    wxColour bot1ExecColour = wxColour(238, 255, 0);
+
+    // bot2 read/write/execute colors
+    wxColour bot2ReadColour = wxColour(151, 15, 153);
+    wxColour bot2WriteColour = wxColour(240, 12, 95);
+    wxColour bot2ExecColour = wxColour(26, 44, 237);
+
     // sizer to arrange our memory grid
     wxGridSizer *m_memGridSizer = nullptr;
 

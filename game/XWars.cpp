@@ -55,7 +55,7 @@ xwars::xwars(){
     //bots.resize(bot_paths.size());
     //botpaths = bot_paths;
     //botnames = bot_names;
-    
+
     //// initialize every bot
     //for(size_t i = 0; i < bots.size(); i++){
         //// shorter names
@@ -67,10 +67,10 @@ xwars::xwars(){
 
         //// set bot name
         //bot->botname = botnames[i];
-        
+
         //// add stacks for each bots
         //add_section(bot->bin->x_section, "stack", XVM_STACK_SIZE, XVM_DFLT_SP & 0xfffff000, PERM_READ | PERM_WRITE);
-    
+
         //// initialize stack pointer to default value
         //bot->cpu->regs.sp = XVM_DFLT_SP;
 
@@ -113,7 +113,7 @@ void xwars::display_registers(xbot *bot1, xbot *bot2){
 
     // direct call for update
     FactoryGetLeftBotInfo()->UpdateRegisterDisplay(bot1);
-    
+
     // update registers
     fprintf(bot2->reg_writer_e, "$r0=0x%.8x\n", bot2->cpu->regs.r0);
     fprintf(bot2->reg_writer_e, "$r1=0x%.8x\n", bot2->cpu->regs.r1);
@@ -133,7 +133,7 @@ void xwars::display_registers(xbot *bot1, xbot *bot2){
     fprintf(bot2->reg_writer_e, "$pc=0x%.8x\n", bot2->cpu->regs.pc);
     // fflush(bot2->reg_writer_e);
 
-    
+
     // post event
     // wxCommandEvent e2(REGISTER_DISPLAY_UPDATE_EVENT);
     // e2.SetClientData((void *)bot2);
@@ -142,7 +142,7 @@ void xwars::display_registers(xbot *bot1, xbot *bot2){
 
     // direct call for update
     FactoryGetRightBotInfo()->UpdateRegisterDisplay(bot2);
-    
+
     // wait for all events to complete
     //wxTheApp->Yield();
 }
@@ -163,7 +163,7 @@ void xwars::display_disassembly(xbot *bot1, xbot *bot2){
 
     // direct call for update
     FactoryGetLeftBotInfo()->UpdateInstructionDisplay(bot1);
-    
+
     xasm_disassemble_bytes(
         bot2->dis_writer_e,
         bot2->bin,
@@ -178,9 +178,8 @@ void xwars::display_disassembly(xbot *bot1, xbot *bot2){
 
 // load bots into text section at random placesx
 void xwars::copy_bots(xbot *bot1, xbot *bot2){
-    
     section_entry * text = find_section_entry_by_name(bot1->bin->x_section, ".text");
-    
+
     bot1->bot_section = find_section_entry_by_name(bot1->bin->x_section, ".bot");
     bot1->size = bot1->bot_section->m_ofst;
 
@@ -215,7 +214,7 @@ void xwars::copy_bots(xbot *bot1, xbot *bot2){
 bool xwars::battle_init(std::string Bot1Path, std::string Bot2Path){
     // reset counter
     counter = 0;
-    
+
     // delete old bots
     if (m_currentBots.first && m_currentBots.second){
         section_entry* text = find_section_entry_by_name(m_currentBots.first->bin->x_section, ".text");
@@ -234,12 +233,12 @@ bool xwars::battle_init(std::string Bot1Path, std::string Bot2Path){
 
         temp->next = NULL;
         m_currentBots.second->bin->x_section->n_sections--;
-        
+
         delete m_currentBots.first;
         delete m_currentBots.second;
         m_currentBots = {NULL, NULL};
     }
-    
+
     // create new bots
     xbot *bot1 = new xbot;
     xbot *bot2 = new xbot;
@@ -262,7 +261,7 @@ bool xwars::battle_init(std::string Bot1Path, std::string Bot2Path){
     // set correct stack pointer
     bot1->cpu->regs.sp = XVM_DFLT_SP;
     bot2->cpu->regs.sp = XVM_DFLT_SP;
-    
+
     // load .bot sections
     xvm_bin_load_file(bot1->bin, Bot1Path.c_str());
     xvm_bin_load_file(bot2->bin, Bot2Path.c_str());
@@ -297,7 +296,7 @@ bool xwars::battle_init(std::string Bot1Path, std::string Bot2Path){
 
     remove_section_by_name(bot1->bin->x_section, ".bot");
     remove_section_by_name(bot2->bin->x_section, ".bot");
-    
+
     bot1->bot_section = NULL;
     bot2->bot_section = NULL;
 
@@ -325,7 +324,7 @@ xwars::~xwars(){
 bool xwars::battle_step(){
     xbot* bot1 = m_currentBots.first;
     xbot* bot2 = m_currentBots.second;
-    
+
     if (
         (counter < MAX_INSTR_EXECS) &&
         get_RF(bot1->cpu) &&
@@ -334,7 +333,7 @@ bool xwars::battle_step(){
         display_registers(bot1, bot2);
         display_disassembly(bot1, bot2);
         bot1->step();
-        
+
         if (signal_abort(bot1->cpu->errors, bot1->cpu) == E_ERR){
             winner = bot2->botname;
             return false;
@@ -343,17 +342,25 @@ bool xwars::battle_step(){
             winner = bot2->botname;
             return false;
         }
-        
+
         bot2->step();
-        
+
+        // check which won
         if (signal_abort(bot2->cpu->errors, bot2->cpu) == E_ERR){
             winner = bot1->botname;
             return false;
         }
+
         if (signal_abort(bot2->bin->x_section->errors, bot2->cpu) == E_ERR){
             winner = bot1->botname;
             return false;
         }
+
+        // upadte memory grid for bot 1
+        FactoryGetMiddlePanel()->GetMemoryGrid()->UpdateGrid(bot1->cpu->regs.pc & 0xfff, BotID::Bot1, Permission::Write);
+
+        // update memory grid for bot 2
+        FactoryGetMiddlePanel()->GetMemoryGrid()->UpdateGrid(bot2->cpu->regs.pc & 0xfff, BotID::Bot2, Permission::Write);
 
         counter++;
     	return true;
