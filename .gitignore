@@ -13,6 +13,7 @@
 GTAGS
 GPATH
 GRTAGS
+.gdb_history
 *.hpp~
 *.cpp~
 *~

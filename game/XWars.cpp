@@ -1,14 +1,15 @@
 #include "XWars.hpp"
+#include "../common/bitmap.h"
 #include "../xasm/xasm.h"
 #include "Common.hpp"
+#include "Factory.hpp"
+#include "MiddlePanel.hpp"
 #include <cstdio>
 #include <unistd.h>
 #include <wx/app.h>
 #include <wx/event.h>
 #include <wx/time.h>
 #include <wx/utils.h>
-#include "Factory.hpp"
-#include "MiddlePanel.hpp"
 
 // Created by X3eRo0 on 6/7/2021.
 //
@@ -16,7 +17,7 @@
 //     modification : many changes, do diff with original "xwarss/bot.c"
 //                    to see them
 //     reason : modifying code for use in arena
-//     other files modified : common/sections.h, common/sections.c 
+//     other files modified : common/sections.h, common/sections.c
 
 // this static instance will be allocated when
 // get_xwars_instance is called for the first time
@@ -26,15 +27,16 @@
 // but in other cpp/hpp files we will need to call get_xwars()
 // to get this instance
 
-static xwars *xwars_instance = nullptr;
+static xwars* xwars_instance = nullptr;
 
 // writer_e and reader_e
 // extern FILE * reader_e, * writer_e;
 
 // will create a new xwars_instance if not created already
 // and return the intance
-xwars* get_xwars_instance(){
-    if(!xwars_instance){
+xwars* get_xwars_instance()
+{
+    if (!xwars_instance) {
         xwars_instance = new xwars;
     }
 
@@ -42,48 +44,51 @@ xwars* get_xwars_instance(){
 }
 
 // deallocate xwars and related stuffs
-void shutdown_xwars(){
+void shutdown_xwars()
+{
     delete xwars_instance;
 }
 
 // constructor
-xwars::xwars(){
+xwars::xwars()
+{
 }
 
-//void xwars::load_bots(const std::vector<std::string> &bot_paths, const std::vector<std::string>& bot_names){
-    //// allocate memory space for all bots
-    //bots.resize(bot_paths.size());
-    //botpaths = bot_paths;
-    //botnames = bot_names;
+// void xwars::load_bots(const std::vector<std::string> &bot_paths, const std::vector<std::string>& bot_names){
+//// allocate memory space for all bots
+// bots.resize(bot_paths.size());
+// botpaths = bot_paths;
+// botnames = bot_names;
 
-    //// initialize every bot
-    //for(size_t i = 0; i < bots.size(); i++){
-        //// shorter names
-        //xbot* &bot = bots[i];
-        //std::string bot_path = bot_paths[i];
+//// initialize every bot
+// for(size_t i = 0; i < bots.size(); i++){
+//// shorter names
+// xbot* &bot = bots[i];
+// std::string bot_path = bot_paths[i];
 
-        //// initialize this bot
-        //bot = new xbot;
+//// initialize this bot
+// bot = new xbot;
 
-        //// set bot name
-        //bot->botname = botnames[i];
+//// set bot name
+// bot->botname = botnames[i];
 
-        //// add stacks for each bots
-        //add_section(bot->bin->x_section, "stack", XVM_STACK_SIZE, XVM_DFLT_SP & 0xfffff000, PERM_READ | PERM_WRITE);
+//// add stacks for each bots
+// add_section(bot->bin->x_section, "stack", XVM_STACK_SIZE, XVM_DFLT_SP & 0xfffff000, PERM_READ | PERM_WRITE);
 
-        //// initialize stack pointer to default value
-        //bot->cpu->regs.sp = XVM_DFLT_SP;
+//// initialize stack pointer to default value
+// bot->cpu->regs.sp = XVM_DFLT_SP;
 
-        //// load binary file
-        //// load init and bot sections
-        //xvm_bin_load_file(bot->bin, botpaths[i].c_str());
+//// load binary file
+//// load init and bot sections
+// xvm_bin_load_file(bot->bin, botpaths[i].c_str());
 
-        //// remove .text section
-        //remove_section_by_name(bot->bin->x_section, ".text");
-    //}
+//// remove .text section
+// remove_section_by_name(bot->bin->x_section, ".text");
+//}
 //}
 
-void xwars::display_registers(xbot *bot1, xbot *bot2){
+void xwars::display_registers(xbot* bot1, xbot* bot2)
+{
 
     // update registers
     // update order must be same as Register::RegisterNames
@@ -133,7 +138,6 @@ void xwars::display_registers(xbot *bot1, xbot *bot2){
     fprintf(bot2->reg_writer_e, "$pc=0x%.8x\n", bot2->cpu->regs.pc);
     // fflush(bot2->reg_writer_e);
 
-
     // post event
     // wxCommandEvent e2(REGISTER_DISPLAY_UPDATE_EVENT);
     // e2.SetClientData((void *)bot2);
@@ -144,22 +148,22 @@ void xwars::display_registers(xbot *bot1, xbot *bot2){
     FactoryGetRightBotInfo()->UpdateRegisterDisplay(bot2);
 
     // wait for all events to complete
-    //wxTheApp->Yield();
+    // wxTheApp->Yield();
 }
 
-void xwars::display_disassembly(xbot *bot1, xbot *bot2){
-    section_entry * text = find_section_entry_by_name(bot1->bin->x_section,
-						      ".text");
+void xwars::display_disassembly(xbot* bot1, xbot* bot2)
+{
+    section_entry* text = find_section_entry_by_name(bot1->bin->x_section,
+        ".text");
     // generate disassembly and write to
     // to pipe
     xasm_disassemble_bytes(
         bot1->dis_writer_e,
         bot1->bin,
-        (char *) get_reference(bot1->bin->x_section, bot1->cpu->regs.pc, PERM_EXEC),
+        (char*)get_reference(bot1->bin->x_section, bot1->cpu->regs.pc, PERM_EXEC),
         text->v_size - (bot1->cpu->regs.pc - text->v_addr),
         bot1->cpu->regs.pc,
-        20
-    );
+        20);
 
     // direct call for update
     FactoryGetLeftBotInfo()->UpdateInstructionDisplay(bot1);
@@ -167,18 +171,18 @@ void xwars::display_disassembly(xbot *bot1, xbot *bot2){
     xasm_disassemble_bytes(
         bot2->dis_writer_e,
         bot2->bin,
-        (char *) get_reference(bot2->bin->x_section, bot2->cpu->regs.pc, PERM_EXEC),
+        (char*)get_reference(bot2->bin->x_section, bot2->cpu->regs.pc, PERM_EXEC),
         text->v_size - (bot2->cpu->regs.pc - text->v_addr),
         bot2->cpu->regs.pc,
-        20
-    );
+        20);
 
     FactoryGetRightBotInfo()->UpdateInstructionDisplay(bot2);
 }
 
 // load bots into text section at random placesx
-void xwars::copy_bots(xbot *bot1, xbot *bot2){
-    section_entry * text = find_section_entry_by_name(bot1->bin->x_section, ".text");
+void xwars::copy_bots(xbot* bot1, xbot* bot2)
+{
+    section_entry* text = find_section_entry_by_name(bot1->bin->x_section, ".text");
 
     bot1->bot_section = find_section_entry_by_name(bot1->bin->x_section, ".bot");
     bot1->size = bot1->bot_section->m_ofst;
@@ -190,44 +194,44 @@ void xwars::copy_bots(xbot *bot1, xbot *bot2){
     srandom(time(nullptr));
 
     // assign bot1 in first half
-    while ((bot1->offset < 0x20) || (bot1->offset > 0x200 - bot1->size)){
+    while ((bot1->offset < 0x20) || (bot1->offset > 0x200 - bot1->size)) {
         bot1->offset = random() & 0xfff;
     }
 
     // assign bot2 in second half
-    while ((bot2->offset < 0x220) || (bot2->offset > 0x400 - bot2->size)){
+    while ((bot2->offset < 0x220) || (bot2->offset > 0x400 - bot2->size)) {
         bot2->offset = random() & 0xfff;
     }
 
     bot1->bot_addr = text->v_addr + bot1->offset;
     bot2->bot_addr = text->v_addr + bot2->offset;
 
-    //printf("text : 0x%x\n", text_section->v_addr);
-    //printf("bot1 offset: 0x%x\n", bot1->offset);
-    //printf("bot2 offset: 0x%x\n", bot2->offset);
+    // printf("text : 0x%x\n", text_section->v_addr);
+    // printf("bot1 offset: 0x%x\n", bot1->offset);
+    // printf("bot2 offset: 0x%x\n", bot2->offset);
 
     memcpy(&(text->m_buff[bot1->offset]), bot1->bot_section->m_buff, bot1->size);
     memcpy(&(text->m_buff[bot2->offset]), bot2->bot_section->m_buff, bot2->size);
 }
 
-
-bool xwars::battle_init(std::string Bot1Path, std::string Bot2Path){
+bool xwars::battle_init(std::string Bot1Path, std::string Bot2Path)
+{
     // reset counter
     counter = 0;
 
     // delete old bots
-    if (m_currentBots.first && m_currentBots.second){
+    if (m_currentBots.first && m_currentBots.second) {
         section_entry* text = find_section_entry_by_name(m_currentBots.first->bin->x_section, ".text");
         section_entry* temp = m_currentBots.first->bin->x_section->sections;
 
-        while (temp->next != text){
+        while (temp->next != text) {
             temp = temp->next;
         }
         temp->next = NULL;
         m_currentBots.first->bin->x_section->n_sections--;
 
         temp = m_currentBots.second->bin->x_section->sections;
-        while (temp->next != text){
+        while (temp->next != text) {
             temp = temp->next;
         }
 
@@ -236,19 +240,19 @@ bool xwars::battle_init(std::string Bot1Path, std::string Bot2Path){
 
         delete m_currentBots.first;
         delete m_currentBots.second;
-        m_currentBots = {NULL, NULL};
+        m_currentBots = { NULL, NULL };
     }
 
     // create new bots
-    xbot *bot1 = new xbot;
-    xbot *bot2 = new xbot;
+    xbot* bot1 = new xbot;
+    xbot* bot2 = new xbot;
 
     // store bots temporarily
-    m_currentBots = {bot1, bot2};
+    m_currentBots = { bot1, bot2 };
 
     // get bot namaes
-    bot1->botname = Bot1Path.substr(Bot1Path.find_last_of("/\\") + 1); 
-    bot2->botname = Bot2Path.substr(Bot2Path.find_last_of("/\\") + 1); 
+    bot1->botname = Bot1Path.substr(Bot1Path.find_last_of("/\\") + 1);
+    bot2->botname = Bot2Path.substr(Bot2Path.find_last_of("/\\") + 1);
 
     // set bot names
     FactoryGetLeftBotInfo()->SetBotName(bot1->botname);
@@ -271,13 +275,13 @@ bool xwars::battle_init(std::string Bot1Path, std::string Bot2Path){
     remove_section_by_name(bot2->bin->x_section, ".text");
 
     // allocate a common text region
-    section_entry * temp = NULL;
-    section_entry * text = init_section_entry();
+    section_entry* temp = NULL;
+    section_entry* text = init_section_entry();
     set_section_entry(text, ".text", 0x400, 0x1337000, PERM_READ | PERM_WRITE | PERM_EXEC);
 
     // add the .text in bot1
     temp = bot1->bin->x_section->sections;
-    while (temp->next != NULL){
+    while (temp->next != NULL) {
         temp = temp->next;
     }
     temp->next = text;
@@ -285,7 +289,7 @@ bool xwars::battle_init(std::string Bot1Path, std::string Bot2Path){
 
     // add the .text in bot2
     temp = bot2->bin->x_section->sections;
-    while (temp->next != NULL){
+    while (temp->next != NULL) {
         temp = temp->next;
     }
 
@@ -308,12 +312,13 @@ bool xwars::battle_init(std::string Bot1Path, std::string Bot2Path){
 }
 
 // destructor
-xwars::~xwars(){
+xwars::~xwars()
+{
     // destroy bots
     // bots were alloc'd with new operator so
     // the must be dealloc'd with delete operator
-    //for(xbot* bot : bots){
-        //delete bot;
+    // for(xbot* bot : bots){
+    // delete bot;
     //}
 }
 
@@ -321,37 +326,37 @@ xwars::~xwars(){
 //     m_botInfos = {first, second};
 // }
 
-bool xwars::battle_step(){
+bool xwars::battle_step()
+{
     xbot* bot1 = m_currentBots.first;
     xbot* bot2 = m_currentBots.second;
 
     if (
-        (counter < MAX_INSTR_EXECS) &&
-        get_RF(bot1->cpu) &&
-        get_RF(bot2->cpu)
-    ){
+        (counter < MAX_INSTR_EXECS) && get_RF(bot1->cpu) && get_RF(bot2->cpu)) {
         display_registers(bot1, bot2);
         display_disassembly(bot1, bot2);
+        set_current_bitmap_bot(0);
         bot1->step();
 
-        if (signal_abort(bot1->cpu->errors, bot1->cpu) == E_ERR){
+        if (signal_abort(bot1->cpu->errors, bot1->cpu) == E_ERR) {
             winner = bot2->botname;
             return false;
         }
-        if (signal_abort(bot1->bin->x_section->errors, bot1->cpu) == E_ERR){
+        if (signal_abort(bot1->bin->x_section->errors, bot1->cpu) == E_ERR) {
             winner = bot2->botname;
             return false;
         }
 
+        set_current_bitmap_bot(1);
         bot2->step();
 
         // check which won
-        if (signal_abort(bot2->cpu->errors, bot2->cpu) == E_ERR){
+        if (signal_abort(bot2->cpu->errors, bot2->cpu) == E_ERR) {
             winner = bot1->botname;
             return false;
         }
 
-        if (signal_abort(bot2->bin->x_section->errors, bot2->cpu) == E_ERR){
+        if (signal_abort(bot2->bin->x_section->errors, bot2->cpu) == E_ERR) {
             winner = bot1->botname;
             return false;
         }
@@ -363,8 +368,8 @@ bool xwars::battle_step(){
         FactoryGetMiddlePanel()->GetMemoryGrid()->UpdateGrid(bot2->cpu->regs.pc & 0xfff, BotID::Bot2, Permission::Write);
 
         counter++;
-    	return true;
-    }else{
+        return true;
+    } else {
         return false;
     }
 }
