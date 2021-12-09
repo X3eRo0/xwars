@@ -1,15 +1,15 @@
 #include "MainWindow.hpp"
-#include "XWars.hpp"
-#include "SettingsDialog.hpp"
 #include "Factory.hpp"
+#include "SettingsDialog.hpp"
+#include "XWars.hpp"
+#include <wx/aboutdlg.h>
 #include <wx/event.h>
 #include <wx/gdicmn.h>
 #include <wx/msgdlg.h>
 #include <wx/wxcrt.h>
-#include <wx/aboutdlg.h>
 
 // event handler ids
-enum MainWindowEventHandlerIDs{
+enum MainWindowEventHandlerIDs {
     MENU_ABOUT_ID = wxID_HIGHEST + 1005,
     MENU_SETTINGS_ID = wxID_HIGHEST + 1006
 };
@@ -21,16 +21,17 @@ EVT_MENU(MENU_SETTINGS_ID, MainWindow::OnSettings)
 END_EVENT_TABLE()
 
 // constructor
-MainWindow::MainWindow(wxWindow *parent, wxWindowID id, const wxString &title)
-    : wxFrame(parent, id, title){
+MainWindow::MainWindow(wxWindow* parent, wxWindowID id, const wxString& title)
+    : wxFrame(parent, id, title)
+{
     // main panel to contain other panels
     // this will span this whole frame
     // as the direct child to main frame spans it while
-    wxPanel *m_parentPanel = new wxPanel(this);
+    wxPanel* m_parentPanel = new wxPanel(this);
 
     // create sizer for parentPanel panel
     // left and right panel will be added to this sizer for sizing
-    wxBoxSizer *m_mainHSizer = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* m_mainHSizer = new wxBoxSizer(wxHORIZONTAL);
     m_parentPanel->SetSizer(m_mainHSizer);
 
     // left panel will show information about bots
@@ -43,9 +44,9 @@ MainWindow::MainWindow(wxWindow *parent, wxWindowID id, const wxString &title)
     // get_xwars_instance()->register_bot_info(m_lBotInfo, m_rBotInfo);
 
     // add these panels to main sizer
-    m_mainHSizer->Add(m_lBotInfo, 3, wxEXPAND | wxALL);
-    m_mainHSizer->Add(m_midPanel, 2, wxEXPAND | wxALL);
-    m_mainHSizer->Add(m_rBotInfo, 3, wxEXPAND | wxALL);
+    m_mainHSizer->Add(m_lBotInfo, 1, wxEXPAND | wxALL);
+    m_mainHSizer->Add(m_midPanel, 1, wxEXPAND | wxALL);
+    m_mainHSizer->Add(m_rBotInfo, 1, wxEXPAND | wxALL);
 
     // set colors for panels to tell them apart
     m_lBotInfo->SetBackgroundColour(*wxBLACK);
@@ -57,7 +58,7 @@ MainWindow::MainWindow(wxWindow *parent, wxWindowID id, const wxString &title)
     SetMenuBar(m_menuBar);
 
     // create file menu
-    wxMenu *fileMenu = new wxMenu;
+    wxMenu* fileMenu = new wxMenu;
     m_menuBar->Append(fileMenu, "&File");
     fileMenu->Append(MENU_SETTINGS_ID, "&Settings\tCtrl+X");
     fileMenu->Append(MENU_ABOUT_ID, "&About\tCtrl+A");
@@ -73,14 +74,15 @@ MainWindow::MainWindow(wxWindow *parent, wxWindowID id, const wxString &title)
         .fontWeight = wxFONTWEIGHT_NORMAL,
         .bgColour = *wxBLACK,
         .fgColour = *wxWHITE,
-        .size = wxSize(1366,768)
+        .size = wxSize(1366, 768)
     };
 
     UpdateSelf();
 }
 
 // handle event
-void MainWindow::OnAbout(wxCommandEvent &event) {
+void MainWindow::OnAbout(wxCommandEvent& event)
+{
     wxAboutDialogInfo info;
     info.SetName("XVM - XWars");
     info.SetVersion("0.1 Alpha");
@@ -91,13 +93,15 @@ void MainWindow::OnAbout(wxCommandEvent &event) {
 }
 
 // handle event
-void MainWindow::OnSettings(wxCommandEvent &event) {
-    SettingsDialog *dialog = new SettingsDialog(nullptr);
+void MainWindow::OnSettings(wxCommandEvent& event)
+{
+    SettingsDialog* dialog = new SettingsDialog(nullptr);
     dialog->ShowModal();
     dialog->Destroy();
 }
 
-void MainWindow::UpdateSelf(){
+void MainWindow::UpdateSelf()
+{
     // change font
     SetFont(properties.GetFont());
 
@@ -111,13 +115,14 @@ void MainWindow::UpdateSelf(){
     // SetMinClientSize(properties.size);
 }
 
-void MainWindow::ApplyTheme(wxString config){
+void MainWindow::ApplyTheme(wxString config)
+{
     // apply choosen theme.
-    wxXmlDocument * theme = new wxXmlDocument;
+    wxXmlDocument* theme = new wxXmlDocument;
 
-    PropertyData m_mainWindowData = FactoryGetMainWindow()->properties; 
+    PropertyData m_mainWindowData = FactoryGetMainWindow()->properties;
     PropertyData m_botNameDisplayData = FactoryGetLeftBotInfo()->GetBotNameDisplay()->properties;
-    PropertyData m_registerDisplayData = FactoryGetLeftRegisterDisplay()->properties;    
+    PropertyData m_registerDisplayData = FactoryGetLeftRegisterDisplay()->properties;
     PropertyData m_instructionDisplayData = FactoryGetLeftInstructionDisplay()->properties;
     PropertyData m_arenaTerminalData = FactoryGetMiddlePanel()->GetArena()->properties;
 
@@ -152,5 +157,3 @@ void MainWindow::ApplyTheme(wxString config){
 
     delete theme;
 }
-
-
