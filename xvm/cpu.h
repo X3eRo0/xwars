@@ -2,15 +2,15 @@
 // Created by X3eRo0 on 4/15/2021.
 //
 
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <sys/socket.h>
 #include "../common/const.h"
 #include "../common/loader.h"
+#include <arpa/inet.h>
+#include <fcntl.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #ifndef XVM_CPU_H
 #define XVM_CPU_H
@@ -91,35 +91,33 @@ typedef enum {
     XVM_PTRD,
 } xvm_modes;
 
-
 typedef struct xvm_flags_t {
     u8 flags;
 } xvm_flags;
 
 typedef struct xvm_cpu_t {
-    xvm_reg    regs;
+    xvm_reg regs;
     xvm_flags flags;
-    signal_report *  errors;
+    signal_report* errors;
 } xvm_cpu;
 
-void reset_reg(xvm_reg * regs);
-xvm_cpu * init_xvm_cpu();
+void reset_reg(xvm_reg* regs);
+xvm_cpu* init_xvm_cpu();
 u8 get_RF(xvm_cpu* cpu);
 u8 get_CF(xvm_cpu* cpu);
 u8 get_ZF(xvm_cpu* cpu);
 u8 set_RF(xvm_cpu* cpu, u8 bit);
 u8 set_CF(xvm_cpu* cpu, u8 bit);
 u8 set_ZF(xvm_cpu* cpu, u8 bit);
-u32 get_argument(xvm_cpu *cpu, xvm_bin *bin, u8 mode, u32 **arg1, u32 **arg2);
-u32 *get_register(xvm_cpu* cpu, u8 reg_id);
-u32  do_execute(xvm_cpu* cpu, xvm_bin* bin);
-u32  do_syscall(xvm_cpu* cpu, xvm_bin* bin);
-void cpu_error(u32 error, char *msg, u32 addr);
+u32 get_argument(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32** arg2);
+u32* get_register(xvm_cpu* cpu, u8 reg_id);
+u32 do_execute(xvm_cpu* cpu, xvm_bin* bin);
+u32 do_syscall(xvm_cpu* cpu, xvm_bin* bin);
+void cpu_error(u32 error, char* msg, u32 addr);
 void fde_cpu(xvm_cpu* cpu, xvm_bin* bin);
 void show_registers(xvm_cpu* cpu, xvm_bin* bin);
-void update_flags(xvm_cpu * cpu, u32 res);
-void fini_xvm_cpu(xvm_cpu * cpu);
+void update_flags(xvm_cpu* cpu, u32 res);
+void fini_xvm_cpu(xvm_cpu* cpu);
 u32 signal_abort(signal_report* err, xvm_cpu* cpu);
 
-
-#endif //XVM_CPU_H
+#endif // XVM_CPU_H

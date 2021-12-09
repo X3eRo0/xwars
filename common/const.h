@@ -6,19 +6,19 @@
 #define XVM_CONST_H
 
 #include <stdint.h>
-#include <string.h>
-#include  <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-#define XVM_MAGIC       0x036d7678 // "xvm\x03"
-#define XVM_DFLT_EP     0x13371000
-#define XVM_DFLT_DP     0x1337F000
-#define XVM_DFLT_SP     0xCAFE3ffc
-#define XVM_STACK_SIZE  0x3000
-#define XVM_HDR_SIZE    0x14
+#define XVM_MAGIC 0x036d7678 // "xvm\x03"
+#define XVM_DFLT_EP 0x13371000
+#define XVM_DFLT_DP 0x1337F000
+#define XVM_DFLT_SP 0xCAFE3ffc
+#define XVM_STACK_SIZE 0x3000
+#define XVM_HDR_SIZE 0x14
 
-#define E_OK		 0
-#define E_ERR		(-1)
+#define E_OK 0
+#define E_ERR (-1)
 
 typedef enum {
 
@@ -115,18 +115,18 @@ typedef enum {
     XVM_OP_RJBE,
 } xvm_opcodes;
 
-#define KNRM  "\x1B[0m"
-#define KRED  "\x1B[31m"
-#define KGRN  "\x1B[32m"
-#define KYEL  "\x1B[33m"
-#define KBLU  "\x1B[34m"
-#define KMAG  "\x1B[35m"
-#define KCYN  "\x1B[36m"
-#define KWHT  "\x1B[37m"
+#define KNRM "\x1B[0m"
+#define KRED "\x1B[31m"
+#define KGRN "\x1B[32m"
+#define KYEL "\x1B[33m"
+#define KBLU "\x1B[34m"
+#define KMAG "\x1B[35m"
+#define KCYN "\x1B[36m"
+#define KWHT "\x1B[37m"
 
-typedef uint8_t  u8;
+typedef uint8_t u8;
 typedef uint16_t u16;
 typedef uint32_t u32;
 typedef uint64_t u64;
 
-#endif //XVM_CONST_H
+#endif // XVM_CONST_H

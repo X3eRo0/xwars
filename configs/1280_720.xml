@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ThemeRoot>
+  <MainWindow>
+    <Font Size="12" Family="wxFONTFAMILY_TELETYPE" Style="wxFONTSTYLE_NORMAL" Weight="wxFONTWEIGHT_LIGHT"/>
+    <Colour BackgroundColour="rgb(26, 95, 180)" ForegroundColour="white"/>
+    <Size Width="1366" Height="720"/>
+  </MainWindow>
+  <BotNameDisplay>
+    <Font Size="20" Family="wxFONTFAMILY_TELETYPE" Style="wxFONTSTYLE_NORMAL" Weight="wxFONTWEIGHT_NORMAL"/>
+    <Colour BackgroundColour="black" ForegroundColour="rgb(248, 228, 92)"/>
+  </BotNameDisplay>
+  <RegisterDisplay>
+    <Font Size="8" Family="wxFONTFAMILY_TELETYPE" Style="wxFONTSTYLE_NORMAL" Weight="wxFONTWEIGHT_NORMAL"/>
+    <Colour BackgroundColour="rgb(32, 16, 32)" ForegroundColour="rgb(237, 51, 59)"/>
+  </RegisterDisplay>
+  <InstructionDisplay>
+    <Font Size="8" Family="wxFONTFAMILY_TELETYPE" Style="wxFONTSTYLE_NORMAL" Weight="wxFONTWEIGHT_NORMAL"/>
+    <Colour BackgroundColour="black" ForegroundColour="rgb(53, 132, 228)"/>
+  </InstructionDisplay>
+  <ArenaTerminal>
+    <Font Size="10" Family="wxFONTFAMILY_TELETYPE" Style="wxFONTSTYLE_NORMAL" Weight="wxFONTWEIGHT_NORMAL"/>
+    <Colour BackgroundColour="rgb(36, 31, 49)" ForegroundColour="rgb(38, 162, 105)"/>
+  </ArenaTerminal>
+</ThemeRoot>

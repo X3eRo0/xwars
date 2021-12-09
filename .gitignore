@@ -4,4 +4,16 @@
 /build/
 /.idea
 /pygui/__pycache__
+/.cache/
 *.swp
+.cache/
+/game/GTAGS
+/game/GPATH
+/game/GRTAGS
+GTAGS
+GPATH
+GRTAGS
+.gdb_history
+*.hpp~
+*.cpp~
+*~

@@ -1,9 +1,6 @@
-.section .init #0x401000 #0x100 rwx
-_start:
-	ret
-
 .section .bot #0x402000 #0x100 rwx
 
+_start:
 lea $r9, [$pc]
 lea $ra, [$r9+#0x80]
 mov $rb, $r9
