@@ -4,33 +4,33 @@
 #include <time.h>
 
 #ifdef __cplusplus
-    extern "C" {
+extern "C" {
 #endif
 
-#include "../xvm/cpu.h"
 #include "../xasm/xasm.h"
+#include "../xvm/cpu.h"
 
 #ifdef __cplusplus
-    }
+}
 #endif
 
 #include "Common.hpp"
 
 // xbot
-struct xbot{
-    xbot();     // init_xbot()
-    ~xbot();    // fini_xbot()
+struct xbot {
+    xbot(); // init_xbot()
+    ~xbot(); // fini_xbot()
 
     // add a new section to this bot
     // this will load them at random memory locations
-    void add_section(section_entry *sxn);
+    void add_section(section_entry* sxn);
 
     // execute next instruction
     u32 step();
 
     std::string botname; // unique name of this bot
-    xvm_cpu *cpu;
-    xvm_bin *bin;
+    xvm_cpu* cpu;
+    xvm_bin* bin;
     u32 init_addr;
     u32 bot_addr;
     u32 offset;
@@ -38,7 +38,7 @@ struct xbot{
     section_entry* bot_section;
     i32 reg_pipes[2];
     i32 dis_pipes[2];
-    FILE * reg_reader_e, * reg_writer_e, * dis_reader_e, * dis_writer_e;
+    FILE *reg_reader_e, *reg_writer_e, *dis_reader_e, *dis_writer_e;
 };
 
 // u32   step(xbot* bot);
@@ -48,4 +48,4 @@ struct xbot{
 // u32   dump_reg(xbot* bot1, xbot* bot2);
 // u32   dump_dis(xbot* bot1, xbot* bot2);
 
-#endif//XVM_ARENA_XBOT_HPP
+#endif // XVM_ARENA_XBOT_HPP

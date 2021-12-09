@@ -1,7 +1,8 @@
 #include "XBot.hpp"
 
 // initialize xbot
-xbot::xbot(){
+xbot::xbot()
+{
     cpu = init_xvm_cpu();
     bin = init_xvm_bin();
     bot_addr = 0;
@@ -11,35 +12,42 @@ xbot::xbot(){
     pipe(reg_pipes);
     pipe(dis_pipes);
 
-    reg_reader_e = fdopen(reg_pipes[0], "r"); setbuf(reg_reader_e, NULL); 
-    reg_writer_e = fdopen(reg_pipes[1], "w"); setbuf(reg_writer_e, NULL);
-    dis_reader_e = fdopen(dis_pipes[0], "r"); setbuf(dis_reader_e, NULL);
-    dis_writer_e = fdopen(dis_pipes[1], "w"); setbuf(dis_writer_e, NULL);
-    
-    if (!reg_reader_e || !reg_writer_e || !dis_reader_e || !dis_writer_e){
+    reg_reader_e = fdopen(reg_pipes[0], "r");
+    setbuf(reg_reader_e, NULL);
+    reg_writer_e = fdopen(reg_pipes[1], "w");
+    setbuf(reg_writer_e, NULL);
+    dis_reader_e = fdopen(dis_pipes[0], "r");
+    setbuf(dis_reader_e, NULL);
+    dis_writer_e = fdopen(dis_pipes[1], "w");
+    setbuf(dis_writer_e, NULL);
+
+    if (!reg_reader_e || !reg_writer_e || !dis_reader_e || !dis_writer_e) {
         puts("[!] Failed to allocate pipes for bot");
     }
 }
 
 // bot destructor
-xbot::~xbot(){
-    if (cpu != nullptr) fini_xvm_cpu(cpu);
-    if (bin) fini_xvm_bin(bin);
+xbot::~xbot()
+{
+    if (cpu != nullptr)
+        fini_xvm_cpu(cpu);
+    if (bin)
+        fini_xvm_bin(bin);
 }
 
 // add a new section to this bot
-void xbot::add_section(section_entry* sxn){
-    section_entry *tmp_sxn = bin->x_section->sections;
-    while (tmp_sxn->next != NULL){
+void xbot::add_section(section_entry* sxn)
+{
+    section_entry* tmp_sxn = bin->x_section->sections;
+    while (tmp_sxn->next != NULL) {
         tmp_sxn = tmp_sxn->next;
     }
-        
+
     tmp_sxn->next = sxn;
     bin->x_section->n_sections++;
 }
 
 u32 xbot::step() { return do_execute(cpu, bin); }
-
 
 // // xlog is writing to logfifo2
 // // logfifo2 is writable only
@@ -97,4 +105,3 @@ u32 xbot::step() { return do_execute(cpu, bin); }
 
 //     return E_OK;
 // }
-

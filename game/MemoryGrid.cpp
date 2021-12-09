@@ -20,7 +20,8 @@ MemoryGrid::MemoryGrid(wxWindow* parent)
     }
 }
 
-void MemoryGrid::UpdateGrid(){
+void MemoryGrid::UpdateGrid()
+{
     for (size_t i = 0; i < NUM_ROWS_IN_MEM_GRID * NUM_COLS_IN_MEM_GRID; i++) {
         // calculate coordinates in mem grid
         size_t x = i / NUM_COLS_IN_MEM_GRID;
@@ -67,8 +68,9 @@ void MemoryGrid::UpdateGrid(){
     }
 }
 
-void MemoryGrid::ClearGrid(){
-    for(size_t i = 0; i < NUM_ROWS_IN_MEM_GRID * NUM_COLS_IN_MEM_GRID; i++){
+void MemoryGrid::ClearGrid()
+{
+    for (size_t i = 0; i < NUM_ROWS_IN_MEM_GRID * NUM_COLS_IN_MEM_GRID; i++) {
         // calculate coordinates in mem grid
         size_t x = i / NUM_COLS_IN_MEM_GRID;
         size_t y = i - x * NUM_COLS_IN_MEM_GRID;

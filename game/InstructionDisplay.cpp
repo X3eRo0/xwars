@@ -6,7 +6,6 @@
  * @date 2021-10-09
  */
 
-
 #include "InstructionDisplay.hpp"
 #include <limits>
 #include <wx/event.h>
@@ -14,8 +13,9 @@
 #include <wx/stream.h>
 #include <wx/stringimpl.h>
 
-
-InstructionDisplay::InstructionDisplay(wxWindow* parent) : wxPanel(parent){
+InstructionDisplay::InstructionDisplay(wxWindow* parent)
+    : wxPanel(parent)
+{
     // change background colour
     SetBackgroundColour(m_bgColor);
 
@@ -35,8 +35,8 @@ InstructionDisplay::InstructionDisplay(wxWindow* parent) : wxPanel(parent){
 
     // create area to display instructions
     m_displayTextCtrl = new wxTextCtrl(m_parentBox, wxID_ANY, wxEmptyString,
-				       wxDefaultPosition, wxDefaultSize,
-				       wxTE_MULTILINE);
+        wxDefaultPosition, wxDefaultSize,
+        wxTE_MULTILINE);
     m_displayTextCtrl->SetBackgroundColour(m_displayBGColour);
     m_displayTextCtrl->SetForegroundColour(m_displayFGColour);
     m_displayTextCtrl->SetFont(m_displayFont);
@@ -44,7 +44,8 @@ InstructionDisplay::InstructionDisplay(wxWindow* parent) : wxPanel(parent){
     m_parentBoxSizer->Add(m_displayTextCtrl, 1, wxEXPAND | wxALL);
 }
 
-void InstructionDisplay::UpdateSelf(){
+void InstructionDisplay::UpdateSelf()
+{
     m_displayTextCtrl->SetBackgroundColour(properties.bgColour);
     m_displayTextCtrl->SetForegroundColour(properties.fgColour);
     m_displayTextCtrl->SetFont(properties.GetFont());

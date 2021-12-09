@@ -9,22 +9,23 @@
 #define XVM_ARENA_SETTINGS_DIALOG_HPP
 
 #include "Common.hpp"
+#include "PropertyDisplay.hpp"
 #include <wx/event.h>
 #include <wx/sizer.h>
 #include <wx/types.h>
-#include "PropertyDisplay.hpp"
 
-class SettingsDialog : public wxDialog{
+class SettingsDialog : public wxDialog {
 public:
-    SettingsDialog(wxWindow *parent = nullptr, wxWindowID id= wxID_ANY,
-		   const wxString& name = "Settings - XVM - XWars",
-		   const wxPoint& pos = wxDefaultPosition,
-		   const wxSize& size = wxSize(600, 500));
-    
+    SettingsDialog(wxWindow* parent = nullptr, wxWindowID id = wxID_ANY,
+        const wxString& name = "Settings - XVM - XWars",
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxSize(600, 500));
+
     DECLARE_EVENT_TABLE();
+
 private:
     void UpdateDataFromDisplay();
-    
+
     // event handlers
     void OnImportBtnClicked(wxCommandEvent& e);
     void OnExportBtnClicked(wxCommandEvent& e);
@@ -32,17 +33,16 @@ private:
     void OnApplyBtnClicked(wxCommandEvent& e);
     void OnCancelBtnClicked(wxCommandEvent& e);
     void OnWidgetTypeChanged(wxCommandEvent& e);
-    
-    wxBoxSizer *m_mainSizer;
-    wxComboBox *m_widgetTypeSelector;
-    PropertiesDisplay *m_propertiesDisplay;
+
+    wxBoxSizer* m_mainSizer;
+    wxComboBox* m_widgetTypeSelector;
+    PropertiesDisplay* m_propertiesDisplay;
     PropertyData m_mainWindowData, m_botNameDisplayData,
-	m_registerDisplayData, m_instructionDisplayData, m_arenaTerminalData;
-    wxPanel *m_bottomPanel;
-    wxBoxSizer *m_bottomPanelSizer;
+        m_registerDisplayData, m_instructionDisplayData, m_arenaTerminalData;
+    wxPanel* m_bottomPanel;
+    wxBoxSizer* m_bottomPanelSizer;
     wxButton *m_exportBtn, *m_importBtn, *m_okBtn, *m_applyBtn, *m_cancelBtn;
     wxColour m_btnBGColor = wxColour(16, 16, 16);
 };
 
-
-#endif//XVM_ARENA_SETTINGS_DIALOG_HPP
+#endif // XVM_ARENA_SETTINGS_DIALOG_HPP

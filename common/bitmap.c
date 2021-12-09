@@ -57,11 +57,13 @@ void set_current_bitmap_bot(u8 botid)
     bot_id = botid;
 }
 
-u8 check_oprn_valid(u8 oprn){
+u8 check_oprn_valid(u8 oprn)
+{
     return (oprn & 0x7) != 0;
 }
 
-void clear_bitmap(){
+void clear_bitmap()
+{
     memset(bitmap, 0, sizeof(bitmap));
 }
 

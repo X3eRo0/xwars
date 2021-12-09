@@ -3,14 +3,14 @@
 //
 
 #ifdef __cplusplus
-    extern "C" {
+extern "C" {
 #endif
 
 #include "signals.h"
 
-
-u32 raise_signal(signal_report* err, u32 signal_id, u32 error_addr, u32 error_misc){
-    if (err != NULL){
+u32 raise_signal(signal_report* err, u32 signal_id, u32 error_addr, u32 error_misc)
+{
+    if (err != NULL) {
         err->signal_id = signal_id;
         err->error_addr = error_addr;
         err->error_misc = error_misc;
@@ -21,5 +21,5 @@ u32 raise_signal(signal_report* err, u32 signal_id, u32 error_addr, u32 error_mi
 }
 
 #ifdef __cplusplus
-    }
+}
 #endif

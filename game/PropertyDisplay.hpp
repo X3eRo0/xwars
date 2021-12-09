@@ -15,9 +15,9 @@
 #include <wx/font.h>
 
 // this will show the actual properties on the screen.
-class PropertiesDisplay : public wxPanel{
+class PropertiesDisplay : public wxPanel {
 public:
-    PropertiesDisplay(wxWindow *parent);
+    PropertiesDisplay(wxWindow* parent);
 
     // update display with given data
     void UpdateDisplay(const PropertyData& data);
@@ -35,15 +35,16 @@ public:
     wxSize GetSelectedSize() const;
 
     wxFont GetFont() const;
-    
+
     // disable size option
     void EnableSizeSelector();
     void DisableSizeSelector();
+
 private:
     PropertyDataWidgets m_widgets;
-    wxBoxSizer* m_mainSizer, *m_fontBoxSizer, *m_colourBoxSizer, *m_sizeBoxSizer;
+    wxBoxSizer *m_mainSizer, *m_fontBoxSizer, *m_colourBoxSizer, *m_sizeBoxSizer;
     wxStaticBox *m_fontBox, *m_colourBox, *m_sizeBox;
     wxColour m_boxBGColour = wxColour(16, 0, 16);
 };
 
-#endif//XVM_ARENA_PROPERTIES_DISPLAY_HPP
+#endif // XVM_ARENA_PROPERTIES_DISPLAY_HPP

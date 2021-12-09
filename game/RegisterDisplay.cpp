@@ -6,14 +6,14 @@
  * @date 2021-10-09
  */
 
-
 #include "RegisterDisplay.hpp"
 #include "Common.hpp"
 #include <wx/sizer.h>
 #include <wx/stringimpl.h>
 
 RegisterDisplay::RegisterDisplay(wxWindow* parent)
-    : wxPanel(parent){
+    : wxPanel(parent)
+{
     // change bg color
     SetBackgroundColour(m_bgColor);
 
@@ -21,7 +21,7 @@ RegisterDisplay::RegisterDisplay(wxWindow* parent)
     m_regGridSizer = new wxGridSizer(6, 3, 1, 1);
 
     // initialize gen purpose regs
-    for(size_t i = 0; i < NUMBER_OF_REGISTERS; i++){
+    for (size_t i = 0; i < NUMBER_OF_REGISTERS; i++) {
         // initialize registers and add to grid sizer
         m_registers[Register::RegisterNames[i]] = new Register(this, Register::RegisterNames[i]);
         m_registers[Register::RegisterNames[i]]->SetBackgroundColour(wxColour(32, 16, 32));
@@ -32,17 +32,19 @@ RegisterDisplay::RegisterDisplay(wxWindow* parent)
 }
 
 // set register value
-void RegisterDisplay::SetRegisterValue(const std::string &regname, const std::string& val){
+void RegisterDisplay::SetRegisterValue(const std::string& regname, const std::string& val)
+{
     m_registers[regname]->SetValue(val);
 }
 
 // update self properties
-void RegisterDisplay::UpdateSelf(){
+void RegisterDisplay::UpdateSelf()
+{
     // change self background
     this->SetBackgroundColour(properties.bgColour);
 
     // change each registers background and properties
-    for(auto& [regname, reg] : m_registers){
+    for (auto& [regname, reg] : m_registers) {
         reg->SetFont(properties.GetFont());
         reg->SetBGColour(properties.bgColour);
         reg->SetFGColour(properties.fgColour);

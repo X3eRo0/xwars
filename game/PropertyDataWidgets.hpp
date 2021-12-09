@@ -13,7 +13,7 @@
 
 // contains widgets for altering properties corresponding to each field
 // in property data struct. This is for ease of use
-struct PropertyDataWidgets{
+struct PropertyDataWidgets {
     u32 GetFontSize();
     wxFontFamily GetFontFamily();
     wxFontStyle GetFontStyle();
@@ -21,14 +21,14 @@ struct PropertyDataWidgets{
     wxColour GetBGColour();
     wxColour GetFGColour();
     u32 GetSize();
-    
-    TextProperty *fontSize;
-    OptionProperty *fontFamily;
-    OptionProperty *fontStyle;
-    OptionProperty *fontWeight;
-    ColourProperty *bgColour;
-    ColourProperty *fgColour;
-    OptionProperty *size;
+
+    TextProperty* fontSize;
+    OptionProperty* fontFamily;
+    OptionProperty* fontStyle;
+    OptionProperty* fontWeight;
+    ColourProperty* bgColour;
+    ColourProperty* fgColour;
+    OptionProperty* size;
 };
 
-#endif//XVM_ARENA_PROPERTY_DATA_WIDGETS_HPP
+#endif // XVM_ARENA_PROPERTY_DATA_WIDGETS_HPP

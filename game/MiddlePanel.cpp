@@ -1,10 +1,12 @@
 #include "MiddlePanel.hpp"
+#include "Arena.hpp"
+#include "MemoryGrid.hpp"
 #include <wx/gdicmn.h>
 #include <wx/sizer.h>
-#include "MemoryGrid.hpp"
-#include "Arena.hpp"
 
-MiddlePanel::MiddlePanel(wxWindow* parent) : wxPanel(parent){
+MiddlePanel::MiddlePanel(wxWindow* parent)
+    : wxPanel(parent)
+{
     // create main sizer to arrage items within
     // this middle panel
     m_mainSizer = new wxBoxSizer(wxVERTICAL);

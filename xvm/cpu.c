@@ -3,36 +3,42 @@
 //
 
 #ifdef __cplusplus
-    extern "C" {
+extern "C" {
 #endif
 
 #include "cpu.h"
 
-void reset_reg(xvm_reg * regs){
+void reset_reg(xvm_reg* regs)
+{
     memset(regs, 0, sizeof(xvm_reg));
     regs->pc = XVM_DFLT_EP;
     regs->sp = XVM_DFLT_SP;
     regs->bp = XVM_DFLT_SP;
 }
 
-void reset_flags(xvm_flags * flags){
+void reset_flags(xvm_flags* flags)
+{
     flags->flags = (1 << XVM_RF);
 }
 
-u8 get_RF(xvm_cpu * cpu){
+u8 get_RF(xvm_cpu* cpu)
+{
     return cpu->flags.flags & (1 << XVM_RF);
 }
 
-u8 get_ZF(xvm_cpu * cpu){
+u8 get_ZF(xvm_cpu* cpu)
+{
     return cpu->flags.flags & (1 << XVM_ZF);
 }
 
-u8 get_CF(xvm_cpu * cpu){
+u8 get_CF(xvm_cpu* cpu)
+{
     return cpu->flags.flags & (1 << XVM_CF);
 }
 
-u8 set_RF(xvm_cpu * cpu, u8 bit){
-    if (bit){
+u8 set_RF(xvm_cpu* cpu, u8 bit)
+{
+    if (bit) {
         cpu->flags.flags |= (1 << XVM_RF);
     } else {
         cpu->flags.flags &= ~(1 << XVM_RF);
@@ -40,8 +46,9 @@ u8 set_RF(xvm_cpu * cpu, u8 bit){
     return cpu->flags.flags & (1 << XVM_RF);
 }
 
-u8 set_ZF(xvm_cpu * cpu, u8 bit){
-    if (bit){
+u8 set_ZF(xvm_cpu* cpu, u8 bit)
+{
+    if (bit) {
         cpu->flags.flags |= (1 << XVM_ZF);
     } else {
         cpu->flags.flags &= ~(1 << XVM_ZF);
@@ -49,8 +56,9 @@ u8 set_ZF(xvm_cpu * cpu, u8 bit){
     return cpu->flags.flags & (1 << XVM_ZF);
 }
 
-u8 set_CF(xvm_cpu * cpu, u8 bit){
-    if (bit){
+u8 set_CF(xvm_cpu* cpu, u8 bit)
+{
+    if (bit) {
         cpu->flags.flags |= (1 << XVM_CF);
     } else {
         cpu->flags.flags &= ~(1 << XVM_CF);
@@ -58,8 +66,9 @@ u8 set_CF(xvm_cpu * cpu, u8 bit){
     return cpu->flags.flags & (1 << XVM_CF);
 }
 
-xvm_cpu * init_xvm_cpu(){
-    xvm_cpu * cpu = (xvm_cpu *)malloc(sizeof(xvm_cpu));
+xvm_cpu* init_xvm_cpu()
+{
+    xvm_cpu* cpu = (xvm_cpu*)malloc(sizeof(xvm_cpu));
     cpu->errors = (signal_report*)calloc(1, sizeof(signal_report));
     reset_reg(&cpu->regs);
     reset_flags(&cpu->flags);
@@ -83,10 +92,11 @@ void show_registers(xvm_cpu* cpu, xvm_bin * bin){
 }
 */
 
-u32 signal_abort(signal_report *err, xvm_cpu* cpu){
-    if (err != NULL){
+u32 signal_abort(signal_report* err, xvm_cpu* cpu)
+{
+    if (err != NULL) {
 
-        if (err->signal_id == NOSIGNAL){
+        if (err->signal_id == NOSIGNAL) {
             return E_OK;
         }
 
@@ -95,38 +105,50 @@ u32 signal_abort(signal_report *err, xvm_cpu* cpu){
         // FILE *fp = fopen("/tmp/xwars_2", "w");
         // setbuf(fp, 0);
 
-        switch(err->signal_id){
-            case XSIGFPE : fprintf(stderr/*fp*/, "[-] Floating point exception (core not dumped)\n"); break;
-            case XSIGILL : fprintf(stderr/*fp*/, "[-] Illegal Instruction (core not dumped)\n"); break;
-            case XSIGTRAP: fprintf(stderr/*fp*/, "[-] Trap/Breakpoint\n"); break;
-            case XSIGSTOP: break;
-            default: fprintf(stderr/*fp*/, "[-] Segmentation Fault (core not dumped)\n"); break;
+        switch (err->signal_id) {
+        case XSIGFPE:
+            fprintf(stderr /*fp*/, "[-] Floating point exception (core not dumped)\n");
+            break;
+        case XSIGILL:
+            fprintf(stderr /*fp*/, "[-] Illegal Instruction (core not dumped)\n");
+            break;
+        case XSIGTRAP:
+            fprintf(stderr /*fp*/, "[-] Trap/Breakpoint\n");
+            break;
+        case XSIGSTOP:
+            break;
+        default:
+            fprintf(stderr /*fp*/, "[-] Segmentation Fault (core not dumped)\n");
+            break;
         }
-        //fclose(fp);
+        // fclose(fp);
     }
     return E_ERR;
 }
 
-void fde_cpu(xvm_cpu *cpu, xvm_bin *bin){
+void fde_cpu(xvm_cpu* cpu, xvm_bin* bin)
+{
     u32 instr_size = 0;
-    while (get_RF(cpu)){
+    while (get_RF(cpu)) {
         // show_registers(cpu, bin);
         instr_size = do_execute(cpu, bin);
-        if (signal_abort(cpu->errors, cpu) == E_ERR){
+        if (signal_abort(cpu->errors, cpu) == E_ERR) {
             return;
         }
-        if (signal_abort(bin->x_section->errors, cpu) == E_ERR){
+        if (signal_abort(bin->x_section->errors, cpu) == E_ERR) {
             return;
         }
     }
 }
 
-void fini_xvm_cpu(xvm_cpu * cpu){
+void fini_xvm_cpu(xvm_cpu* cpu)
+{
     free(cpu->errors);
     memset(cpu, 0, sizeof(xvm_cpu));
-    free(cpu); cpu = NULL;
+    free(cpu);
+    cpu = NULL;
 }
 
 #ifdef __cplusplus
-    }
+}
 #endif

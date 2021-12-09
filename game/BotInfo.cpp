@@ -5,14 +5,14 @@
  * current instruction being executed etc... for each bot.
  * @version 0.1
  * @date 2021-10-09
- * 
+ *
  * @copyright Copyright (c) 2021
- * 
+ *
  */
 
+#include "BotInfo.hpp"
 #include "BotNameDisplay.hpp"
 #include "Common.hpp"
-#include "BotInfo.hpp"
 #include "Factory.hpp"
 #include <chrono>
 #include <cstdio>
@@ -22,7 +22,9 @@
 #include <wx/time.h>
 #include <wx/utils.h>
 
-BotInfo::BotInfo(wxWindow* parent, const std::string& botname, bool left) : wxPanel(parent){
+BotInfo::BotInfo(wxWindow* parent, const std::string& botname, bool left)
+    : wxPanel(parent)
+{
     // create main sizer for our window
     m_mainSizer = new wxBoxSizer(wxVERTICAL);
     this->SetSizer(m_mainSizer);
@@ -30,10 +32,10 @@ BotInfo::BotInfo(wxWindow* parent, const std::string& botname, bool left) : wxPa
     // create register and instruction dislay
     m_botNameDisplay = new BotNameDisplay(this, botname);
 
-    if(left){
+    if (left) {
         m_registerDisplay = FactoryCreateLeftRegisterDisplay(this);
         m_instructionDisplay = FactoryCreateLeftInstructionDisplay(this);
-    }else{
+    } else {
         m_registerDisplay = FactoryCreateRightRegisterDisplay(this);
         m_instructionDisplay = FactoryCreateRightInstructionDisplay(this);
     }
@@ -45,46 +47,50 @@ BotInfo::BotInfo(wxWindow* parent, const std::string& botname, bool left) : wxPa
 }
 
 // change register display text color
-void BotInfo::SetRegisterDisplayFGColour(const wxColour &c){
+void BotInfo::SetRegisterDisplayFGColour(const wxColour& c)
+{
     m_registerDisplayColour = c;
     m_registerDisplay->SetForegroundColour(c);
 }
 
 // change instruction display text color
-void BotInfo::SetInstructionDisplayFGColour(const wxColour &c){
+void BotInfo::SetInstructionDisplayFGColour(const wxColour& c)
+{
     m_instructionDisplayColour = c;
     m_instructionDisplay->SetForegroundColour(c);
 }
 
 // register update event handler
-void BotInfo::UpdateRegisterDisplay(xbot *bot){
-    char * lineptr = NULL;
+void BotInfo::UpdateRegisterDisplay(xbot* bot)
+{
+    char* lineptr = NULL;
     size_t n = 0;
-    FILE * reader = bot->reg_reader_e;
+    FILE* reader = bot->reg_reader_e;
 
-    if (!reader){
+    if (!reader) {
         puts("connection with backend failed [ reader end not visible ]");
         return;
     }
 
     // wxMilliSleep(25);
-    for (i32 i = 0; i < 16; i++){
+    for (i32 i = 0; i < 16; i++) {
         getline(&lineptr, &n, reader);
-        lineptr+=4;
+        lineptr += 4;
         m_registerDisplay->SetRegisterValue(Register::RegisterNames[i], lineptr);
     }
 }
 
 // register update event handler
-void BotInfo::UpdateInstructionDisplay(xbot *bot){
+void BotInfo::UpdateInstructionDisplay(xbot* bot)
+{
     ClearInstructionDisplay();
 
-    char *lineptr = NULL;
+    char* lineptr = NULL;
     size_t n = 0;
 
     // get reader end from bot and check if visible
-    FILE *reader = bot->dis_reader_e;
-    if (!reader){
+    FILE* reader = bot->dis_reader_e;
+    if (!reader) {
         puts("connection with backend failed [ reader end not visible ]");
         return;
     }
@@ -93,25 +99,27 @@ void BotInfo::UpdateInstructionDisplay(xbot *bot){
 
     std::string disassembly = "\n";
     disassembly += "Actual Instruction: ";
-    disassembly += lineptr+16;
+    disassembly += lineptr + 16;
     disassembly += "\n";
     disassembly += lineptr;
 
-    for(size_t i = 0; i < 19; i++){
+    for (size_t i = 0; i < 19; i++) {
         getline(&lineptr, &n, reader);
-        //printf("LineNo: %d\n", ++i);
-	disassembly += lineptr;
+        // printf("LineNo: %d\n", ++i);
+        disassembly += lineptr;
     }
-    
+
     PrintInstruction("%s", disassembly);
     wxTheApp->Yield(false);
     free(lineptr);
 }
 
-void BotInfo::SetBotName(const std::string &name){
+void BotInfo::SetBotName(const std::string& name)
+{
     m_botNameDisplay->SetBotName(name);
 }
 
-BotNameDisplay* BotInfo::GetBotNameDisplay(){
+BotNameDisplay* BotInfo::GetBotNameDisplay()
+{
     return m_botNameDisplay;
 }
