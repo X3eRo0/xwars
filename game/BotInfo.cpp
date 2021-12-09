@@ -31,18 +31,17 @@ BotInfo::BotInfo(wxWindow* parent, const std::string& botname, bool left) : wxPa
     m_botNameDisplay = new BotNameDisplay(this, botname);
 
     if(left){
-	m_registerDisplay = FactoryCreateLeftRegisterDisplay(this);
-	m_instructionDisplay = FactoryCreateLeftInstructionDisplay(this);
-
+        m_registerDisplay = FactoryCreateLeftRegisterDisplay(this);
+        m_instructionDisplay = FactoryCreateLeftInstructionDisplay(this);
     }else{
-	m_registerDisplay = FactoryCreateRightRegisterDisplay(this);
-	m_instructionDisplay = FactoryCreateRightInstructionDisplay(this);
+        m_registerDisplay = FactoryCreateRightRegisterDisplay(this);
+        m_instructionDisplay = FactoryCreateRightInstructionDisplay(this);
     }
-    
+
     // add displays for sizing
     m_mainSizer->Add(m_botNameDisplay, 1, wxEXPAND | wxALL);
     m_mainSizer->Add(m_registerDisplay, 5, wxEXPAND | wxALL, 3);
-    m_mainSizer->Add(m_instructionDisplay, 10, wxEXPAND | wxALL, 3);   
+    m_mainSizer->Add(m_instructionDisplay, 10, wxEXPAND | wxALL, 3);
 }
 
 // change register display text color
@@ -62,23 +61,24 @@ void BotInfo::UpdateRegisterDisplay(xbot *bot){
     char * lineptr = NULL;
     size_t n = 0;
     FILE * reader = bot->reg_reader_e;
-    
+
     if (!reader){
         puts("connection with backend failed [ reader end not visible ]");
         return;
     }
-    
+
     // wxMilliSleep(25);
     for (i32 i = 0; i < 16; i++){
         getline(&lineptr, &n, reader);
-	    lineptr+=4;
-	    m_registerDisplay->SetRegisterValue(Register::RegisterNames[i], lineptr);
+        lineptr+=4;
+        m_registerDisplay->SetRegisterValue(Register::RegisterNames[i], lineptr);
     }
 }
 
 // register update event handler
 void BotInfo::UpdateInstructionDisplay(xbot *bot){
     ClearInstructionDisplay();
+
     char *lineptr = NULL;
     size_t n = 0;
 
@@ -88,7 +88,7 @@ void BotInfo::UpdateInstructionDisplay(xbot *bot){
         puts("connection with backend failed [ reader end not visible ]");
         return;
     }
-    
+
     getline(&lineptr, &n, reader);
 
     std::string disassembly = "\n";

@@ -19,18 +19,18 @@
 class RegisterDisplay : public wxPanel{
 public:
     RegisterDisplay(wxWindow* parent);
-    
+
     void SetRegisterValue(const std::string& regname, const std::string& val);
-    
+
     // properties
     PropertyData properties = PropertyData{
-	.widgetType = WidgetType::RegisterDisplay,
-	.fontSize = 8,
-	.fontFamily = wxFONTFAMILY_MODERN,
-	.fontStyle = wxFONTSTYLE_NORMAL,
-	.fontWeight = wxFONTWEIGHT_NORMAL,
-	.bgColour = wxColour(32, 16, 32),
-	.fgColour = *wxWHITE
+        .widgetType = WidgetType::RegisterDisplay,
+        .fontSize = 8,
+        .fontFamily = wxFONTFAMILY_MODERN,
+        .fontStyle = wxFONTSTYLE_NORMAL,
+        .fontWeight = wxFONTWEIGHT_NORMAL,
+        .bgColour = wxColour(32, 16, 32),
+        .fgColour = *wxWHITE
     };
 
     void UpdateSelf();

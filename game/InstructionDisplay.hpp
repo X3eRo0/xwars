@@ -56,7 +56,7 @@ public:
 
     // clear the instruction display text ctrl
     void ClearDisplay(){
-        m_displayTextCtrl->SetLabelText(wxEmptyString);
+        if(m_displayTextCtrl) m_displayTextCtrl->Clear();
     }
 private:
     wxColour m_bgColor = wxColour(32, 16, 32);
@@ -64,7 +64,7 @@ private:
     wxSizer *m_mainSizer;
     // this box will contain all our objects
     wxStaticBox *m_parentBox;
-    // parent box colour 
+    // parent box colour
     wxColour m_parentBoxFGColour = *wxCYAN;
     // sizer for sizing objects in parent box
     wxBoxSizer *m_parentBoxSizer;

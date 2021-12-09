@@ -13,7 +13,7 @@ MemoryGrid::MemoryGrid(wxWindow* parent)
     for (auto& row : m_memGrid) {
         for (auto& elem : row) {
             elem = new wxStaticText(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(10, 10), wxBORDER_NONE);
-            elem->SetOwnBackgroundColour(m_gridElementColour);
+            elem->SetBackgroundColour(m_gridElementColour);
             elem->SetFont(wxFont(8, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT));
             m_memGridSizer->Add(elem, 1, wxEXPAND | wxALL, 1);
         }
@@ -60,7 +60,7 @@ void MemoryGrid::UpdateGrid(){
                     pm = 'X';
                 }
             }
-            m_memGrid[x][y]->SetForegroundColour(*wxWHITE);
+            // m_memGrid[x][y]->SetForegroundColour(*wxWHITE);
             m_memGrid[x][y]->SetBackgroundColour(colour);
             m_memGrid[x][y]->SetLabelText(pm);
         }

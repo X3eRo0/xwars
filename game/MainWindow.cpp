@@ -35,17 +35,17 @@ MainWindow::MainWindow(wxWindow *parent, wxWindowID id, const wxString &title)
 
     // left panel will show information about bots
     // right panel will show memory space
-    m_lBotInfo = FactoryCreateLeftBotInfo(m_parentPanel, "Khiladi One");
+    m_lBotInfo = FactoryCreateLeftBotInfo(m_parentPanel, "Team Alpha");
     m_midPanel = FactoryCreateMiddlePanel(m_parentPanel);
-    m_rBotInfo = FactoryCreateRightBotInfo(m_parentPanel, "Khiladi Two");
+    m_rBotInfo = FactoryCreateRightBotInfo(m_parentPanel, "Team Beta");
 
     // register the two bot infos to xwars
     // get_xwars_instance()->register_bot_info(m_lBotInfo, m_rBotInfo);
 
     // add these panels to main sizer
-    m_mainHSizer->Add(m_lBotInfo, 3, wxEXPAND | wxALL, 4);
-    m_mainHSizer->Add(m_midPanel, 2, wxEXPAND | wxALL, 4);
-    m_mainHSizer->Add(m_rBotInfo, 3, wxEXPAND | wxALL, 4);
+    m_mainHSizer->Add(m_lBotInfo, 3, wxEXPAND | wxALL);
+    m_mainHSizer->Add(m_midPanel, 2, wxEXPAND | wxALL);
+    m_mainHSizer->Add(m_rBotInfo, 3, wxEXPAND | wxALL);
 
     // set colors for panels to tell them apart
     m_lBotInfo->SetBackgroundColour(*wxBLACK);

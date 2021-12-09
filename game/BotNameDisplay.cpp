@@ -6,22 +6,23 @@ BotNameDisplay::BotNameDisplay(wxWindow* parent, const std::string& botname)
     : wxPanel(parent), m_botname(botname){
     // change background colour
     SetBackgroundColour(properties.bgColour);
-    
+
     // create main sizer for this
     m_mainSizer = new wxBoxSizer(wxHORIZONTAL);
     this->SetSizer(m_mainSizer);
 
     // create botname static text
     m_botnameText = new wxStaticText(this, wxID_ANY, m_botname,
-				     wxDefaultPosition, wxDefaultSize,
-				     wxALIGN_CENTRE);
+                                     wxDefaultPosition, wxDefaultSize,
+                                     wxALIGN_CENTRE);
+
     m_botnameText->SetFont(wxFont(properties.fontSize, properties.fontFamily,
-				  properties.fontStyle, properties.fontWeight));
+                                  properties.fontStyle, properties.fontWeight));
     m_botnameText->SetForegroundColour(properties.fgColour);
-    
+
     // create buttons
     m_rText = new wxStaticText(this, wxID_ANY, "R", wxDefaultPosition,
-			       wxDefaultSize, wxALIGN_CENTRE);
+                               wxDefaultSize, wxALIGN_CENTRE);
     m_rText->SetBackgroundColour(m_rColour);
     m_rText->SetForegroundColour(m_rwxFGColour);
     m_rText->SetFont(m_rwxTextFont);
@@ -31,7 +32,7 @@ BotNameDisplay::BotNameDisplay(wxWindow* parent, const std::string& botname)
     m_wText->SetBackgroundColour(m_wColour);
     m_wText->SetForegroundColour(m_rwxFGColour);
     m_wText->SetFont(m_rwxTextFont);
-    
+
     m_xText = new wxStaticText(this, wxID_ANY, "X", wxDefaultPosition,
 			       wxDefaultSize, wxALIGN_CENTRE);
     m_xText->SetBackgroundColour(m_xColour);
