@@ -3,6 +3,7 @@
 //
 
 #include "bitmap.h"
+#include <string.h>
 
 #if defined(__cplusplus)
 extern "C" {
@@ -57,7 +58,11 @@ void set_current_bitmap_bot(u8 botid)
 }
 
 u8 check_oprn_valid(u8 oprn){
-    return (oprn & 0x7) != 0; 
+    return (oprn & 0x7) != 0;
+}
+
+void clear_bitmap(){
+    memset(bitmap, 0, sizeof(bitmap));
 }
 
 #if defined(__cplusplus)

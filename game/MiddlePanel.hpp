@@ -37,10 +37,9 @@ private:
     // memory grid will display current state of memory and
     // for this we will need a grid sizer to arrange items in grid
     wxGridSizer *m_memGridSizer;
-    
+
     // a memory button is an element in memory grid
     // this will show it's individual status in the grid
-    
 };
 
 #endif//XVM_ARENA_MIDDLE_PANEL_HPP

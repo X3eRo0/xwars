@@ -1,4 +1,5 @@
 #include "Arena.hpp"
+#include "Factory.hpp"
 #include "XWars.hpp"
 #include <algorithm>
 #include <wx/event.h>
@@ -13,6 +14,9 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <stdio.h>
+
+#include "MiddlePanel.hpp"
+#include "MemoryGrid.hpp"
 
 enum xvmArenaButtonIDs{
     ID_LOAD  = wxID_HIGHEST + 1000,
@@ -96,7 +100,7 @@ void Arena::OnLoad(wxCommandEvent& WXUNUSED(event)){
 
     // get the selected directory path
     wxString botFolder = fd->GetPath();
-	LoadBots(botFolder);
+    LoadBots(botFolder);
 }
 
 void Arena::OnStart(wxCommandEvent& WXUNUSED(event)){
@@ -108,32 +112,38 @@ void Arena::OnStart(wxCommandEvent& WXUNUSED(event)){
     m_battleIdx = 0;
     for (u32 i = 0; i < bots.size() - 1; i++){
         for (u32 j = i+1; j < bots.size(); j++){
-			m_battlePairs.push_back({i, j});
+            m_battlePairs.push_back({i, j});
         }
     }
     //wxPuts("Generated BattlePairs");
+
+    // clear memory grid
+    FactoryGetMiddlePanel()->GetMemoryGrid()->ClearGrid();
 
     // do first battle
     const std::pair<int, int>& botpair = m_battlePairs[m_battleIdx++];
     if(get_xwars_instance()->battle_init(bots[botpair.first],
 					 bots[botpair.second])){
-		m_iterTimer.Start(m_iterWaitTime);
+        m_iterTimer.Start(m_iterWaitTime);
     }
 }
 
 void Arena::OnIntervalTimer(wxTimerEvent& e){
     if(m_battleIdx == m_battlePairs.size()){
-		m_intervTimer.Stop();
-		return;
+        m_intervTimer.Stop();
+        return;
     }
 
     // do battle
     const auto& bots = get_xwars_instance()->botpaths;
     const std::pair<int, int>& botpair = m_battlePairs[m_battleIdx++];
 
+    // clear memory grid
+    FactoryGetMiddlePanel()->GetMemoryGrid()->ClearGrid();
+
     // init battle and start iteration timer
     if(get_xwars_instance()->battle_init(bots[botpair.first], bots[botpair.second])){
-		m_iterTimer.Start(m_iterWaitTime);
+        m_iterTimer.Start(m_iterWaitTime);
     }
 }
 
@@ -142,8 +152,8 @@ void Arena::OnIterationTimer(wxTimerEvent& e){
 
     if(!get_xwars_instance()->battle_step()){
         Print("[+] Winner %s in %d instructions\n", get_xwars_instance()->winner.c_str(), get_xwars_instance()->counter);
-		m_iterTimer.Stop();
-		m_intervTimer.Start(m_interWaitTime);
+        m_iterTimer.Stop();
+        m_intervTimer.Start(m_interWaitTime);
     }
 }
 

@@ -20,6 +20,7 @@
 #include <wx/gdicmn.h>
 #include <wx/listctrl.h>
 #include <wx/stream.h>
+#include <wx/stringimpl.h>
 
 class InstructionDisplay : public wxPanel{
 public:
@@ -36,18 +37,18 @@ public:
         // to write things onto the display area            :
         // --------------------------------------------------
         // wxTheApp->SafeYield(GetMainWindow(), false);
-	// wxTheApp->Yield();
+        // wxTheApp->Yield();
     }
 
     // properties
     PropertyData properties = PropertyData{
-	.widgetType = WidgetType::InstructionDisplay,
-	.fontSize = 8,
-	.fontFamily = wxFONTFAMILY_MODERN,
-	.fontStyle = wxFONTSTYLE_NORMAL,
-	.fontWeight = wxFONTWEIGHT_NORMAL,
-	.bgColour = *wxBLACK,
-	.fgColour = *wxGREEN
+        .widgetType = WidgetType::InstructionDisplay,
+        .fontSize = 8,
+        .fontFamily = wxFONTFAMILY_MODERN,
+        .fontStyle = wxFONTSTYLE_NORMAL,
+        .fontWeight = wxFONTWEIGHT_NORMAL,
+        .bgColour = *wxBLACK,
+        .fgColour = *wxGREEN
     };
 
     // update theme after changing properties to take effect
@@ -55,7 +56,7 @@ public:
 
     // clear the instruction display text ctrl
     void ClearDisplay(){
-        m_displayTextCtrl->Clear();
+        m_displayTextCtrl->SetLabelText(wxEmptyString);
     }
 private:
     wxColour m_bgColor = wxColour(32, 16, 32);

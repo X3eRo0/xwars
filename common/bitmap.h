@@ -33,6 +33,7 @@ void set_current_bitmap_bot(u8 botid);
 
 u8 check_oprn_valid(u8 oprn);
 
+void clear_bitmap();
 
 #if defined(__cplusplus)
 }

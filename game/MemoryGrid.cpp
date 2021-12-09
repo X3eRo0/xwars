@@ -1,5 +1,6 @@
 #include "MemoryGrid.hpp"
 #include "../common/bitmap.h"
+#include <wx/stringimpl.h>
 
 MemoryGrid::MemoryGrid(wxWindow* parent)
     : wxPanel(parent)
@@ -19,8 +20,7 @@ MemoryGrid::MemoryGrid(wxWindow* parent)
     }
 }
 
-void MemoryGrid::UpdateGrid()
-{
+void MemoryGrid::UpdateGrid(){
     for (size_t i = 0; i < NUM_ROWS_IN_MEM_GRID * NUM_COLS_IN_MEM_GRID; i++) {
         // calculate coordinates in mem grid
         size_t x = i / NUM_COLS_IN_MEM_GRID;
@@ -65,4 +65,17 @@ void MemoryGrid::UpdateGrid()
             m_memGrid[x][y]->SetLabelText(pm);
         }
     }
+}
+
+void MemoryGrid::ClearGrid(){
+    for(size_t i = 0; i < NUM_ROWS_IN_MEM_GRID * NUM_COLS_IN_MEM_GRID; i++){
+        // calculate coordinates in mem grid
+        size_t x = i / NUM_COLS_IN_MEM_GRID;
+        size_t y = i - x * NUM_COLS_IN_MEM_GRID;
+
+        m_memGrid[x][y]->SetLabelText(wxEmptyString);
+        m_memGrid[x][y]->SetBackgroundColour(m_gridElementColour);
+    }
+
+    clear_bitmap();
 }

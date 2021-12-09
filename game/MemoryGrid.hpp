@@ -18,6 +18,9 @@ public:
 
     // update element of memory grid
     void UpdateGrid();
+
+    // clears the grid whenever called
+    void ClearGrid();
 private:
     // bot1 read/write/execute colours
     wxColour bot1ReadColour = wxColour(0, 255, 255);  // cyan
@@ -33,7 +36,7 @@ private:
     wxGridSizer *m_memGridSizer = nullptr;
 
     // colour for our item in grid
-    wxColour m_gridElementColour = *wxColour(128, 128, 128);
+    wxColour m_gridElementColour = wxColour(128, 128, 128);
 
     // our memory grid
     std::array<std::array<wxStaticText*, NUM_COLS_IN_MEM_GRID>, NUM_ROWS_IN_MEM_GRID> m_memGrid;
