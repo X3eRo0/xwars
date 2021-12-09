@@ -7,12 +7,13 @@
 //                    CHECK "diff" to see changes. Build Tested! Works!
 //     reason : ISO C++11 forbids using char* as string
 
+#include "const.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "sections.h"
 #include "bitmap.h"
+#include "sections.h"
 
 section_entry* init_section_entry()
 {
@@ -40,6 +41,18 @@ u32* get_reference(section* sec, u32 addr, u8 opt_perm)
             raise_signal(sec->errors, XSIGSEGV, addr, 0);
             // segfault(XSIGSEGV, sec_entry, addr);
         }
+        u8 oprn = 0;
+        if (opt_perm == PERM_EXEC) {
+            oprn = make_oprn(get_current_bitmap_bot(), oprn_x);
+        } else if (opt_perm == PERM_READ) {
+            oprn = make_oprn(get_current_bitmap_bot(), oprn_r);
+        } else if (opt_perm == PERM_WRITE) {
+            oprn = make_oprn(get_current_bitmap_bot(), oprn_w);
+        }
+        set_oprn_at_idx(addr - sec_entry->v_addr, oprn);
+        set_oprn_at_idx(addr + 1 - sec_entry->v_addr, oprn);
+        set_oprn_at_idx(addr + 2 - sec_entry->v_addr, oprn);
+        set_oprn_at_idx(addr + 3 - sec_entry->v_addr, oprn);
         return ((u32*)&sec_entry->m_buff[addr - sec_entry->v_addr]);
     }
 
@@ -57,7 +70,12 @@ u8 read_byte(section* sec, u32 addr, u8 opt_perm)
             raise_signal(sec->errors, XSIGSEGV, addr, 0);
             // segfault(XSIGSEGV, sec_entry, addr);
         }
-        u8 oprn = make_oprn(get_current_bitmap_bot(), PERM_READ);
+        u8 oprn = 0;
+        if (opt_perm == PERM_EXEC) {
+            oprn = make_oprn(get_current_bitmap_bot(), oprn_x);
+        } else {
+            oprn = make_oprn(get_current_bitmap_bot(), oprn_r);
+        }
         set_oprn_at_idx(addr - sec_entry->v_addr, oprn);
         return (u8) * ((u8*)&sec_entry->m_buff[addr - sec_entry->v_addr]);
     }
@@ -75,7 +93,12 @@ u16 read_word(section* sec, u32 addr, u8 opt_perm)
             raise_signal(sec->errors, XSIGSEGV, addr, 0);
             // segfault(XSIGSEGV, sec_entry, addr);
         }
-        u8 oprn = make_oprn(get_current_bitmap_bot(), PERM_READ);
+        u8 oprn = 0;
+        if (opt_perm == PERM_EXEC) {
+            oprn = make_oprn(get_current_bitmap_bot(), oprn_x);
+        } else {
+            oprn = make_oprn(get_current_bitmap_bot(), oprn_r);
+        }
         set_oprn_at_idx(addr - sec_entry->v_addr, oprn);
         set_oprn_at_idx(addr + 1 - sec_entry->v_addr, oprn);
         return (u16) * ((u16*)&sec_entry->m_buff[addr - sec_entry->v_addr]);
@@ -95,7 +118,12 @@ u32 read_dword(section* sec, u32 addr, u8 opt_perm)
             raise_signal(sec->errors, XSIGSEGV, addr, 0);
             // segfault(XSIGSEGV, sec_entry, addr);
         }
-        u8 oprn = make_oprn(get_current_bitmap_bot(), PERM_READ);
+        u8 oprn = 0;
+        if (opt_perm == PERM_EXEC) {
+            oprn = make_oprn(get_current_bitmap_bot(), oprn_x);
+        } else {
+            oprn = make_oprn(get_current_bitmap_bot(), oprn_r);
+        }
         set_oprn_at_idx(addr - sec_entry->v_addr, oprn);
         set_oprn_at_idx(addr + 1 - sec_entry->v_addr, oprn);
         set_oprn_at_idx(addr + 2 - sec_entry->v_addr, oprn);
@@ -197,6 +225,8 @@ u32 write_byte(section* sec, u32 addr, u8 byte)
             raise_signal(sec->errors, XSIGSEGV, addr, 0);
             // segfault(XSIGSEGV, sec_entry, addr);
         }
+        u8 oprn = make_oprn(get_current_bitmap_bot(), PERM_WRITE);
+        set_oprn_at_idx(addr - sec_entry->v_addr, oprn);
         *((u8*)&sec_entry->m_buff[addr - sec_entry->v_addr]) = byte;
         return sizeof(u8);
     }
@@ -215,6 +245,9 @@ u32 write_word(section* sec, u32 addr, u16 word)
             raise_signal(sec->errors, XSIGSEGV, addr, 0);
             // segfault(XSIGSEGV, sec_entry, addr);
         }
+        u8 oprn = make_oprn(get_current_bitmap_bot(), PERM_WRITE);
+        set_oprn_at_idx(addr - sec_entry->v_addr, oprn);
+        set_oprn_at_idx(addr + 1 - sec_entry->v_addr, oprn);
         *((u16*)&sec_entry->m_buff[addr - sec_entry->v_addr]) = word;
         return sizeof(u16);
     }
@@ -233,6 +266,12 @@ u32 write_dword(section* sec, u32 addr, u32 dword)
             raise_signal(sec->errors, XSIGSEGV, addr, 0);
             // segfault(XSIGSEGV, sec_entry, addr);
         }
+        u8 oprn = make_oprn(get_current_bitmap_bot(), PERM_WRITE);
+        set_oprn_at_idx(addr - sec_entry->v_addr, oprn);
+        set_oprn_at_idx(addr + 1 - sec_entry->v_addr, oprn);
+        set_oprn_at_idx(addr + 2 - sec_entry->v_addr, oprn);
+        set_oprn_at_idx(addr + 3 - sec_entry->v_addr, oprn);
+
         *((u32*)&sec_entry->m_buff[addr - sec_entry->v_addr]) = dword;
         return sizeof(u32);
     }
