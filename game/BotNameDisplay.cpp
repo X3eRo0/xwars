@@ -28,13 +28,13 @@ BotNameDisplay::BotNameDisplay(wxWindow* parent, const std::string& botname)
     m_rText->SetFont(m_rwxTextFont);
 
     m_wText = new wxStaticText(this, wxID_ANY, "W", wxDefaultPosition,
-			       wxDefaultSize, wxALIGN_CENTRE);
+                               wxDefaultSize, wxALIGN_CENTRE);
     m_wText->SetBackgroundColour(m_wColour);
     m_wText->SetForegroundColour(m_rwxFGColour);
     m_wText->SetFont(m_rwxTextFont);
 
     m_xText = new wxStaticText(this, wxID_ANY, "X", wxDefaultPosition,
-			       wxDefaultSize, wxALIGN_CENTRE);
+                               wxDefaultSize, wxALIGN_CENTRE);
     m_xText->SetBackgroundColour(m_xColour);
     m_xText->SetForegroundColour(m_rwxFGColour);
     m_xText->SetFont(m_rwxTextFont);

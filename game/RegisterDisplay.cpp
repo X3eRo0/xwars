@@ -4,9 +4,6 @@
  * @brief This panel will show current state of registers for the given bot.
  * @version 0.1
  * @date 2021-10-09
- * 
- * @copyright Copyright (c) 2021
- * 
  */
 
 
@@ -42,7 +39,7 @@ void RegisterDisplay::SetRegisterValue(const std::string &regname, const std::st
 // update self properties
 void RegisterDisplay::UpdateSelf(){
     // change self background
-    m_parentBox->SetBackgroundColour(properties.bgColour);
+    this->SetBackgroundColour(properties.bgColour);
 
     // change each registers background and properties
     for(auto& [regname, reg] : m_registers){
