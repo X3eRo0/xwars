@@ -26,21 +26,11 @@ public:
     void ClearGrid();
 
 private:
-    // bot1 read/write/execute colours
-    wxColour bot1ReadColour = wxColour(0, 255, 255); // cyan
-    wxColour bot1WriteColour = wxColour(255, 192, 203); // pink
-    wxColour bot1ExecColour = wxColour(0, 0, 255); // blue
-
-    // bot2 read/write/execute colors
-    wxColour bot2ReadColour = wxColour(255, 255, 0); // yellow
-    wxColour bot2WriteColour = wxColour(255, 165, 0); // orange
-    wxColour bot2ExecColour = wxColour(255, 0, 0); // red
-
     // sizer to arrange our memory grid
     wxGridSizer* m_memGridSizer = nullptr;
 
     // colour for our item in grid
-    wxColour m_gridElementColour = wxColour(128, 128, 128);
+    wxColour m_gridElementColour = wxColour(0, 0, 0);
 
     // our memory grid
     std::array<std::array<wxStaticText*, NUM_COLS_IN_MEM_GRID>, NUM_ROWS_IN_MEM_GRID> m_memGrid;

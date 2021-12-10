@@ -39,30 +39,30 @@ void MemoryGrid::UpdateGrid()
             /* printf("bot_id: %d\n", bot_id); */
             if (bot_id) {
                 if (pm_read) {
-                    colour = bot1ReadColour;
+                    colour = GetBot1ReadColour();
                     pm = 'R';
                 } else if (pm_write) {
-                    colour = bot1WriteColour;
+                    colour = GetBot1WriteColour();
                     pm = 'W';
                 } else {
-                    colour = bot1ExecColour;
+                    colour = GetBot1ExecColour();
                     pm = 'X';
                 }
 
             } else {
                 if (pm_read) {
-                    colour = bot2ReadColour;
+                    colour = GetBot2ReadColour();
                     pm = 'R';
                 } else if (pm_write) {
-                    colour = bot2WriteColour;
+                    colour = GetBot2WriteColour();
                     pm = 'W';
                 } else {
-                    colour = bot2ExecColour;
+                    colour = GetBot2ExecColour();
                     pm = 'X';
                 }
             }
-            // m_memGrid[x][y]->SetForegroundColour(*wxWHITE);
-            m_memGrid[x][y]->SetBackgroundColour(colour);
+            m_memGrid[x][y]->SetForegroundColour(colour);
+//            m_memGrid[x][y]->SetBackgroundColour(colour);
             m_memGrid[x][y]->SetLabelText(pm);
         }
     }
@@ -76,7 +76,7 @@ void MemoryGrid::ClearGrid()
         size_t y = i - x * NUM_COLS_IN_MEM_GRID;
 
         m_memGrid[x][y]->SetLabelText(wxEmptyString);
-        m_memGrid[x][y]->SetBackgroundColour(m_gridElementColour);
+        // m_memGrid[x][y]->SetBackgroundColour(m_gridElementColour);
     }
 
     clear_bitmap();

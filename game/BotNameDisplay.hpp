@@ -18,17 +18,11 @@
 
 class BotNameDisplay : public wxPanel {
 public:
-    BotNameDisplay(wxWindow* parent, const std::string& botname);
-
-    /**
-        @note Read, Write & Execute colours are colours that will be used to
-              read, wrote and executable memory for each bot.
-
-              Default values are :
-                    Read = RED
-                    Write = BLUE
-                    Execute = GREEN
-    */
+    // create bot name display
+    // @param parent is the parent of this panel
+    // @param botname is the name to be displayed in place of team name
+    // @param left is to mark this as left or right bot. If left == true then this is left bot.
+    BotNameDisplay(wxWindow* parent, const std::string& botname, bool left);
 
     // set botname
     void SetBotName(const std::string& name);
@@ -68,11 +62,13 @@ private:
     std::string m_botname;
     // to show botname
     wxStaticText* m_botnameText;
-    ;
     // buttons to show read, write, execute colours
     wxStaticText *m_rText, *m_wText, *m_xText;
     // read, write and execute colour
-    wxColour m_rColour = *wxRED, m_wColour = *wxBLUE, m_xColour = *wxGREEN, m_rwxFGColour = *wxBLACK;
+    wxColour m_rColour = GetBot1ReadColour(),
+        m_wColour = GetBot1ReadColour(),
+        m_xColour = GetBot1ReadColour(),
+        m_rwxBGColour = *wxBLACK;
     // font for our r,w,x items
     wxFont m_rwxTextFont = wxFont(12, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
 };

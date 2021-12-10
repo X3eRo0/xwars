@@ -23,14 +23,13 @@
 #include <wx/utils.h>
 
 BotInfo::BotInfo(wxWindow* parent, const std::string& botname, bool left)
-    : wxPanel(parent)
-{
+    : wxPanel(parent){
     // create main sizer for our window
     m_mainSizer = new wxBoxSizer(wxVERTICAL);
     this->SetSizer(m_mainSizer);
 
     // create register and instruction dislay
-    m_botNameDisplay = new BotNameDisplay(this, botname);
+    m_botNameDisplay = new BotNameDisplay(this, botname, left);
 
     if (left) {
         m_registerDisplay = FactoryCreateLeftRegisterDisplay(this);
