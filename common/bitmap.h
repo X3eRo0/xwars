@@ -11,6 +11,7 @@
 extern "C" {
 #endif
 
+#define oprn_cx 7
 // 111 - invalid
 // 010 - valid
 // 100 - valid

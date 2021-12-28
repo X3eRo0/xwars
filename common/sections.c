@@ -50,7 +50,7 @@ u32* get_reference(section* sec, u32 addr, u8 opt_perm)
             return ((u32*)&sec_entry->m_buff[addr - sec_entry->v_addr]);
         }
         if (opt_perm == PERM_EXEC) {
-            oprn = make_oprn(get_current_bitmap_bot(), oprn_x);
+            oprn = make_oprn(get_current_bitmap_bot(), oprn_cx);
         } else if (opt_perm == PERM_READ) {
             oprn = make_oprn(get_current_bitmap_bot(), oprn_r);
         } else if (opt_perm == PERM_WRITE) {
@@ -84,7 +84,7 @@ u8 read_byte(section* sec, u32 addr, u8 opt_perm)
         }
         u8 oprn = 0;
         if (opt_perm == PERM_EXEC) {
-            oprn = make_oprn(get_current_bitmap_bot(), oprn_x);
+            oprn = make_oprn(get_current_bitmap_bot(), oprn_cx);
         } else {
             oprn = make_oprn(get_current_bitmap_bot(), oprn_r);
         }
@@ -110,7 +110,7 @@ u16 read_word(section* sec, u32 addr, u8 opt_perm)
         }
         u8 oprn = 0;
         if (opt_perm == PERM_EXEC) {
-            oprn = make_oprn(get_current_bitmap_bot(), oprn_x);
+            oprn = make_oprn(get_current_bitmap_bot(), oprn_cx);
         } else {
             oprn = make_oprn(get_current_bitmap_bot(), oprn_r);
         }
@@ -138,7 +138,7 @@ u32 read_dword(section* sec, u32 addr, u8 opt_perm)
         }
         u8 oprn = 0;
         if (opt_perm == PERM_EXEC) {
-            oprn = make_oprn(get_current_bitmap_bot(), oprn_x);
+            oprn = make_oprn(get_current_bitmap_bot(), oprn_cx);
         } else {
             oprn = make_oprn(get_current_bitmap_bot(), oprn_r);
         }

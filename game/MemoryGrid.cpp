@@ -1,5 +1,6 @@
 #include "MemoryGrid.hpp"
 #include "../common/bitmap.h"
+#include "Common.hpp"
 #include <wx/gdicmn.h>
 #include <wx/stringimpl.h>
 
@@ -33,41 +34,45 @@ void MemoryGrid::UpdateGrid()
         size_t x = i / NUM_COLS_IN_MEM_GRID;
         size_t y = i - x * NUM_COLS_IN_MEM_GRID;
 
-        if (m_memGrid[x][y]->GetLabelText() == " ") {
-            continue;
-        }
-
         u8 op = get_oprn_at_idx(i);
         bool pm_read = (op >> oprn::oprn_r) & 1;
         bool pm_write = (op >> oprn::oprn_w) & 1;
         bool pm_exec = (op >> oprn::oprn_x) & 1;
         bool bot_id = (op >> oprn::oprn_b) & 1;
-        char pm;
-        wxColour colour;
+        wxString pm = wxEmptyString;
+        wxColour colour = *wxBLACK;
         if (check_oprn_valid(op)) {
             /* printf("bot_id: %d\n", bot_id); */
             if (bot_id) {
-                if (pm_read) {
+                if (pm_read && pm_write && pm_exec){
+                    colour = GetBot1ExecColour();
+                    pm = "X";
+                    set_oprn_at_idx(i, make_oprn(bot_id, oprn_x));
+                } else if (pm_read) {
                     colour = GetBot1ReadColour();
-                    pm = 'R';
+                    pm = "R";
                 } else if (pm_write) {
                     colour = GetBot1WriteColour();
-                    pm = 'W';
+                    pm = "W";
                 } else {
                     colour = GetBot1ExecColour();
-                    pm = 'X';
+                    pm = wxEmptyString;
                 }
 
             } else {
-                if (pm_read) {
+                if (pm_read && pm_write && pm_exec){
+                    colour = GetBot2ExecColour();
+                    pm = "X";
+                    set_oprn_at_idx(i, make_oprn(bot_id, oprn_x));
+                } else if (pm_read) {
                     colour = GetBot2ReadColour();
-                    pm = 'R';
+                    pm = "R";
                 } else if (pm_write) {
                     colour = GetBot2WriteColour();
-                    pm = 'W';
+                    pm = "W";
                 } else {
                     colour = GetBot2ExecColour();
-                    pm = 'X';
+                    pm = wxEmptyString;
                 }
             }
             m_memGrid[x][y]->SetForegroundColour(*wxWHITE);
