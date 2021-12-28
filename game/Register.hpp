@@ -47,7 +47,7 @@ public:
 
 private:
     // RegisterDisplay and Register, both must have same background colour
-    wxColour m_defaultColour = wxColour(32, 16, 32);
+    wxColour m_defaultColour = wxColour(0, 0, 0);
     // main sizer
     wxBoxSizer* m_mainSizer;
     // label name and value

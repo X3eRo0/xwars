@@ -25,15 +25,15 @@ Register::Register(wxWindow* parent, const std::string& name)
     // create label and value static texts
     m_registerNameText = new wxStaticText(this, wxID_ANY, "$" + m_registerName,
         wxDefaultPosition, wxDefaultSize,
-        wxALIGN_CENTER);
+        wxALIGN_CENTER | wxST_NO_AUTORESIZE);
 
     m_delimiterText = new wxStaticText(this, wxID_ANY, m_delimiterString,
         wxDefaultPosition, wxDefaultSize,
-        wxALIGN_CENTER);
+        wxALIGN_CENTER | wxST_NO_AUTORESIZE);
 
     m_registerValueText = new wxStaticText(this, wxID_ANY, "0x00000000",
         wxDefaultPosition, wxDefaultSize,
-        wxALIGN_CENTER);
+        wxALIGN_CENTER | wxST_NO_AUTORESIZE);
 
     // set font
     m_registerNameText->SetFont(m_font);

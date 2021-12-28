@@ -11,10 +11,6 @@ extern "C" {
 
 #include "cpu.h"
 
-/*static xvm_instr instructions[] = {
-    {XVM_OP_HLT, &xvm_op_hlt}
-};*/
-
 u32* get_register(xvm_cpu* cpu, u8 reg_id)
 {
     switch (reg_id) {

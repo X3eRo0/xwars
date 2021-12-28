@@ -63,7 +63,7 @@ public:
     }
 
 private:
-    wxColour m_bgColor = wxColour(32, 16, 32);
+    wxColour m_bgColor = wxColour(0, 0, 0);
     // main sizer
     wxSizer* m_mainSizer;
     // this box will contain all our objects

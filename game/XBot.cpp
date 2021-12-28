@@ -31,7 +31,7 @@ xbot::~xbot()
 {
     if (cpu != nullptr)
         fini_xvm_cpu(cpu);
-    if (bin)
+    if (bin != nullptr)
         fini_xvm_bin(bin);
 }
 
@@ -47,7 +47,13 @@ void xbot::add_section(section_entry* sxn)
     bin->x_section->n_sections++;
 }
 
-u32 xbot::step() { return do_execute(cpu, bin); }
+u32 xbot::step()
+{
+    if (cpu && bin) {
+        return do_execute(cpu, bin);
+    }
+    return E_ERR;
+}
 
 // // xlog is writing to logfifo2
 // // logfifo2 is writable only

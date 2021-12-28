@@ -11,7 +11,7 @@
   </BotNameDisplay>
   <RegisterDisplay>
     <Font Size="12" Family="wxFONTFAMILY_MODERN" Style="wxFONTSTYLE_NORMAL" Weight="wxFONTWEIGHT_NORMAL"/>
-    <Colour BackgroundColour="rgb(32, 16, 32)" ForegroundColour="white"/>
+    <Colour BackgroundColour="black" ForegroundColour="white"/>
   </RegisterDisplay>
   <InstructionDisplay>
     <Font Size="15" Family="wxFONTFAMILY_MODERN" Style="wxFONTSTYLE_NORMAL" Weight="wxFONTWEIGHT_NORMAL"/>

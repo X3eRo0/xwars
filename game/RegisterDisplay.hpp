@@ -29,14 +29,14 @@ public:
         .fontFamily = wxFONTFAMILY_MODERN,
         .fontStyle = wxFONTSTYLE_NORMAL,
         .fontWeight = wxFONTWEIGHT_NORMAL,
-        .bgColour = wxColour(32, 16, 32),
+        .bgColour = wxColour(0, 0, 0),
         .fgColour = *wxWHITE
     };
 
     void UpdateSelf();
 
 private:
-    wxColour m_bgColor = wxColour(32, 16, 32);
+    wxColour m_bgColor = wxColour(0, 0, 0);
     // main sizer
     wxSizer* m_mainSizer;
     // sizer for sizing objects in parent box

@@ -153,6 +153,13 @@ void xwars::display_registers(xbot* bot1, xbot* bot2)
 
 void xwars::display_disassembly(xbot* bot1, xbot* bot2)
 {
+    if (!bot1 || !bot2) {
+        return;
+    }
+
+    if (!bot1->cpu || !bot1->bin || !bot2->cpu || !bot2->bin) {
+        return;
+    }
     section_entry* text = find_section_entry_by_name(bot1->bin->x_section,
         ".text");
     // generate disassembly and write to
@@ -160,7 +167,7 @@ void xwars::display_disassembly(xbot* bot1, xbot* bot2)
     xasm_disassemble_bytes(
         bot1->dis_writer_e,
         bot1->bin,
-        (char*)get_reference(bot1->bin->x_section, bot1->cpu->regs.pc, PERM_EXEC),
+        (char*)get_reference(bot1->bin->x_section, bot1->cpu->regs.pc, 8 | PERM_READ),
         text->v_size - (bot1->cpu->regs.pc - text->v_addr),
         bot1->cpu->regs.pc,
         20);
@@ -171,7 +178,7 @@ void xwars::display_disassembly(xbot* bot1, xbot* bot2)
     xasm_disassemble_bytes(
         bot2->dis_writer_e,
         bot2->bin,
-        (char*)get_reference(bot2->bin->x_section, bot2->cpu->regs.pc, PERM_EXEC),
+        (char*)get_reference(bot2->bin->x_section, bot2->cpu->regs.pc, 8 | PERM_READ),
         text->v_size - (bot2->cpu->regs.pc - text->v_addr),
         bot2->cpu->regs.pc,
         20);
@@ -185,9 +192,18 @@ void xwars::copy_bots(xbot* bot1, xbot* bot2)
     section_entry* text = find_section_entry_by_name(bot1->bin->x_section, ".text");
 
     bot1->bot_section = find_section_entry_by_name(bot1->bin->x_section, ".bot");
-    bot1->size = bot1->bot_section->m_ofst;
-
     bot2->bot_section = find_section_entry_by_name(bot2->bin->x_section, ".bot");
+
+    if (!bot1->bot_section) {
+        fprintf(stderr, "[!] .bot section missing in %s\n", bot1->botname.c_str());
+        exit(-1);
+    }
+    if (!bot2->bot_section) {
+        fprintf(stderr, "[!] .bot section missing in %s\n", bot2->botname.c_str());
+        exit(-1);
+    }
+
+    bot1->size = bot1->bot_section->m_ofst;
     bot2->size = bot2->bot_section->m_ofst;
 
     // random seed

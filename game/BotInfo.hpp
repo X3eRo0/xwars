@@ -51,6 +51,7 @@ public:
     // clear instruction display area
     void ClearInstructionDisplay()
     {
+        if (m_instructionDisplay)
         m_instructionDisplay->ClearDisplay();
     }
 

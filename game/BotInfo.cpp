@@ -23,7 +23,8 @@
 #include <wx/utils.h>
 
 BotInfo::BotInfo(wxWindow* parent, const std::string& botname, bool left)
-    : wxPanel(parent){
+    : wxPanel(parent)
+{
     // create main sizer for our window
     m_mainSizer = new wxBoxSizer(wxVERTICAL);
     this->SetSizer(m_mainSizer);
@@ -41,7 +42,7 @@ BotInfo::BotInfo(wxWindow* parent, const std::string& botname, bool left)
 
     // add displays for sizing
     m_mainSizer->Add(m_botNameDisplay, 1, wxEXPAND | wxALL);
-    m_mainSizer->Add(m_registerDisplay, 5, wxEXPAND | wxALL, 3);
+    m_mainSizer->Add(m_registerDisplay, 2, wxEXPAND | wxALL, 3);
     m_mainSizer->Add(m_instructionDisplay, 10, wxEXPAND | wxALL, 3);
 }
 
