@@ -54,39 +54,6 @@ xwars::xwars()
 {
 }
 
-// void xwars::load_bots(const std::vector<std::string> &bot_paths, const std::vector<std::string>& bot_names){
-//// allocate memory space for all bots
-// bots.resize(bot_paths.size());
-// botpaths = bot_paths;
-// botnames = bot_names;
-
-//// initialize every bot
-// for(size_t i = 0; i < bots.size(); i++){
-//// shorter names
-// xbot* &bot = bots[i];
-// std::string bot_path = bot_paths[i];
-
-//// initialize this bot
-// bot = new xbot;
-
-//// set bot name
-// bot->botname = botnames[i];
-
-//// add stacks for each bots
-// add_section(bot->bin->x_section, "stack", XVM_STACK_SIZE, XVM_DFLT_SP & 0xfffff000, PERM_READ | PERM_WRITE);
-
-//// initialize stack pointer to default value
-// bot->cpu->regs.sp = XVM_DFLT_SP;
-
-//// load binary file
-//// load init and bot sections
-// xvm_bin_load_file(bot->bin, botpaths[i].c_str());
-
-//// remove .text section
-// remove_section_by_name(bot->bin->x_section, ".text");
-//}
-//}
-
 void xwars::display_registers(xbot* bot1, xbot* bot2)
 {
 
