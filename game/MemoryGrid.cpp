@@ -1,20 +1,25 @@
 #include "MemoryGrid.hpp"
 #include "../common/bitmap.h"
+#include <wx/gdicmn.h>
 #include <wx/stringimpl.h>
 
 MemoryGrid::MemoryGrid(wxWindow* parent)
     : wxPanel(parent)
 {
     // create grid sizer for memory grid and set it as sizer for "this" panel
-    m_memGridSizer = new wxGridSizer(NUM_ROWS_IN_MEM_GRID, NUM_COLS_IN_MEM_GRID, 2, 2);
+    m_memGridSizer = new wxGridSizer(NUM_ROWS_IN_MEM_GRID, NUM_COLS_IN_MEM_GRID, 0, 0);
+    m_memGridSizer->SetCols(32);
+    m_memGridSizer->SetRows(32);
     this->SetSizer(m_memGridSizer);
 
     // create memory grid
     for (auto& row : m_memGrid) {
         for (auto& elem : row) {
-            elem = new wxStaticText(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(10, 10), wxBORDER_NONE);
+            elem = new wxStaticText(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(9, 9), wxBORDER_NONE | wxST_NO_AUTORESIZE | wxALIGN_CENTRE_HORIZONTAL);
+            elem->Wrap(9);
             elem->SetBackgroundColour(m_gridElementColour);
-            elem->SetFont(wxFont(8, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT));
+            elem->SetOwnBackgroundColour(m_gridElementColour);
+            elem->SetFont(wxFont(9, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
             m_memGridSizer->Add(elem, 1, wxEXPAND | wxALL, 1);
         }
     }
@@ -22,6 +27,7 @@ MemoryGrid::MemoryGrid(wxWindow* parent)
 
 void MemoryGrid::UpdateGrid()
 {
+    ClearExecs();
     for (size_t i = 0; i < NUM_ROWS_IN_MEM_GRID * NUM_COLS_IN_MEM_GRID; i++) {
         // calculate coordinates in mem grid
         size_t x = i / NUM_COLS_IN_MEM_GRID;
@@ -32,7 +38,6 @@ void MemoryGrid::UpdateGrid()
         bool pm_write = (op >> oprn::oprn_w) & 1;
         bool pm_exec = (op >> oprn::oprn_x) & 1;
         bool bot_id = (op >> oprn::oprn_b) & 1;
-
         char pm;
         wxColour colour;
         if (check_oprn_valid(op)) {
@@ -61,9 +66,21 @@ void MemoryGrid::UpdateGrid()
                     pm = 'X';
                 }
             }
-            m_memGrid[x][y]->SetForegroundColour(colour);
-//            m_memGrid[x][y]->SetBackgroundColour(colour);
+            m_memGrid[x][y]->SetForegroundColour(*wxWHITE);
+            m_memGrid[x][y]->SetOwnBackgroundColour(colour);
             m_memGrid[x][y]->SetLabelText(pm);
+        }
+    }
+}
+
+void MemoryGrid::ClearExecs()
+{
+
+    for (size_t i = 0; i < NUM_ROWS_IN_MEM_GRID * NUM_COLS_IN_MEM_GRID; i++) {
+        u8 op = get_oprn_at_idx(i);
+        bool pm_exec = (op >> oprn::oprn_x) & 1;
+        if (pm_exec) {
+            set_oprn_at_idx(i, op & (0xff ^ (1 << oprn::oprn_x)));
         }
     }
 }
@@ -76,7 +93,7 @@ void MemoryGrid::ClearGrid()
         size_t y = i - x * NUM_COLS_IN_MEM_GRID;
 
         m_memGrid[x][y]->SetLabelText(wxEmptyString);
-        // m_memGrid[x][y]->SetBackgroundColour(m_gridElementColour);
+        m_memGrid[x][y]->SetOwnBackgroundColour(m_gridElementColour);
     }
 
     clear_bitmap();

@@ -22,6 +22,9 @@ public:
     // update element of memory grid
     void UpdateGrid();
 
+    // clears EXEC bits
+    void ClearExecs();
+
     // clears the grid whenever called
     void ClearGrid();
 
