@@ -37,8 +37,8 @@ inline wxColour GetBot1WriteColour() { return wxColour(255, 20, 147); } // pink
 inline wxColour GetBot1ExecColour() { return wxColour(0, 0, 255); } // blue
 
 // GetBot2 read/write/execute colors
-inline wxColour GetBot2ReadColour() { return wxColour(0, 128, 0); } // yellow
-inline wxColour GetBot2WriteColour() { return wxColour(255, 69, 0); } // orange
-inline wxColour GetBot2ExecColour() { return wxColour(255, 0, 0); } // red
+inline wxColour GetBot2ReadColour() { return wxColour(255, 128, 128); } // yellow
+inline wxColour GetBot2WriteColour() { return wxColour(0, 235, 108); } // orange
+inline wxColour GetBot2ExecColour() { return wxColour(255, 255, 0); } // red
 
 #endif // XVM_ARENA_COMMON_HPP

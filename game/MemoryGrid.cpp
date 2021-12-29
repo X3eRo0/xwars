@@ -2,6 +2,7 @@
 #include "../common/bitmap.h"
 #include "Common.hpp"
 #include <wx/gdicmn.h>
+#include <wx/gtk/colour.h>
 #include <wx/stringimpl.h>
 
 MemoryGrid::MemoryGrid(wxWindow* parent)
@@ -16,7 +17,8 @@ MemoryGrid::MemoryGrid(wxWindow* parent)
     // create memory grid
     for (auto& row : m_memGrid) {
         for (auto& elem : row) {
-            elem = new wxStaticText(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(9, 9), wxBORDER_NONE | wxST_NO_AUTORESIZE | wxALIGN_CENTRE_HORIZONTAL);
+            elem = new wxStaticText(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                    wxSize(9, 9), wxBORDER_NONE | wxST_NO_AUTORESIZE | wxALIGN_CENTRE_HORIZONTAL);
             elem->Wrap(9);
             elem->SetBackgroundColour(m_gridElementColour);
             elem->SetOwnBackgroundColour(m_gridElementColour);
@@ -47,7 +49,7 @@ void MemoryGrid::UpdateGrid()
                 if (pm_read && pm_write && pm_exec){
                     colour = GetBot1ExecColour();
                     pm = "X";
-                    set_oprn_at_idx(i, make_oprn(bot_id, oprn_x));
+                    set_oprn_at_idx(i, make_oprn(1, oprn_x));
                 } else if (pm_read) {
                     colour = GetBot1ReadColour();
                     pm = "R";
@@ -59,11 +61,11 @@ void MemoryGrid::UpdateGrid()
                     pm = wxEmptyString;
                 }
 
-            } else {
+            } else if(bot_id == 0) {
                 if (pm_read && pm_write && pm_exec){
                     colour = GetBot2ExecColour();
                     pm = "X";
-                    set_oprn_at_idx(i, make_oprn(bot_id, oprn_x));
+                    set_oprn_at_idx(i, make_oprn(0, oprn_x));
                 } else if (pm_read) {
                     colour = GetBot2ReadColour();
                     pm = "R";
@@ -75,7 +77,19 @@ void MemoryGrid::UpdateGrid()
                     pm = wxEmptyString;
                 }
             }
-            m_memGrid[x][y]->SetForegroundColour(*wxWHITE);
+
+            // wxColour fgColour = wxColour(255 - colour.Red(), 255 - colour.Green(), 255 - colour.Blue());
+            wxColour fgColour = *wxWHITE;
+
+            // if bg color is bright then fg must be dark
+            uint8_t numBrightComponents = 0;
+            uint8_t threshold = 150;
+            if(colour.Red() > threshold) numBrightComponents++;
+            if(colour.Green() > threshold) numBrightComponents++;
+            if(colour.Blue() > threshold) numBrightComponents++;
+            if(numBrightComponents >= 2) fgColour = *wxBLACK;
+
+            m_memGrid[x][y]->SetForegroundColour(fgColour);
             m_memGrid[x][y]->SetOwnBackgroundColour(colour);
             m_memGrid[x][y]->SetLabelText(pm);
         }
