@@ -55,7 +55,7 @@ struct xwars {
     u32 counter = 0;
 
     // winner of last battle
-    std::string winner = "";
+    wxString winner = "";
 
 private:
     // first - left

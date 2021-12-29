@@ -17,6 +17,7 @@
 
 #include "MemoryGrid.hpp"
 #include "MiddlePanel.hpp"
+#include "StatsDisplay.hpp"
 
 enum xvmArenaButtonIDs {
     ID_LOAD = wxID_HIGHEST + 1000,
@@ -132,8 +133,11 @@ void Arena::OnStart(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void Arena::OnIntervalTimer(wxTimerEvent& e)
-{
+void Arena::OnIntervalTimer(wxTimerEvent& e){
+    // show stats
+    StatsDisplay *stats = new StatsDisplay(get_xwars_instance()->winner);
+    stats->ShowModal();
+
     if (m_battleIdx == m_battlePairs.size()) {
         m_intervTimer.Stop();
         return;

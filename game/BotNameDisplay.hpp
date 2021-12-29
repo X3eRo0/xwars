@@ -22,10 +22,15 @@ public:
     // @param parent is the parent of this panel
     // @param botname is the name to be displayed in place of team name
     // @param left is to mark this as left or right bot. If left == true then this is left bot.
-    BotNameDisplay(wxWindow* parent, const std::string& botname, bool left);
+    BotNameDisplay(wxWindow* parent, const wxString& botname, bool left);
 
     // set botname
     void SetBotName(const std::string& name);
+
+    // get botname
+    const wxString& GetBotName(){
+        return m_botname;
+    }
 
     // // set botname colour
     // void SetNameColour(const wxString& c);
@@ -59,7 +64,7 @@ private:
     // main sizer for this panel
     wxBoxSizer* m_mainSizer;
     // botname
-    std::string m_botname;
+    wxString m_botname;
     // to show botname
     wxStaticText* m_botnameText;
     // buttons to show read, write, execute colours

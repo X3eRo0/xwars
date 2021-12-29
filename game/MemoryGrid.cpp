@@ -45,7 +45,7 @@ void MemoryGrid::UpdateGrid()
         wxColour colour = *wxBLACK;
         if (check_oprn_valid(op)) {
             /* printf("bot_id: %d\n", bot_id); */
-            if (bot_id) {
+            if (bot_id == 0) {
                 if (pm_read && pm_write && pm_exec){
                     colour = GetBot1ExecColour();
                     pm = "X";
@@ -61,7 +61,7 @@ void MemoryGrid::UpdateGrid()
                     pm = wxEmptyString;
                 }
 
-            } else if(bot_id == 0) {
+            } else {
                 if (pm_read && pm_write && pm_exec){
                     colour = GetBot2ExecColour();
                     pm = "X";
@@ -83,11 +83,11 @@ void MemoryGrid::UpdateGrid()
 
             // if bg color is bright then fg must be dark
             uint8_t numBrightComponents = 0;
-            uint8_t threshold = 150;
-            if(colour.Red() > threshold) numBrightComponents++;
-            if(colour.Green() > threshold) numBrightComponents++;
-            if(colour.Blue() > threshold) numBrightComponents++;
-            if(numBrightComponents >= 2) fgColour = *wxBLACK;
+            uint8_t threshold = 40;
+            float luma = 0.2126f * float(colour.Red()) + 0.7152f * float(colour.Green()) + 0.0722f * float(colour.Blue());
+            if(luma > 40){
+                fgColour = *wxBLACK;
+            }
 
             m_memGrid[x][y]->SetForegroundColour(fgColour);
             m_memGrid[x][y]->SetOwnBackgroundColour(colour);

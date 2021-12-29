@@ -39,6 +39,7 @@ add_executable(xwars
     PropertyDisplay.cpp
     SettingsDialog.cpp
     PropertyData.cpp
+    StatsDisplay.cpp
 )
 
 target_link_libraries(xwars vm ${wxWidgets_LIBRARIES})

@@ -3,7 +3,7 @@
 #include <wx/gdicmn.h>
 #include <wx/sizer.h>
 
-BotNameDisplay::BotNameDisplay(wxWindow* parent, const std::string& botname, bool left)
+BotNameDisplay::BotNameDisplay(wxWindow* parent, const wxString& botname, bool left)
     : wxPanel(parent)
     , m_botname(botname)
 {
@@ -20,7 +20,7 @@ BotNameDisplay::BotNameDisplay(wxWindow* parent, const std::string& botname, boo
         wxALIGN_CENTRE);
 
     m_botnameText->SetFont(wxFont(properties.fontSize, properties.fontFamily,
-        properties.fontStyle, properties.fontWeight));
+                                  properties.fontStyle, properties.fontWeight));
     m_botnameText->SetForegroundColour(properties.fgColour);
 
     // create buttons

@@ -22,7 +22,7 @@
 #include <wx/time.h>
 #include <wx/utils.h>
 
-BotInfo::BotInfo(wxWindow* parent, const std::string& botname, bool left)
+BotInfo::BotInfo(wxWindow* parent, const wxString& botname, bool left)
     : wxPanel(parent)
 {
     // create main sizer for our window
