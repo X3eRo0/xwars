@@ -18,7 +18,7 @@ RegisterDisplay::RegisterDisplay(wxWindow* parent)
     SetBackgroundColour(m_bgColor);
 
     // initialize grid sizer for arranging gprs
-    m_regGridSizer = new wxGridSizer(6, 3, 0, 0);
+    m_regGridSizer = new wxGridSizer(6, 3, -1, -1);
 
     // initialize gen purpose regs
     for (size_t i = 0; i < NUMBER_OF_REGISTERS; i++) {

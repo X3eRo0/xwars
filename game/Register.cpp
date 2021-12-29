@@ -45,9 +45,9 @@ Register::Register(wxWindow* parent, const std::string& name)
     m_registerValueText->SetForegroundColour(m_registerValueFGColour);
 
     // add for sizing
-    m_mainSizer->Add(m_registerNameText, 3, wxEXPAND | wxALL, 2);
-    m_mainSizer->Add(m_delimiterText, 1, wxEXPAND | wxALL, 2);
-    m_mainSizer->Add(m_registerValueText, 10, wxEXPAND | wxALL, 2);
+    m_mainSizer->Add(m_registerNameText, 3, wxEXPAND | wxUP | wxDOWN, 1);
+    m_mainSizer->Add(m_delimiterText, 1, wxEXPAND | wxUP | wxDOWN, 1);
+    m_mainSizer->Add(m_registerValueText, 10, wxEXPAND | wxUP | wxDOWN, 1);
 }
 
 void Register::SetName(const std::string& n)

@@ -19,14 +19,14 @@ InstructionDisplay::InstructionDisplay(wxWindow* parent)
     SetBackgroundColour(m_bgColor);
 
     // create main sizer
-    m_mainSizer = new wxBoxSizer(wxVERTICAL);
+    m_mainSizer = new wxBoxSizer(wxVERTICAL); 
     this->SetSizer(m_mainSizer);
 
     // create static box to contain register display areas
     // and set it to span whole space
     m_parentBox = new wxStaticBox(this, wxID_ANY, "Instructions");
     m_parentBox->SetForegroundColour(m_parentBoxFGColour);
-    m_mainSizer->Add(m_parentBox, 1, wxEXPAND | wxALL, 2);
+    m_mainSizer->Add(m_parentBox, 1, wxEXPAND | wxTOP | wxDOWN, 2);
 
     // sizer for our parent box
     m_parentBoxSizer = new wxBoxSizer(wxVERTICAL);

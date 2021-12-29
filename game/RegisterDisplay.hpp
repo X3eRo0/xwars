@@ -14,6 +14,7 @@
 
 #include "Common.hpp"
 #include "Register.hpp"
+#include <unordered_map>
 #include <array>
 
 class RegisterDisplay : public wxPanel {

@@ -44,9 +44,9 @@ MainWindow::MainWindow(wxWindow* parent, wxWindowID id, const wxString& title)
     // get_xwars_instance()->register_bot_info(m_lBotInfo, m_rBotInfo);
 
     // add these panels to main sizer
-    m_mainHSizer->Add(m_lBotInfo, 2, wxEXPAND | wxALL);
-    m_mainHSizer->Add(m_midPanel, 3, wxEXPAND | wxALL);
-    m_mainHSizer->Add(m_rBotInfo, 2, wxEXPAND | wxALL);
+    m_mainHSizer->Add(m_lBotInfo, 3, wxEXPAND | wxALL);
+    m_mainHSizer->Add(m_midPanel, 4, wxEXPAND | wxALL);
+    m_mainHSizer->Add(m_rBotInfo, 3, wxEXPAND | wxALL);
 
     // set colors for panels to tell them apart
     m_lBotInfo->SetBackgroundColour(*wxBLACK);

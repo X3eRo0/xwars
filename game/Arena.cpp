@@ -82,7 +82,7 @@ Arena::Arena(wxWindow* parent)
 
     // add for sizing
     m_mainSizer->Add(m_buttonsPanel, 1, wxEXPAND | wxALL, 0);
-    m_mainSizer->Add(m_terminal, 14, wxEXPAND | wxALL, 0);
+    m_mainSizer->Add(m_terminal, 5, wxEXPAND | wxALL, 0);
 
     // bind our timer to this
     m_iterTimer.Bind(wxEVT_TIMER, &Arena::OnIterationTimer, this);
