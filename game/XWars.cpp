@@ -326,7 +326,7 @@ bool xwars::battle_step()
         bot1->step();
 
         // upadte memory grid for bot 1
-        FactoryGetMiddlePanel()->GetMemoryGrid()->UpdateGrid();
+        /* FactoryGetMiddlePanel()->GetMemoryGrid()->UpdateGrid(); */
 
         if (signal_abort(bot1->cpu->errors, bot1->cpu) == E_ERR) {
             winner = bot2->botname;
