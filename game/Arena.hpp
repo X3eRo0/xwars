@@ -3,6 +3,7 @@
 
 #include "Common.hpp"
 #include "PropertyData.hpp"
+#include "StatsDisplay.hpp"
 #include "XWars.hpp"
 #include <vector>
 #include <wx/event.h>
@@ -71,6 +72,9 @@ private:
     void OnStart(wxCommandEvent& event);
     void OnIntervalTimer(wxTimerEvent& e);
     void OnIterationTimer(wxTimerEvent& e);
+
+    // stats display
+    StatsDisplay *m_statsDisplay;
 
     // main sizer
     wxBoxSizer* m_mainSizer;

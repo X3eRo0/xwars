@@ -88,6 +88,9 @@ Arena::Arena(wxWindow* parent)
     // bind our timer to this
     m_iterTimer.Bind(wxEVT_TIMER, &Arena::OnIterationTimer, this);
     m_intervTimer.Bind(wxEVT_TIMER, &Arena::OnIntervalTimer, this);
+
+    // create stats display
+    m_statsDisplay = new StatsDisplay;
 }
 
 // when load button is clicked
@@ -112,6 +115,11 @@ void Arena::OnStart(wxCommandEvent& WXUNUSED(event))
     // shorter name for bots
     const auto& bots = get_xwars_instance()->botpaths;
 
+    // add botnames to scoreboard
+    for(const auto& botname : bots){
+        m_statsDisplay->AddBot(botname.substr(botname.find_last_of("/\\") + 1), 0);
+    }
+
     // generate battle indices
     m_battlePairs.clear();
     m_battleIdx = 0;
@@ -120,25 +128,25 @@ void Arena::OnStart(wxCommandEvent& WXUNUSED(event))
             m_battlePairs.push_back({ i, j });
         }
     }
-    // wxPuts("Generated BattlePairs");
 
     // clear memory grid
     FactoryGetMiddlePanel()->GetMemoryGrid()->ClearGrid();
 
     // do first battle
     const std::pair<int, int>& botpair = m_battlePairs[m_battleIdx++];
-    if (get_xwars_instance()->battle_init(bots[botpair.first],
-            bots[botpair.second])) {
+    if (get_xwars_instance()->battle_init(bots[botpair.first], bots[botpair.second])) {
         m_iterTimer.Start(m_iterWaitTime);
     }
 }
 
 void Arena::OnIntervalTimer(wxTimerEvent& e){
-    // show stats
-    StatsDisplay *stats = new StatsDisplay(get_xwars_instance()->winner);
-    stats->ShowModal();
+    // show stats display with winner
+    m_statsDisplay->SetWinner(get_xwars_instance()->winner);
+    m_statsDisplay->Show();
 
-    if (m_battleIdx == m_battlePairs.size()) {
+
+    // this is the last battle
+    if ((m_battleIdx == m_battlePairs.size()) && (m_intervTimer.IsRunning())) {
         m_intervTimer.Stop();
         return;
     }
@@ -156,10 +164,7 @@ void Arena::OnIntervalTimer(wxTimerEvent& e){
     }
 }
 
-void Arena::OnIterationTimer(wxTimerEvent& e)
-{
-    // wxPuts("Reached Iteration Timer");
-
+void Arena::OnIterationTimer(wxTimerEvent& e){
     if (!get_xwars_instance()->battle_step()) {
         Print("[+] Winner %s in %d instructions\n", get_xwars_instance()->winner.c_str(), get_xwars_instance()->counter);
         m_iterTimer.Stop();

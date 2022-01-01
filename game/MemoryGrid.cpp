@@ -45,7 +45,7 @@ void MemoryGrid::UpdateGrid()
         wxColour colour = *wxBLACK;
         if (check_oprn_valid(op)) {
             /* printf("bot_id: %d\n", bot_id); */
-            if (bot_id == 0) {
+            if (bot_id == 1) {
                 if (pm_read && pm_write && pm_exec){
                     colour = GetBot1ExecColour();
                     pm = "X";

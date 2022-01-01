@@ -24,13 +24,13 @@ StatsDisplay::StatsDisplay(const wxString& winner,
     m_topPanel->SetBackgroundColour(wxColour(16, 8, 16));
 
     // show winner text in top panel
-    wxStaticText *m_winnerBotName = new wxStaticText(m_topPanel, wxID_ANY, "The winner is \"" + winner + "\"" ,
+    m_winnerText = new wxStaticText(m_topPanel, wxID_ANY, "The winner is \"" + winner + "\"" ,
                                                      wxDefaultPosition, wxDefaultSize,
                                                      wxST_NO_AUTORESIZE | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
-    m_winnerBotName->SetForegroundColour(*wxRED);
+    m_winnerText->SetForegroundColour(*wxRED);
     wxFont winnerBotNameFont(36, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
-    m_winnerBotName->SetFont(winnerBotNameFont);
-    topPanelSizer->Add(m_winnerBotName, 1, wxEXPAND | wxALL);
+    m_winnerText->SetFont(winnerBotNameFont);
+    topPanelSizer->Add(m_winnerText, 1, wxEXPAND | wxALL);
 
     // create bottom panel
     m_bottomPanel = new wxPanel(m_parentPanel);
@@ -43,24 +43,41 @@ StatsDisplay::StatsDisplay(const wxString& winner,
     wxFont scoreboardListFont = wxFont(12, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
     m_scoreboardList->SetFont(scoreboardListFont);
 
+    // add columns for name and score
     m_scoreboardList->AppendColumn("Name", wxLIST_FORMAT_CENTRE, size.GetWidth()*5/6);
     m_scoreboardList->AppendColumn("Score", wxLIST_FORMAT_CENTER, size.GetWidth()/6);
-
-    m_scoreboardList->InsertItem(0, "kamikaze");
-    m_scoreboardList->SetItem(0, 1, "4");
-
-    m_scoreboardList->InsertItem(0, "amun");
-    m_scoreboardList->SetItem(0, 1, "3");
-
-    m_scoreboardList->InsertItem(0, "x3er0o");
-    m_scoreboardList->SetItem(0, 1, "0");
-
-    m_scoreboardList->InsertItem(0, "misra");
-    m_scoreboardList->SetItem(0, 1, "inf");
-
     bottomPanelSizer->Add(m_scoreboardList, 1, wxEXPAND | wxALL);
 
     // add all panels to main sizer
     m_mainSizer->Add(m_topPanel, 1, wxEXPAND | wxALL, 2);
     m_mainSizer->Add(m_bottomPanel, 4, wxEXPAND | wxALL, 2);
+}
+
+void StatsDisplay::AddBot(const wxString &name, u32 score){
+    m_scoreboardList->InsertItem(m_botCount, name);
+    m_scoreboardList->SetItem(m_botCount, 1, std::to_string(score));
+    m_botNameIDMap[name] = m_botCount++;
+    m_botNameScoreMap[name] = 0;
+}
+
+void StatsDisplay::SetBotScore(const wxString &name, u32 score){
+    m_scoreboardList->SetItem(m_botNameIDMap[name], 1, std::to_string(score));
+}
+
+void StatsDisplay::SetWinner(const wxString& name){
+    m_winnerText->SetLabel("The winner is \"" + name +  "\"");
+    IncBotScore(name);
+
+    static int lastWinner = -1;
+
+    if(lastWinner != -1){
+        m_scoreboardList->Select(lastWinner, false);
+    }
+
+    m_scoreboardList->Select(m_botNameIDMap[name], true);
+    lastWinner = m_botNameIDMap[name];
+}
+
+void StatsDisplay::IncBotScore(const wxString &name){
+    SetBotScore(name, ++m_botNameScoreMap[name]);
 }
