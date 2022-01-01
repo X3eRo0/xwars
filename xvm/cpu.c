@@ -116,6 +116,7 @@ u32 signal_abort(signal_report* err, xvm_cpu* cpu)
             fprintf(stderr /*fp*/, "[-] Trap/Breakpoint\n");
             break;
         case XSIGSTOP:
+            fprintf(stderr /*fp*/, "[-] SIGSTOP\n");
             break;
         default:
             fprintf(stderr /*fp*/, "[-] Segmentation Fault (core not dumped)\n");

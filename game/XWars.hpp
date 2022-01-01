@@ -42,6 +42,9 @@ struct xwars {
     // again or not, true means this must be called again, false otherwise
     bool battle_step();
 
+    void set_battle_status(u32 value);
+    u32 get_battle_status();
+
     // -- README --
     // here I will explain working :
     // 1 - get xwars global instance by calling get_xwars_instance()
@@ -63,7 +66,10 @@ private:
     std::pair<BotInfo*, BotInfo*> m_botInfos;
 
     // current fighting bots
-    std::pair<xbot*, xbot*> m_currentBots = { nullptr, nullptr };
+    std::pair<xbot*, xbot*> m_currentBots;
+
+    // is battle running
+    u32 battle_status = 0;
 };
 
 // get xwars global instance

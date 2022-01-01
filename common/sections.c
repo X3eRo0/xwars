@@ -37,7 +37,6 @@ u32* get_reference(section* sec, u32 addr, u8 opt_perm)
     // read byte
     section_entry* sec_entry = find_section_entry_by_addr(sec, addr);
     if (sec_entry != NULL) {
-        printf("%s:0x%x -- 0x%x\n", sec_entry->m_name, addr, addr - sec_entry->v_addr);
         if (!(sec_entry->m_flag & PERM_READ) || !(sec_entry->m_flag & (opt_perm & 7))) {
             raise_signal(sec->errors, XSIGSEGV, addr, 0);
             // segfault(XSIGSEGV, sec_entry, addr);

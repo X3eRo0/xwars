@@ -141,8 +141,8 @@ void Arena::OnStart(wxCommandEvent& WXUNUSED(event))
 
 void Arena::OnIntervalTimer(wxTimerEvent& e){
     // show stats display with winner
-    m_statsDisplay->SetWinner(get_xwars_instance()->winner);
-    m_statsDisplay->Show();
+    /* m_statsDisplay->SetWinner(get_xwars_instance()->winner); */
+    /* m_statsDisplay->Show(); */
 
 
     // this is the last battle
@@ -165,8 +165,10 @@ void Arena::OnIntervalTimer(wxTimerEvent& e){
 }
 
 void Arena::OnIterationTimer(wxTimerEvent& e){
-    if (!get_xwars_instance()->battle_step()) {
+    xwars * xwars_instance = get_xwars_instance();
+    if (xwars_instance->get_battle_status() && !xwars_instance->battle_step()) {
         Print("[+] Winner %s in %d instructions\n", get_xwars_instance()->winner.c_str(), get_xwars_instance()->counter);
+        xwars_instance->set_battle_status(0);
         m_iterTimer.Stop();
         m_intervTimer.Start(m_interWaitTime);
     }

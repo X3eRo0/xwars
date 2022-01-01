@@ -130,7 +130,7 @@ void xwars::display_disassembly(xbot* bot1, xbot* bot2)
     section_entry* text = find_section_entry_by_name(bot1->bin->x_section,
         ".text");
 
-    if (!text){
+    if (!text) {
         return;
     }
 
@@ -194,10 +194,6 @@ void xwars::copy_bots(xbot* bot1, xbot* bot2)
     bot1->bot_addr = text->v_addr + bot1->offset;
     bot2->bot_addr = text->v_addr + bot2->offset;
 
-    // printf("text : 0x%x\n", text_section->v_addr);
-    // printf("bot1 offset: 0x%x\n", bot1->offset);
-    // printf("bot2 offset: 0x%x\n", bot2->offset);
-
     memcpy(&(text->m_buff[bot1->offset]), bot1->bot_section->m_buff, bot1->size);
     memcpy(&(text->m_buff[bot2->offset]), bot2->bot_section->m_buff, bot2->size);
 }
@@ -209,6 +205,8 @@ bool xwars::battle_init(std::string Bot1Path, std::string Bot2Path)
 
     // delete old bots
     if (m_currentBots.first && m_currentBots.second) {
+        printf("[++] FREEING PREVIOUSLY ALLOCATED BOTS\n");
+        printf("[++] \t%s and %s\n", m_currentBots.first->botname.c_str(), m_currentBots.second->botname.c_str());
         section_entry* text = find_section_entry_by_name(m_currentBots.first->bin->x_section, ".text");
         section_entry* temp = m_currentBots.first->bin->x_section->sections;
 
@@ -298,31 +296,27 @@ bool xwars::battle_init(std::string Bot1Path, std::string Bot2Path)
     bot2->cpu->regs.pc = bot2->bot_addr;
 
     // take first step in battle
+    set_battle_status(1);
     return battle_step();
 }
 
 // destructor
-xwars::~xwars()
+xwars::~xwars() { }
+
+void xwars::set_battle_status(u32 value)
 {
-    // destroy bots
-    // bots were alloc'd with new operator so
-    // the must be dealloc'd with delete operator
-    // for(xbot* bot : bots){
-    // delete bot;
-    //}
+    battle_status = value;
 }
 
-// void xwars::register_bot_info(BotInfo *first, BotInfo *second){
-//     m_botInfos = {first, second};
-// }
+u32 xwars::get_battle_status()
+{
+    return battle_status;
+}
 
 bool xwars::battle_step()
 {
     xbot* bot1 = m_currentBots.first;
     xbot* bot2 = m_currentBots.second;
-
-    printf("bot1 writer_e: %p\n", bot1->dis_writer_e);
-    printf("bot2 writer_e: %p\n", bot2->dis_writer_e);
 
     if (
         (counter < MAX_INSTR_EXECS) && get_RF(bot1->cpu) && get_RF(bot2->cpu)) {
@@ -370,6 +364,7 @@ bool xwars::battle_step()
         counter++;
         return true;
     } else {
+        printf("[!] counter: %d, cpu1: %d, cpu2: %d\n", counter, get_RF(bot1->cpu), get_RF(bot2->cpu));
         return false;
     }
 }
