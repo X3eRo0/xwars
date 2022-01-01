@@ -87,7 +87,7 @@ Arena::Arena(wxWindow* parent)
 
     // bind our timer to this
     m_iterTimer.Bind(wxEVT_TIMER, &Arena::OnIterationTimer, this);
-    m_intervTimer.Bind(wxEVT_TIMER, &Arena::OnIntervalTimer, this);
+    // m_intervTimer.Bind(wxEVT_TIMER, &Arena::OnIntervalTimer, this);
 
     // create stats display
     m_statsDisplay = new StatsDisplay;
@@ -146,8 +146,8 @@ void Arena::OnIntervalTimer(wxTimerEvent& e){
 
 
     // this is the last battle
-    if ((m_battleIdx == m_battlePairs.size()) && (m_intervTimer.IsRunning())) {
-        m_intervTimer.Stop();
+    if (m_battleIdx == m_battlePairs.size()) {
+        m_iterTimer.Stop();
         return;
     }
 
@@ -169,8 +169,29 @@ void Arena::OnIterationTimer(wxTimerEvent& e){
     if (xwars_instance->get_battle_status() && !xwars_instance->battle_step()) {
         Print("[+] Winner %s in %d instructions\n", get_xwars_instance()->winner.c_str(), get_xwars_instance()->counter);
         xwars_instance->set_battle_status(0);
-        m_iterTimer.Stop();
-        m_intervTimer.Start(m_interWaitTime);
+        // m_iterTimer.Stop();
+        // m_intervTimer.Start(m_interWaitTime);
+
+    m_statsDisplay->SetWinner(get_xwars_instance()->winner);
+    m_statsDisplay->ShowModal();
+
+        // this is the last battle
+        if (m_battleIdx == m_battlePairs.size()) {
+            m_iterTimer.Stop();
+            return;
+        }
+
+        // do battle
+        const auto& bots = get_xwars_instance()->botpaths;
+        const std::pair<int, int>& botpair = m_battlePairs[m_battleIdx++];
+
+        // clear memory grid
+        FactoryGetMiddlePanel()->GetMemoryGrid()->ClearGrid();
+
+        // init battle and start iteration timer
+        if (get_xwars_instance()->battle_init(bots[botpair.first], bots[botpair.second])) {
+            m_iterTimer.Start(m_iterWaitTime);
+        }
     }
 }
 
