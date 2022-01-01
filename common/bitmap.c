@@ -47,9 +47,9 @@ void set_oprn_at_idx(u32 idx, u8 value)
     u8 bitmap_byte = bitmap[idx >> 1];
 
     if ((idx & 1) == 1) {
-        bitmap_byte = (value << 4) | bitmap_byte & 0xf;
+        bitmap_byte = (value << 4) | (bitmap_byte & 0xf);
     } else {
-        bitmap_byte = bitmap_byte & 0xf0 | value;
+        bitmap_byte = (bitmap_byte & 0xf0) | value;
     }
 
     bitmap[idx >> 1] = bitmap_byte;

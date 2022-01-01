@@ -129,6 +129,11 @@ void xwars::display_disassembly(xbot* bot1, xbot* bot2)
     }
     section_entry* text = find_section_entry_by_name(bot1->bin->x_section,
         ".text");
+
+    if (!text){
+        return;
+    }
+
     // generate disassembly and write to
     // to pipe
     xasm_disassemble_bytes(
@@ -223,7 +228,8 @@ bool xwars::battle_init(std::string Bot1Path, std::string Bot2Path)
 
         delete m_currentBots.first;
         delete m_currentBots.second;
-        m_currentBots = { NULL, NULL };
+        m_currentBots.first = NULL;
+        m_currentBots.second = NULL;
     }
 
     // create new bots
@@ -231,7 +237,8 @@ bool xwars::battle_init(std::string Bot1Path, std::string Bot2Path)
     xbot* bot2 = new xbot;
 
     // store bots temporarily
-    m_currentBots = { bot1, bot2 };
+    m_currentBots.first = bot1;
+    m_currentBots.second = bot2;
 
     // get bot namaes
     bot1->botname = Bot1Path.substr(Bot1Path.find_last_of("/\\") + 1);
@@ -313,6 +320,9 @@ bool xwars::battle_step()
 {
     xbot* bot1 = m_currentBots.first;
     xbot* bot2 = m_currentBots.second;
+
+    printf("bot1 writer_e: %p\n", bot1->dis_writer_e);
+    printf("bot2 writer_e: %p\n", bot2->dis_writer_e);
 
     if (
         (counter < MAX_INSTR_EXECS) && get_RF(bot1->cpu) && get_RF(bot2->cpu)) {
