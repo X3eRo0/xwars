@@ -31,6 +31,7 @@ enum xvmArenaButtonIDs {
 BEGIN_EVENT_TABLE(Arena, wxPanel)
 EVT_BUTTON(ID_LOAD, Arena::OnLoad)
 EVT_BUTTON(ID_START, Arena::OnStart)
+EVT_BUTTON(ID_PAUSE, Arena::OnPause)
 END_EVENT_TABLE()
 
 Arena::Arena(wxWindow* parent)
@@ -89,6 +90,8 @@ Arena::Arena(wxWindow* parent)
     m_iterTimer.Bind(wxEVT_TIMER, &Arena::OnIterationTimer, this);
     // m_intervTimer.Bind(wxEVT_TIMER, &Arena::OnIntervalTimer, this);
 
+    
+
     // create stats display
     m_statsDisplay = new StatsDisplay;
 }
@@ -110,32 +113,39 @@ void Arena::OnLoad(wxCommandEvent& WXUNUSED(event))
     LoadBots(botFolder);
 }
 
-void Arena::OnStart(wxCommandEvent& WXUNUSED(event))
-{
-    // shorter name for bots
-    const auto& bots = get_xwars_instance()->botpaths;
+void Arena::OnStart(wxCommandEvent& WXUNUSED(event)){
+    if(!m_isBattlePaused){
+        // clear scoreboard
+        m_statsDisplay->ClearDisplay();
 
-    // add botnames to scoreboard
-    for(const auto& botname : bots){
-        m_statsDisplay->AddBot(botname.substr(botname.find_last_of("/\\") + 1), 0);
-    }
+        // shorter name for bots
+        const auto& bots = get_xwars_instance()->botpaths;
 
-    // generate battle indices
-    m_battlePairs.clear();
-    m_battleIdx = 0;
-    for (u32 i = 0; i < bots.size() - 1; i++) {
-        for (u32 j = i + 1; j < bots.size(); j++) {
-            m_battlePairs.push_back({ i, j });
+        // add botnames to scoreboard
+        for(const auto& botname : bots){
+            m_statsDisplay->AddBot(botname.substr(botname.find_last_of("/\\") + 1), 0);
         }
-    }
 
-    // clear memory grid
-    FactoryGetMiddlePanel()->GetMemoryGrid()->ClearGrid();
+        // generate battle indices
+        m_battlePairs.clear();
+        m_battleIdx = 0;
+        for (u32 i = 0; i < bots.size() - 1; i++) {
+            for (u32 j = i + 1; j < bots.size(); j++) {
+                m_battlePairs.push_back({ i, j });
+            }
+        }
 
-    // do first battle
-    const std::pair<int, int>& botpair = m_battlePairs[m_battleIdx++];
-    if (get_xwars_instance()->battle_init(bots[botpair.first], bots[botpair.second])) {
+        // clear memory grid
+        FactoryGetMiddlePanel()->GetMemoryGrid()->ClearGrid();
+
+        // do first battle
+        const std::pair<int, int>& botpair = m_battlePairs[m_battleIdx++];
+        if (get_xwars_instance()->battle_init(bots[botpair.first], bots[botpair.second])) {
+            m_iterTimer.Start(m_iterWaitTime);
+        }
+    } else {
         m_iterTimer.Start(m_iterWaitTime);
+        m_isBattlePaused = false;
     }
 }
 
@@ -230,6 +240,11 @@ void Arena::LoadBots(const wxString& BotsFolder)
     for (size_t i = 0; i < botpaths.size(); i++) {
         Print("[+] Loaded Bot [ %s ]\n", botpaths[i].substr(botpaths[i].find_last_of("/\\") + 1));
     }
+}
+
+void Arena::OnPause(wxCommandEvent& event){
+    m_iterTimer.Stop();
+    m_isBattlePaused = true;
 }
 
 // OnStart - start iter timer

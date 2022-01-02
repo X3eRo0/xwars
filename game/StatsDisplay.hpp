@@ -17,6 +17,9 @@ public:
     void AddBot(const wxString& name, u32 score);
     void SetBotScore(const wxString& name, u32 score);
     void IncBotScore(const wxString& name);
+
+    // reset scoreboard
+    void ClearDisplay();
 private:
     // map from bot names to their index in list
     std::unordered_map<wxString, u32> m_botNameIDMap;

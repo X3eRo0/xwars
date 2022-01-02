@@ -81,3 +81,8 @@ void StatsDisplay::SetWinner(const wxString& name){
 void StatsDisplay::IncBotScore(const wxString &name){
     SetBotScore(name, ++m_botNameScoreMap[name]);
 }
+
+void StatsDisplay::ClearDisplay(){
+    m_scoreboardList->DeleteAllItems();
+    m_botCount = 0;
+}

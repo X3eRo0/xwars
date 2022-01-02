@@ -68,6 +68,7 @@ public:
     DECLARE_EVENT_TABLE();
 
 private:
+    void OnPause(wxCommandEvent& event);
     void OnLoad(wxCommandEvent& event);
     void OnStart(wxCommandEvent& event);
     void OnIntervalTimer(wxTimerEvent& e);
@@ -76,6 +77,8 @@ private:
     // stats display
     StatsDisplay *m_statsDisplay;
 
+    // is battle paused
+    bool m_isBattlePaused = false;
     // main sizer
     wxBoxSizer* m_mainSizer;
     // our awesome terminal will only show output
@@ -96,7 +99,7 @@ private:
     wxFont m_terminalFont = wxFont(10, wxFONTFAMILY_MODERN,
         wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM);
     // wait size for battle iteration
-    size_t m_iterWaitTime = 50, m_interWaitTime = 5000;
+    size_t m_iterWaitTime = 100, m_interWaitTime = 5000;
     // timer for timed battles
     wxTimer m_iterTimer, m_intervTimer;
     // battle pairs
