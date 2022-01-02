@@ -28,17 +28,16 @@ typedef const char* cstring;
 
 // get reader and writer
 FILE* get_reader_end();
-FILE *get_writer_end();
-
+FILE* get_writer_end();
 
 // GetBot1 read/write/execute colours
-inline wxColour GetBot1ReadColour() { return wxColour(0, 128, 128); } // cyan 
-inline wxColour GetBot1WriteColour() { return wxColour(255, 20, 147); } // pink
-inline wxColour GetBot1ExecColour() { return wxColour(0, 0, 255); } // blue
+inline wxColour GetBot1ReadColour() { return wxColour(0x00, 0xff, 0xff); } // #00ffff
+inline wxColour GetBot1WriteColour() { return wxColour(0xff, 0x66, 0xff); } // #ff66ff
+inline wxColour GetBot1ExecColour() { return wxColour(0x00, 0x4d, 0x99); } // #004d99
 
 // GetBot2 read/write/execute colors
-inline wxColour GetBot2ReadColour() { return wxColour(255, 128, 128); } // yellow
-inline wxColour GetBot2WriteColour() { return wxColour(0, 235, 108); } // orange
-inline wxColour GetBot2ExecColour() { return wxColour(255, 255, 0); } // yellow
+inline wxColour GetBot2ReadColour() { return wxColour(0xff, 0xff, 0x00); } // #ffff00
+inline wxColour GetBot2WriteColour() { return wxColour(0xac, 0x32, 0x00); } // #ac3200
+inline wxColour GetBot2ExecColour() { return wxColour(0xc0, 0x23, 0x23); } // #c02323
 
 #endif // XVM_ARENA_COMMON_HPP

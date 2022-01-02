@@ -69,6 +69,8 @@ public:
 
 private:
     void OnPause(wxCommandEvent& event);
+    void OnDecrement(wxCommandEvent& event);
+    void OnIncrement(wxCommandEvent& event);
     void OnLoad(wxCommandEvent& event);
     void OnStart(wxCommandEvent& event);
     void OnIntervalTimer(wxTimerEvent& e);
@@ -99,7 +101,7 @@ private:
     wxFont m_terminalFont = wxFont(10, wxFONTFAMILY_MODERN,
         wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM);
     // wait size for battle iteration
-    size_t m_iterWaitTime = 100, m_interWaitTime = 5000;
+    size_t m_iterWaitTime = 60, m_interWaitTime = 5000;
     // timer for timed battles
     wxTimer m_iterTimer, m_intervTimer;
     // battle pairs

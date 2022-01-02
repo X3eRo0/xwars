@@ -20,29 +20,35 @@ BotNameDisplay::BotNameDisplay(wxWindow* parent, const wxString& botname, bool l
         wxALIGN_CENTRE);
 
     m_botnameText->SetFont(wxFont(properties.fontSize, properties.fontFamily,
-                                  properties.fontStyle, properties.fontWeight));
+        properties.fontStyle, properties.fontWeight));
     m_botnameText->SetForegroundColour(properties.fgColour);
 
     // create buttons
     m_rText = new wxStaticText(this, wxID_ANY, "R", wxDefaultPosition,
-                               wxDefaultSize, wxALIGN_CENTRE);
+        wxDefaultSize, wxALIGN_CENTRE);
     m_rText->SetBackgroundColour(m_rwxBGColour);
-    if(left) m_rText->SetForegroundColour(GetBot1ReadColour());
-    else m_rText->SetForegroundColour(GetBot2ReadColour());
+    if (left)
+        m_rText->SetForegroundColour(GetBot1ReadColour());
+    else
+        m_rText->SetForegroundColour(GetBot2ReadColour());
     m_rText->SetFont(m_rwxTextFont);
 
     m_wText = new wxStaticText(this, wxID_ANY, "W", wxDefaultPosition,
-                               wxDefaultSize, wxALIGN_CENTRE);
+        wxDefaultSize, wxALIGN_CENTRE);
     m_wText->SetBackgroundColour(m_rwxBGColour);
-    if(left) m_wText->SetForegroundColour(GetBot1WriteColour());
-    else m_wText->SetForegroundColour(GetBot2WriteColour());
+    if (left)
+        m_wText->SetForegroundColour(GetBot1WriteColour());
+    else
+        m_wText->SetForegroundColour(GetBot2WriteColour());
     m_wText->SetFont(m_rwxTextFont);
 
     m_xText = new wxStaticText(this, wxID_ANY, "X", wxDefaultPosition,
-                               wxDefaultSize, wxALIGN_CENTRE);
+        wxDefaultSize, wxALIGN_CENTRE);
     m_xText->SetBackgroundColour(m_rwxBGColour);
-    if(left) m_xText->SetForegroundColour(GetBot1ExecColour());
-    else m_xText->SetForegroundColour(GetBot2ExecColour());
+    if (left)
+        m_xText->SetForegroundColour(GetBot1ExecColour());
+    else
+        m_xText->SetForegroundColour(GetBot2ExecColour());
     m_xText->SetFont(m_rwxTextFont);
 
     // add items to sizer for sizing

@@ -32,6 +32,8 @@ BEGIN_EVENT_TABLE(Arena, wxPanel)
 EVT_BUTTON(ID_LOAD, Arena::OnLoad)
 EVT_BUTTON(ID_START, Arena::OnStart)
 EVT_BUTTON(ID_PAUSE, Arena::OnPause)
+EVT_BUTTON(ID_PLUS, Arena::OnIncrement)
+EVT_BUTTON(ID_MINUS, Arena::OnDecrement)
 END_EVENT_TABLE()
 
 Arena::Arena(wxWindow* parent)
@@ -57,11 +59,11 @@ Arena::Arena(wxWindow* parent)
     m_buttonsPanel->SetSizer(m_btnsPanelHSizer);
 
     // create buttons
-    m_btnLoad = new wxButton(this, ID_LOAD, "Load", wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
-    m_btnStart = new wxButton(this, ID_START, "Start", wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
-    m_btnPause = new wxButton(this, ID_PAUSE, "Pause", wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
-    m_btnPlus = new wxButton(this, ID_PLUS, "+", wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
-    m_btnMinus = new wxButton(this, ID_MINUS, "-", wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
+    m_btnLoad = new wxButton(this, ID_LOAD, "Load", wxDefaultPosition, wxDefaultSize, 0);
+    m_btnStart = new wxButton(this, ID_START, "Start", wxDefaultPosition, wxDefaultSize, 0);
+    m_btnPause = new wxButton(this, ID_PAUSE, "Pause", wxDefaultPosition, wxDefaultSize, 0);
+    m_btnPlus = new wxButton(this, ID_PLUS, "+", wxDefaultPosition, wxDefaultSize, 0);
+    m_btnMinus = new wxButton(this, ID_MINUS, "-", wxDefaultPosition, wxDefaultSize, 0);
 
     // change background and foreground colors
     m_btnLoad->SetForegroundColour(*wxWHITE);
@@ -90,8 +92,6 @@ Arena::Arena(wxWindow* parent)
     m_iterTimer.Bind(wxEVT_TIMER, &Arena::OnIterationTimer, this);
     // m_intervTimer.Bind(wxEVT_TIMER, &Arena::OnIntervalTimer, this);
 
-    
-
     // create stats display
     m_statsDisplay = new StatsDisplay;
 }
@@ -113,8 +113,9 @@ void Arena::OnLoad(wxCommandEvent& WXUNUSED(event))
     LoadBots(botFolder);
 }
 
-void Arena::OnStart(wxCommandEvent& WXUNUSED(event)){
-    if(!m_isBattlePaused){
+void Arena::OnStart(wxCommandEvent& WXUNUSED(event))
+{
+    if (!m_isBattlePaused) {
         // clear scoreboard
         m_statsDisplay->ClearDisplay();
 
@@ -122,7 +123,7 @@ void Arena::OnStart(wxCommandEvent& WXUNUSED(event)){
         const auto& bots = get_xwars_instance()->botpaths;
 
         // add botnames to scoreboard
-        for(const auto& botname : bots){
+        for (const auto& botname : bots) {
             m_statsDisplay->AddBot(botname.substr(botname.find_last_of("/\\") + 1), 0);
         }
 
@@ -149,11 +150,11 @@ void Arena::OnStart(wxCommandEvent& WXUNUSED(event)){
     }
 }
 
-void Arena::OnIntervalTimer(wxTimerEvent& e){
+void Arena::OnIntervalTimer(wxTimerEvent& e)
+{
     // show stats display with winner
     /* m_statsDisplay->SetWinner(get_xwars_instance()->winner); */
     /* m_statsDisplay->Show(); */
-
 
     // this is the last battle
     if (m_battleIdx == m_battlePairs.size()) {
@@ -174,16 +175,17 @@ void Arena::OnIntervalTimer(wxTimerEvent& e){
     }
 }
 
-void Arena::OnIterationTimer(wxTimerEvent& e){
-    xwars * xwars_instance = get_xwars_instance();
+void Arena::OnIterationTimer(wxTimerEvent& e)
+{
+    xwars* xwars_instance = get_xwars_instance();
     if (xwars_instance->get_battle_status() && !xwars_instance->battle_step()) {
         Print("[+] Winner %s in %d instructions\n", get_xwars_instance()->winner.c_str(), get_xwars_instance()->counter);
         xwars_instance->set_battle_status(0);
         // m_iterTimer.Stop();
         // m_intervTimer.Start(m_interWaitTime);
 
-    m_statsDisplay->SetWinner(get_xwars_instance()->winner);
-    m_statsDisplay->ShowModal();
+        m_statsDisplay->SetWinner(get_xwars_instance()->winner);
+        m_statsDisplay->ShowModal();
 
         // this is the last battle
         if (m_battleIdx == m_battlePairs.size()) {
@@ -242,11 +244,33 @@ void Arena::LoadBots(const wxString& BotsFolder)
     }
 }
 
-void Arena::OnPause(wxCommandEvent& event){
+void Arena::OnPause(wxCommandEvent& event)
+{
     m_iterTimer.Stop();
     m_isBattlePaused = true;
 }
 
+void Arena::OnIncrement(wxCommandEvent& event)
+{
+    if (m_iterWaitTime >= 20 && m_iterWaitTime <= 990) {
+        m_iterWaitTime += 10;
+    }
+    if (!m_isBattlePaused) {
+        m_iterTimer.Stop();
+        m_iterTimer.Start(m_iterWaitTime);
+    }
+}
+
+void Arena::OnDecrement(wxCommandEvent& event)
+{
+    if (m_iterWaitTime >= 20 && m_iterWaitTime <= 1000) {
+        m_iterWaitTime -= 10;
+    }
+    if (!m_isBattlePaused) {
+        m_iterTimer.Stop();
+        m_iterTimer.Start(m_iterWaitTime);
+    }
+}
 // OnStart - start iter timer
 // OnIterTimer - check if more step and start inter timer and stop iter timer
 // OnInterTimer - start iter timer

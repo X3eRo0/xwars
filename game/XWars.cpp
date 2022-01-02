@@ -324,7 +324,7 @@ bool xwars::battle_step()
         display_disassembly(bot1, bot2);
 
         // tell backend this is bot 1
-        set_current_bitmap_bot(0);
+        set_current_bitmap_bot(1);
 
         // next step
         bot1->step();
@@ -342,7 +342,7 @@ bool xwars::battle_step()
         }
 
         // tell backend this is bot 2
-        set_current_bitmap_bot(1);
+        set_current_bitmap_bot(0);
 
         // next step
         bot2->step();

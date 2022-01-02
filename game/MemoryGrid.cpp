@@ -18,7 +18,7 @@ MemoryGrid::MemoryGrid(wxWindow* parent)
     for (auto& row : m_memGrid) {
         for (auto& elem : row) {
             elem = new wxStaticText(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                    wxSize(9, 9), wxBORDER_NONE | wxST_NO_AUTORESIZE | wxALIGN_CENTRE_HORIZONTAL);
+                wxSize(9, 9), wxBORDER_NONE | wxST_NO_AUTORESIZE | wxALIGN_CENTRE_HORIZONTAL);
             elem->Wrap(9);
             elem->SetBackgroundColour(m_gridElementColour);
             elem->SetOwnBackgroundColour(m_gridElementColour);
@@ -46,7 +46,7 @@ void MemoryGrid::UpdateGrid()
         if (check_oprn_valid(op)) {
             /* printf("bot_id: %d\n", bot_id); */
             if (bot_id == 1) {
-                if (pm_read && pm_write && pm_exec){
+                if (pm_read && pm_write && pm_exec) {
                     colour = GetBot1ExecColour();
                     pm = "X";
                     set_oprn_at_idx(i, make_oprn(1, oprn_x));
@@ -62,7 +62,7 @@ void MemoryGrid::UpdateGrid()
                 }
 
             } else {
-                if (pm_read && pm_write && pm_exec){
+                if (pm_read && pm_write && pm_exec) {
                     colour = GetBot2ExecColour();
                     pm = "X";
                     set_oprn_at_idx(i, make_oprn(0, oprn_x));
@@ -85,7 +85,8 @@ void MemoryGrid::UpdateGrid()
             uint8_t numBrightComponents = 0;
             uint8_t threshold = 40;
             float luma = 0.2126f * float(colour.Red()) + 0.7152f * float(colour.Green()) + 0.0722f * float(colour.Blue());
-            if(luma > 40){
+
+            if (luma > 100.0f) {
                 fgColour = *wxBLACK;
             }
 
