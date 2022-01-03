@@ -88,7 +88,11 @@ const wxColour& BotNameDisplay::GetExecuteColour() const { return m_xColour; }
 
 void BotNameDisplay::SetBotName(const std::string& name)
 {
-    m_botnameText->SetLabelText(name);
+    if (name.length() > 10) {
+        m_botnameText->SetLabelText(name.substr(0, 10) + "...");
+    } else {
+        m_botnameText->SetLabelText(name);
+    }
 }
 
 void BotNameDisplay::UpdateSelf()

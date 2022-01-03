@@ -15,7 +15,7 @@
   </RegisterDisplay>
   <InstructionDisplay>
     <Font Size="15" Family="wxFONTFAMILY_MODERN" Style="wxFONTSTYLE_NORMAL" Weight="wxFONTWEIGHT_NORMAL"/>
-    <Colour BackgroundColour="black" ForegroundColour="rgb(0, 128, 0)"/>
+    <Colour BackgroundColour="black" ForegroundColour="#00ff00"/>
   </InstructionDisplay>
   <ArenaTerminal>
     <Font Size="13" Family="wxFONTFAMILY_MODERN" Style="wxFONTSTYLE_NORMAL" Weight="wxFONTWEIGHT_NORMAL"/>
