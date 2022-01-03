@@ -3,13 +3,14 @@
 #include "Common.hpp"
 #include <wx/gdicmn.h>
 #include <wx/gtk/colour.h>
+#include <wx/stattext.h>
 #include <wx/stringimpl.h>
 
 MemoryGrid::MemoryGrid(wxWindow* parent)
     : wxPanel(parent)
 {
     // create grid sizer for memory grid and set it as sizer for "this" panel
-    m_memGridSizer = new wxGridSizer(NUM_ROWS_IN_MEM_GRID, NUM_COLS_IN_MEM_GRID, -1, -1);
+    m_memGridSizer = new wxGridSizer(NUM_ROWS_IN_MEM_GRID, NUM_COLS_IN_MEM_GRID, 1, 1);
     m_memGridSizer->SetCols(32);
     m_memGridSizer->SetRows(32);
     this->SetSizer(m_memGridSizer);
@@ -18,7 +19,7 @@ MemoryGrid::MemoryGrid(wxWindow* parent)
     for (auto& row : m_memGrid) {
         for (auto& elem : row) {
             elem = new wxStaticText(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                wxSize(9, 9), wxBORDER_NONE | wxST_NO_AUTORESIZE | wxALIGN_CENTRE_HORIZONTAL);
+                                    wxDefaultSize, wxBORDER_NONE | wxST_NO_AUTORESIZE | wxALIGN_CENTRE_HORIZONTAL);
             elem->Wrap(9);
             elem->SetBackgroundColour(m_gridElementColour);
             elem->SetOwnBackgroundColour(m_gridElementColour);
