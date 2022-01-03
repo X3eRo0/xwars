@@ -19,7 +19,7 @@ MemoryGrid::MemoryGrid(wxWindow* parent)
     for (auto& row : m_memGrid) {
         for (auto& elem : row) {
             elem = new wxStaticText(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                    wxDefaultSize, wxBORDER_NONE | wxST_NO_AUTORESIZE | wxALIGN_CENTRE_HORIZONTAL);
+                wxDefaultSize, wxBORDER_NONE | wxST_NO_AUTORESIZE | wxALIGN_CENTRE_HORIZONTAL);
             elem->Wrap(9);
             elem->SetBackgroundColour(m_gridElementColour);
             elem->SetOwnBackgroundColour(m_gridElementColour);
