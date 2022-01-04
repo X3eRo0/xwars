@@ -25,14 +25,13 @@ BotNameDisplay::BotNameDisplay(wxWindow* parent, const wxString& botname, bool l
 
     // create buttons
     m_rText = new wxStaticText(this, wxID_ANY, "R", wxDefaultPosition,
-        wxDefaultSize, wxALIGN_CENTRE);
+        wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL | wxALIGN_CENTRE_VERTICAL);
+
     // m_rText->SetBackgroundColour(m_rwxBGColour);
-    if (left){
+    if (left) {
         wxColour colour = GetBot1ReadColour();
 
-        float luma = 0.2126f * float(colour.Red()) +
-            0.7152f * float(colour.Green()) +
-            0.0722f * float(colour.Blue());
+        float luma = 0.2126f * float(colour.Red()) + 0.7152f * float(colour.Green()) + 0.0722f * float(colour.Blue());
         if (luma > 100.0f) {
             m_rText->SetForegroundColour(*wxBLACK);
         }
@@ -41,9 +40,7 @@ BotNameDisplay::BotNameDisplay(wxWindow* parent, const wxString& botname, bool l
     } else {
         wxColour colour = GetBot2ReadColour();
 
-        float luma = 0.2126f * float(colour.Red()) +
-            0.7152f * float(colour.Green()) +
-            0.0722f * float(colour.Blue());
+        float luma = 0.2126f * float(colour.Red()) + 0.7152f * float(colour.Green()) + 0.0722f * float(colour.Blue());
         if (luma > 100.0f) {
             m_rText->SetForegroundColour(*wxBLACK);
         }
@@ -53,24 +50,20 @@ BotNameDisplay::BotNameDisplay(wxWindow* parent, const wxString& botname, bool l
     m_rText->SetFont(m_rwxTextFont);
 
     m_wText = new wxStaticText(this, wxID_ANY, "W", wxDefaultPosition,
-        wxDefaultSize, wxALIGN_CENTRE);
-    if (left){
+        wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL | wxALIGN_CENTRE_VERTICAL);
+    if (left) {
         wxColour colour = GetBot1WriteColour();
 
-        float luma = 0.2126f * float(colour.Red()) +
-            0.7152f * float(colour.Green()) +
-            0.0722f * float(colour.Blue());
+        float luma = 0.2126f * float(colour.Red()) + 0.7152f * float(colour.Green()) + 0.0722f * float(colour.Blue());
         if (luma > 100.0f) {
             m_wText->SetForegroundColour(*wxBLACK);
         }
 
         m_wText->SetBackgroundColour(GetBot1WriteColour());
-    }else{
+    } else {
         wxColour colour = GetBot2WriteColour();
 
-        float luma = 0.2126f * float(colour.Red()) +
-            0.7152f * float(colour.Green()) +
-            0.0722f * float(colour.Blue());
+        float luma = 0.2126f * float(colour.Red()) + 0.7152f * float(colour.Green()) + 0.0722f * float(colour.Blue());
         if (luma > 100.0f) {
             m_wText->SetForegroundColour(*wxBLACK);
         }
@@ -81,14 +74,12 @@ BotNameDisplay::BotNameDisplay(wxWindow* parent, const wxString& botname, bool l
     m_wText->SetFont(m_rwxTextFont);
 
     m_xText = new wxStaticText(this, wxID_ANY, "X", wxDefaultPosition,
-        wxDefaultSize, wxALIGN_CENTRE);
+        wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL | wxALIGN_CENTRE_VERTICAL);
     // m_xText->SetForegroundColour(m_rwxBGColour);{
-    if (left){
+    if (left) {
         wxColour colour = GetBot1ExecColour();
 
-        float luma = 0.2126f * float(colour.Red()) +
-            0.7152f * float(colour.Green()) +
-            0.0722f * float(colour.Blue());
+        float luma = 0.2126f * float(colour.Red()) + 0.7152f * float(colour.Green()) + 0.0722f * float(colour.Blue());
         if (luma > 100.0f) {
             m_xText->SetForegroundColour(*wxBLACK);
         }
@@ -97,9 +88,7 @@ BotNameDisplay::BotNameDisplay(wxWindow* parent, const wxString& botname, bool l
     } else {
         wxColour colour = GetBot2ExecColour();
 
-        float luma = 0.2126f * float(colour.Red()) +
-            0.7152f * float(colour.Green()) +
-            0.0722f * float(colour.Blue());
+        float luma = 0.2126f * float(colour.Red()) + 0.7152f * float(colour.Green()) + 0.0722f * float(colour.Blue());
         if (luma > 100.0f) {
             m_xText->SetForegroundColour(*wxBLACK);
         }
@@ -111,9 +100,9 @@ BotNameDisplay::BotNameDisplay(wxWindow* parent, const wxString& botname, bool l
 
     // add items to sizer for sizing
     m_mainSizer->Add(m_botnameText, 5, wxEXPAND | wxALL, 4);
-    m_mainSizer->Add(m_rText, 1, wxEXPAND | wxALL, 10);
-    m_mainSizer->Add(m_wText, 1, wxEXPAND | wxALL, 10);
-    m_mainSizer->Add(m_xText, 1, wxEXPAND | wxALL, 10);
+    m_mainSizer->Add(m_rText, 1, wxEXPAND | wxALL, 20);
+    m_mainSizer->Add(m_wText, 1, wxEXPAND | wxALL, 20);
+    m_mainSizer->Add(m_xText, 1, wxEXPAND | wxALL, 20);
 }
 
 // void BotNameDisplay::SetNameColour(const wxString &c){

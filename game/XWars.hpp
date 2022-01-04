@@ -8,6 +8,7 @@
 #include <utility>
 
 #define MAX_INSTR_EXECS 2000
+#define MAX_BOT_SIZE 0x180
 
 struct xwars {
     xwars();
@@ -15,9 +16,6 @@ struct xwars {
 
     // // register bot info panels that must be updated
     // void register_bot_info(BotInfo* first, BotInfo* second);
-
-    // compile given bots
-    void compile_bots(const std::vector<std::string>& bot_paths);
 
     // this will allocate bots for the first time by loading
     // the assembly file(s) from locations in bot_paths

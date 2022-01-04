@@ -178,18 +178,35 @@ void xwars::copy_bots(xbot* bot1, xbot* bot2)
     bot1->size = bot1->bot_section->m_ofst;
     bot2->size = bot2->bot_section->m_ofst;
 
+    if (bot1->size > MAX_BOT_SIZE) {
+        bot1->size = MAX_BOT_SIZE;
+    }
+    if (bot2->size > MAX_BOT_SIZE) {
+        bot2->size = MAX_BOT_SIZE;
+    }
     // random seed
     srandom(time(nullptr));
 
-    // assign bot1 in first half
-    while ((bot1->offset < 0x20) || (bot1->offset > 0x200 - bot1->size)) {
-        bot1->offset = random() & 0xfff;
+    xbot* firstbot = bot1;
+    xbot* secondbot = bot2;
+
+    if (random() & 1) {
+        firstbot = bot2;
+        secondbot = bot1;
     }
 
+    // assign bot1 in first half
+    do {
+        firstbot->offset = random() & 0xfff;
+    } while (firstbot->offset > 0x200 - firstbot->size);
+
     // assign bot2 in second half
-    while ((bot2->offset < 0x220) || (bot2->offset > 0x400 - bot2->size)) {
-        bot2->offset = random() & 0xfff;
+    while ((secondbot->offset < 0x200) || (secondbot->offset > 0x400 - secondbot->size)) {
+        secondbot->offset = random() & 0xfff;
     }
+
+    firstbot = NULL;
+    secondbot = NULL;
 
     bot1->bot_addr = text->v_addr + bot1->offset;
     bot2->bot_addr = text->v_addr + bot2->offset;
@@ -205,8 +222,6 @@ bool xwars::battle_init(std::string Bot1Path, std::string Bot2Path)
 
     // delete old bots
     if (m_currentBots.first && m_currentBots.second) {
-        printf("[++] FREEING PREVIOUSLY ALLOCATED BOTS\n");
-        printf("[++] \t%s and %s\n", m_currentBots.first->botname.c_str(), m_currentBots.second->botname.c_str());
         section_entry* text = find_section_entry_by_name(m_currentBots.first->bin->x_section, ".text");
         section_entry* temp = m_currentBots.first->bin->x_section->sections;
 
@@ -364,6 +379,7 @@ bool xwars::battle_step()
         counter++;
         return true;
     } else {
+        winner = "DRAW";
         printf("[!] counter: %d, cpu1: %d, cpu2: %d\n", counter, get_RF(bot1->cpu), get_RF(bot2->cpu));
         return false;
     }
