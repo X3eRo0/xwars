@@ -32,7 +32,6 @@ u8 get_oprn_at_idx(u32 idx)
 {
     if ((idx >> 1) >= 0x200){
         fprintf(stderr, "[-] Trying to access out of bounds in bitmap\n");
-        exit(-1);
     }
     u8 bitmap_byte = bitmap[idx >> 1];
     u8 oprn = 0;
@@ -50,7 +49,6 @@ void set_oprn_at_idx(u32 idx, u8 value)
 {
     if ((idx >> 1) >= 0x200){
         fprintf(stderr, "[-] Trying to access out of bounds in bitmap\n");
-        exit(-1);
     }
     u8 bitmap_byte = bitmap[idx >> 1];
 
