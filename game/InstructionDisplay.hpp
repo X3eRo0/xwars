@@ -44,7 +44,7 @@ public:
     // properties
     PropertyData properties = PropertyData {
         .widgetType = WidgetType::InstructionDisplay,
-        .fontSize = 8,
+        .fontSize = 10,
         .fontFamily = wxFONTFAMILY_MODERN,
         .fontStyle = wxFONTSTYLE_NORMAL,
         .fontWeight = wxFONTWEIGHT_NORMAL,

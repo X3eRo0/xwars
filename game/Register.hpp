@@ -56,7 +56,7 @@ private:
     // panel will be like this [ <reg_name> : <reg_value> ]
     wxStaticText *m_registerNameText, *m_registerValueText, *m_delimiterText;
     // label and value fomt
-    wxFont m_font = wxFont(8, wxFONTFAMILY_MODERN,
+    wxFont m_font = wxFont(10, wxFONTFAMILY_MODERN,
         wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
     // color values
     wxColour m_registerNameFGColour = *wxGREEN, m_registerValueFGColour = *wxWHITE;

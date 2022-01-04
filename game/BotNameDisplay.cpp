@@ -26,29 +26,87 @@ BotNameDisplay::BotNameDisplay(wxWindow* parent, const wxString& botname, bool l
     // create buttons
     m_rText = new wxStaticText(this, wxID_ANY, "R", wxDefaultPosition,
         wxDefaultSize, wxALIGN_CENTRE);
-    m_rText->SetBackgroundColour(m_rwxBGColour);
-    if (left)
-        m_rText->SetForegroundColour(GetBot1ReadColour());
-    else
-        m_rText->SetForegroundColour(GetBot2ReadColour());
+    // m_rText->SetBackgroundColour(m_rwxBGColour);
+    if (left){
+        wxColour colour = GetBot1ReadColour();
+
+        float luma = 0.2126f * float(colour.Red()) +
+            0.7152f * float(colour.Green()) +
+            0.0722f * float(colour.Blue());
+        if (luma > 100.0f) {
+            m_rText->SetForegroundColour(*wxBLACK);
+        }
+
+        m_rText->SetBackgroundColour(GetBot1ReadColour());
+    } else {
+        wxColour colour = GetBot2ReadColour();
+
+        float luma = 0.2126f * float(colour.Red()) +
+            0.7152f * float(colour.Green()) +
+            0.0722f * float(colour.Blue());
+        if (luma > 100.0f) {
+            m_rText->SetForegroundColour(*wxBLACK);
+        }
+
+        m_rText->SetBackgroundColour(GetBot2ReadColour());
+    }
     m_rText->SetFont(m_rwxTextFont);
 
     m_wText = new wxStaticText(this, wxID_ANY, "W", wxDefaultPosition,
         wxDefaultSize, wxALIGN_CENTRE);
-    m_wText->SetBackgroundColour(m_rwxBGColour);
-    if (left)
-        m_wText->SetForegroundColour(GetBot1WriteColour());
-    else
-        m_wText->SetForegroundColour(GetBot2WriteColour());
+    if (left){
+        wxColour colour = GetBot1WriteColour();
+
+        float luma = 0.2126f * float(colour.Red()) +
+            0.7152f * float(colour.Green()) +
+            0.0722f * float(colour.Blue());
+        if (luma > 100.0f) {
+            m_wText->SetForegroundColour(*wxBLACK);
+        }
+
+        m_wText->SetBackgroundColour(GetBot1WriteColour());
+    }else{
+        wxColour colour = GetBot2WriteColour();
+
+        float luma = 0.2126f * float(colour.Red()) +
+            0.7152f * float(colour.Green()) +
+            0.0722f * float(colour.Blue());
+        if (luma > 100.0f) {
+            m_wText->SetForegroundColour(*wxBLACK);
+        }
+
+        m_wText->SetBackgroundColour(GetBot2WriteColour());
+    }
+
     m_wText->SetFont(m_rwxTextFont);
 
     m_xText = new wxStaticText(this, wxID_ANY, "X", wxDefaultPosition,
         wxDefaultSize, wxALIGN_CENTRE);
-    m_xText->SetBackgroundColour(m_rwxBGColour);
-    if (left)
-        m_xText->SetForegroundColour(GetBot1ExecColour());
-    else
-        m_xText->SetForegroundColour(GetBot2ExecColour());
+    // m_xText->SetForegroundColour(m_rwxBGColour);{
+    if (left){
+        wxColour colour = GetBot1ExecColour();
+
+        float luma = 0.2126f * float(colour.Red()) +
+            0.7152f * float(colour.Green()) +
+            0.0722f * float(colour.Blue());
+        if (luma > 100.0f) {
+            m_xText->SetForegroundColour(*wxBLACK);
+        }
+
+        m_xText->SetBackgroundColour(GetBot1ExecColour());
+    } else {
+        wxColour colour = GetBot2ExecColour();
+
+        float luma = 0.2126f * float(colour.Red()) +
+            0.7152f * float(colour.Green()) +
+            0.0722f * float(colour.Blue());
+        if (luma > 100.0f) {
+            m_xText->SetForegroundColour(*wxBLACK);
+        }
+
+        m_xText->SetBackgroundColour(GetBot2ExecColour());
+    }
+
     m_xText->SetFont(m_rwxTextFont);
 
     // add items to sizer for sizing
