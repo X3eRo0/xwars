@@ -77,7 +77,7 @@ private:
     // display area bg color
     wxColour m_displayBGColour = *wxBLACK, m_displayFGColour = *wxGREEN;
     // instruction display font
-    wxFont m_displayFont = wxFont(9, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM);
+    wxFont m_displayFont = wxFont(10, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM);
 };
 
 #endif // XVM_ARENA_INSTRUCTION_DISPLAY_HPP

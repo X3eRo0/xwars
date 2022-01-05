@@ -84,16 +84,16 @@ Arena::Arena(wxWindow* parent)
     m_btnMinus->SetBackgroundColour(*wxBLACK);
 
     // add for sizing
-    m_btnsPanelHSizer->Add(m_btnLoad, 1);
-    m_btnsPanelHSizer->Add(m_btnStart, 1);
-    m_btnsPanelHSizer->Add(m_btnPause, 1);
-    m_btnsPanelHSizer->Add(m_btnNext, 1);
-    m_btnsPanelHSizer->Add(m_btnPlus, 1);
-    m_btnsPanelHSizer->Add(m_btnMinus, 1);
+    m_btnsPanelHSizer->Add(m_btnLoad, 1, wxEXPAND | wxUP | wxDOWN);
+    m_btnsPanelHSizer->Add(m_btnStart, 1, wxEXPAND | wxUP | wxDOWN);
+    m_btnsPanelHSizer->Add(m_btnPause, 1, wxEXPAND | wxUP | wxDOWN);
+    m_btnsPanelHSizer->Add(m_btnNext, 1, wxEXPAND | wxUP | wxDOWN);
+    m_btnsPanelHSizer->Add(m_btnPlus, 1, wxEXPAND | wxUP | wxDOWN);
+    m_btnsPanelHSizer->Add(m_btnMinus, 1, wxEXPAND | wxUP | wxDOWN);
 
     // add for sizing
-    m_mainSizer->Add(m_buttonsPanel, 1, wxEXPAND | wxALL, 0);
-    m_mainSizer->Add(m_terminal, 5, wxEXPAND | wxALL, 0);
+    m_mainSizer->Add(m_buttonsPanel, 1, wxEXPAND | wxALL);
+    m_mainSizer->Add(m_terminal, 5, wxEXPAND | wxALL);
 
     // bind our timer to this
     m_iterTimer.Bind(wxEVT_TIMER, &Arena::OnIterationTimer, this);
@@ -249,7 +249,7 @@ void Arena::OnPause(wxCommandEvent& event)
 void Arena::UpdateStatus()
 {
     wxString statusText;
-    statusText.Printf("Instruction Counter: %.4d | Delay: %.3ldms | Loaded Bots: %.3ld", get_xwars_instance()->counter, m_iterWaitTime, get_xwars_instance()->botpaths.size());
+    statusText.Printf("# of Instructions: %.4d | Delay: %.3ldms | Loaded Bots: %.3ld", get_xwars_instance()->counter, m_iterWaitTime, get_xwars_instance()->botpaths.size());
     FactoryGetMainWindow()->SetStatusText(statusText);
 }
 
