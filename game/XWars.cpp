@@ -10,6 +10,7 @@
 #include <wx/event.h>
 #include <wx/time.h>
 #include <wx/utils.h>
+#include "MainWindow.hpp"
 
 // Created by X3eRo0 on 6/7/2021.
 //
@@ -375,7 +376,6 @@ bool xwars::battle_step()
             winner = bot1->botname;
             return false;
         }
-
         counter++;
         return true;
     } else {

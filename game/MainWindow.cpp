@@ -77,7 +77,11 @@ MainWindow::MainWindow(wxWindow* parent, wxWindowID id, const wxString& title)
         .size = wxSize(1366, 768)
     };
 
+    // update self according to loaded theme
     UpdateSelf();
+
+    // create status bar
+    CreateStatusBar();
 }
 
 // handle event

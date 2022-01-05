@@ -18,6 +18,7 @@
 #include "MemoryGrid.hpp"
 #include "MiddlePanel.hpp"
 #include "StatsDisplay.hpp"
+#include "MainWindow.hpp"
 
 enum xvmArenaButtonIDs {
     ID_LOAD = wxID_HIGHEST + 1000,
@@ -150,40 +151,47 @@ void Arena::OnStart(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void Arena::OnIntervalTimer(wxTimerEvent& e)
-{
-    // show stats display with winner
-    /* m_statsDisplay->SetWinner(get_xwars_instance()->winner); */
-    /* m_statsDisplay->Show(); */
+// void Arena::OnIntervalTimer(wxTimerEvent& e)
+// {
+//     // show stats display with winner
+//     /* m_statsDisplay->SetWinner(get_xwars_instance()->winner); */
+//     /* m_statsDisplay->Show(); */
 
-    // this is the last battle
-    if (m_battleIdx == m_battlePairs.size()) {
-        m_iterTimer.Stop();
-        return;
-    }
+//     // this is the last battle
+//     if (m_battleIdx == m_battlePairs.size()) {
+//         m_iterTimer.Stop();
+//         return;
+//     }
 
-    // do battle
-    const auto& bots = get_xwars_instance()->botpaths;
-    const std::pair<int, int>& botpair = m_battlePairs[m_battleIdx++];
+//     // do battle
+//     const auto& bots = get_xwars_instance()->botpaths;
+//     const std::pair<int, int>& botpair = m_battlePairs[m_battleIdx++];
 
-    // clear memory grid
-    FactoryGetMiddlePanel()->GetMemoryGrid()->ClearGrid();
+//     // clear memory grid
+//     FactoryGetMiddlePanel()->GetMemoryGrid()->ClearGrid();
 
-    // init battle and start iteration timer
-    if (get_xwars_instance()->battle_init(bots[botpair.first], bots[botpair.second])) {
-        m_iterTimer.Start(m_iterWaitTime);
-    }
-}
+//     // init battle and start iteration timer
+//     if (get_xwars_instance()->battle_init(bots[botpair.first], bots[botpair.second])) {
+//         m_iterTimer.Start(m_iterWaitTime);
+//     }
+// }
 
 void Arena::OnIterationTimer(wxTimerEvent& e)
 {
     xwars* xwars_instance = get_xwars_instance();
+
+    // show counter in status text
+    wxString statusText;
+    statusText.Printf("Counter %d | Iteration Wait Time : %ldms", get_xwars_instance()->counter, m_iterWaitTime);
+    FactoryGetMainWindow()->SetStatusText(statusText);
+
     if (xwars_instance->get_battle_status() && !xwars_instance->battle_step()) {
         Print("[+] Winner %s in %d instructions\n", get_xwars_instance()->winner.c_str(), get_xwars_instance()->counter);
         xwars_instance->set_battle_status(0);
         // m_iterTimer.Stop();
         // m_intervTimer.Start(m_interWaitTime);
 
+        // display stats
         m_statsDisplay->SetWinner(get_xwars_instance()->winner);
         m_statsDisplay->ShowModal();
 
