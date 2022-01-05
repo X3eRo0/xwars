@@ -42,8 +42,8 @@ BotInfo::BotInfo(wxWindow* parent, const wxString& botname, bool left)
 
     // add displays for sizing
     m_mainSizer->Add(m_botNameDisplay, 1, wxEXPAND | wxUP | wxDOWN);
-    m_mainSizer->Add(m_registerDisplay, 2, wxEXPAND | wxUP | wxDOWN, 3);
-    m_mainSizer->Add(m_instructionDisplay, 10, wxEXPAND | wxUP | wxDOWN, 3);
+    m_mainSizer->Add(m_registerDisplay, 2, wxEXPAND | wxUP | wxDOWN);
+    m_mainSizer->Add(m_instructionDisplay, 10, wxEXPAND | wxUP | wxDOWN);
 }
 
 // change register display text color
