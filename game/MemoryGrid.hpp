@@ -12,8 +12,8 @@ enum class BotID { Bot1,
     Bot2 };
 
 enum class Permission { Read = 'R',
-    Write = 'W',
-    Execute = 'X' };
+Write = 'W',
+Execute = 'X' };
 
 class MemoryGrid : public wxPanel {
 public:

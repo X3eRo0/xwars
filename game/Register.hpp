@@ -40,12 +40,12 @@ public:
     // one can use this as reference to set register name using the set name
     // like in a for loop
     static inline std::array<std::string, NUMBER_OF_REGISTERS> RegisterNames
-        = { "r0", "r1", "r2", "r3",
-              "r4", "r5", "r6", "r7",
-              "r8", "r9", "ra", "rb",
-              "rc", "sp", "bp", "pc" };
+    = { "r0", "r1", "r2", "r3",
+    "r4", "r5", "r6", "r7",
+    "r8", "r9", "ra", "rb",
+    "rc", "sp", "bp", "pc" };
 
-private:
+    private:
     // RegisterDisplay and Register, both must have same background colour
     wxColour m_defaultColour = wxColour(0, 0, 0);
     // main sizer

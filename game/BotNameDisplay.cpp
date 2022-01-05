@@ -99,7 +99,7 @@ BotNameDisplay::BotNameDisplay(wxWindow* parent, const wxString& botname, bool l
     m_xText->SetFont(m_rwxTextFont);
 
     // add items to sizer for sizing
-    m_mainSizer->Add(m_botnameText, 6, wxEXPAND | wxALL, 4);
+    m_mainSizer->Add(m_botnameText, 6, wxEXPAND | wxALL, 8);
     m_mainSizer->Add(m_rText, 1, wxEXPAND | wxALL, 15);
     m_mainSizer->Add(m_wText, 1, wxEXPAND | wxALL, 15);
     m_mainSizer->Add(m_xText, 1, wxEXPAND | wxALL, 15);

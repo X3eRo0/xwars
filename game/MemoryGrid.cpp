@@ -19,12 +19,12 @@ MemoryGrid::MemoryGrid(wxWindow* parent)
     for (auto& row : m_memGrid) {
         for (auto& elem : row) {
             elem = new wxStaticText(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                    wxDefaultSize, wxBORDER_NONE | wxST_NO_AUTORESIZE | wxALIGN_CENTRE_HORIZONTAL);
-            elem->Wrap(9);
+                                    wxSize(10,10), wxBORDER_NONE | wxST_NO_AUTORESIZE | wxALIGN_CENTRE_HORIZONTAL);
+            // elem->Wrap(8);
             elem->SetBackgroundColour(m_gridElementColour);
             elem->SetOwnBackgroundColour(m_gridElementColour);
             elem->SetFont(wxFont(8, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
-            m_memGridSizer->Add(elem, 1, wxEXPAND | wxLEFT | wxRIGHT);
+            m_memGridSizer->Add(elem, 1, wxEXPAND | wxALL);
         }
     }
 }
