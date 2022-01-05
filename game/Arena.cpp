@@ -235,6 +235,7 @@ void Arena::OnNext(wxCommandEvent& event)
 {
     if (m_isBattlePaused) {
         get_xwars_instance()->battle_step();
+        UpdateStatus();
     } else {
         Print("[-] Cannot execute next instruction while battle is not paused\n");
     }

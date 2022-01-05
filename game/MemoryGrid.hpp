@@ -5,8 +5,8 @@
 #include <wx/gdicmn.h>
 
 // memory grid size
-#define NUM_ROWS_IN_MEM_GRID 32
-#define NUM_COLS_IN_MEM_GRID 32
+#define NUM_ROWS_IN_MEM_GRID 48
+#define NUM_COLS_IN_MEM_GRID 48
 
 enum class BotID { Bot1,
     Bot2 };
