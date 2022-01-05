@@ -3,6 +3,7 @@
 #include "../xasm/xasm.h"
 #include "Common.hpp"
 #include "Factory.hpp"
+#include "MainWindow.hpp"
 #include "MiddlePanel.hpp"
 #include <cstdio>
 #include <unistd.h>
@@ -10,7 +11,6 @@
 #include <wx/event.h>
 #include <wx/time.h>
 #include <wx/utils.h>
-#include "MainWindow.hpp"
 
 // Created by X3eRo0 on 6/7/2021.
 //
@@ -199,10 +199,10 @@ void xwars::copy_bots(xbot* bot1, xbot* bot2)
     // assign bot1 in first half
     do {
         firstbot->offset = random() & 0xfff;
-    } while (firstbot->offset > 0x200 - firstbot->size);
+    } while (firstbot->offset > (XWARS_MEM_SIZE / 2) - firstbot->size);
 
     // assign bot2 in second half
-    while ((secondbot->offset < 0x200) || (secondbot->offset > 0x400 - secondbot->size)) {
+    while ((secondbot->offset < (XWARS_MEM_SIZE / 2)) || (secondbot->offset > (XWARS_MEM_SIZE)-secondbot->size)) {
         secondbot->offset = random() & 0xfff;
     }
 
@@ -281,7 +281,7 @@ bool xwars::battle_init(std::string Bot1Path, std::string Bot2Path)
     // allocate a common text region
     section_entry* temp = NULL;
     section_entry* text = init_section_entry();
-    set_section_entry(text, ".text", 0x400, 0x1337000, PERM_READ | PERM_WRITE | PERM_EXEC);
+    set_section_entry(text, ".text", XWARS_MEM_SIZE, 0x1337000, PERM_READ | PERM_WRITE | PERM_EXEC);
 
     // add the .text in bot1
     temp = bot1->bin->x_section->sections;

@@ -11,8 +11,8 @@ MemoryGrid::MemoryGrid(wxWindow* parent)
 {
     // create grid sizer for memory grid and set it as sizer for "this" panel
     m_memGridSizer = new wxGridSizer(NUM_ROWS_IN_MEM_GRID, NUM_COLS_IN_MEM_GRID, 1, 1);
-    m_memGridSizer->SetCols(32);
-    m_memGridSizer->SetRows(32);
+    m_memGridSizer->SetCols(NUM_COLS_IN_MEM_GRID);
+    m_memGridSizer->SetRows(NUM_ROWS_IN_MEM_GRID);
     this->SetSizer(m_memGridSizer);
 
     // create memory grid

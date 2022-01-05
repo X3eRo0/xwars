@@ -37,7 +37,7 @@ inline wxColour GetBot1ExecColour() { return wxColour(0x00, 0x4d, 0x99); } // #0
 
 // GetBot2 read/write/execute colors
 inline wxColour GetBot2ReadColour() { return wxColour(0xff, 0xff, 0x00); } // #ffff00
-inline wxColour GetBot2WriteColour() { return wxColour(0xac, 0x32, 0x00); } // #ac3200
-inline wxColour GetBot2ExecColour() { return wxColour(0xc0, 0x23, 0x23); } // #c02323
+inline wxColour GetBot2WriteColour() { return wxColour(0xff, 0xff, 0xff); } // #ffffff
+inline wxColour GetBot2ExecColour() { return wxColour(0xaf, 0x00, 0x00); } // #af0000
 
 #endif // XVM_ARENA_COMMON_HPP

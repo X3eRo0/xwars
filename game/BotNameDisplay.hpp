@@ -75,7 +75,7 @@ private:
         m_xColour = GetBot1ReadColour(),
         m_rwxBGColour = *wxBLACK;
     // font for our r,w,x items
-    wxFont m_rwxTextFont = wxFont(12, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
+    wxFont m_rwxTextFont = wxFont(18, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
 };
 
 #endif // XVM_ARENA_BOT_NAME_DISPLAY_HPP

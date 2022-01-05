@@ -16,6 +16,7 @@
 #define XVM_DFLT_SP 0xCAFE4000
 #define XVM_STACK_SIZE 0x3000
 #define XVM_HDR_SIZE 0x14
+#define XWARS_MEM_SIZE 0x400
 
 #define E_OK 0
 #define E_ERR (-1)

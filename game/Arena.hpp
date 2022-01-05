@@ -68,6 +68,8 @@ public:
     DECLARE_EVENT_TABLE();
 
 private:
+    void UpdateStatus();
+    void OnNext(wxCommandEvent& event);
     void OnPause(wxCommandEvent& event);
     void OnDecrement(wxCommandEvent& event);
     void OnIncrement(wxCommandEvent& event);
@@ -96,7 +98,7 @@ private:
     // horizontal sizer for buttons panel
     wxBoxSizer* m_btnsPanelHSizer;
     // our control buttons
-    wxButton *m_btnLoad, *m_btnStart, *m_btnPlus, *m_btnMinus, *m_btnPause;
+    wxButton *m_btnLoad, *m_btnStart, *m_btnPlus, *m_btnNext, *m_btnMinus, *m_btnPause;
     // terminal font
     wxFont m_terminalFont = wxFont(10, wxFONTFAMILY_MODERN,
         wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM);

@@ -17,12 +17,12 @@ extern "C" {
  */
 
 // global bitmap
-u8 bitmap[0x200] = { 0 };
+u8 bitmap[(XWARS_MEM_SIZE / 2)] = { 0 };
 u8 bot_id = 0;
 
 u8 make_oprn(u8 botid, u8 perm)
 {
-    if (perm == oprn_cx){
+    if (perm == oprn_cx) {
         return (botid << oprn_b) | (oprn_cx);
     }
     return (botid << oprn_b) | (1 << perm);
@@ -30,7 +30,7 @@ u8 make_oprn(u8 botid, u8 perm)
 
 u8 get_oprn_at_idx(u32 idx)
 {
-    if ((idx >> 1) >= 0x200){
+    if ((idx >> 1) >= (XWARS_MEM_SIZE / 2)) {
         fprintf(stderr, "[-] Trying to access out of bounds in bitmap\n");
     }
     u8 bitmap_byte = bitmap[idx >> 1];
@@ -47,7 +47,7 @@ u8 get_oprn_at_idx(u32 idx)
 
 void set_oprn_at_idx(u32 idx, u8 value)
 {
-    if ((idx >> 1) >= 0x200){
+    if ((idx >> 1) >= (XWARS_MEM_SIZE / 2)) {
         fprintf(stderr, "[-] Trying to access out of bounds in bitmap\n");
     }
     u8 bitmap_byte = bitmap[idx >> 1];

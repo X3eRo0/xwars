@@ -15,17 +15,18 @@
 #include <wx/timer.h>
 #include <wx/wxcrt.h>
 
+#include "MainWindow.hpp"
 #include "MemoryGrid.hpp"
 #include "MiddlePanel.hpp"
 #include "StatsDisplay.hpp"
-#include "MainWindow.hpp"
 
 enum xvmArenaButtonIDs {
     ID_LOAD = wxID_HIGHEST + 1000,
     ID_START = wxID_HIGHEST + 1001,
     ID_PAUSE = wxID_HIGHEST + 1002,
-    ID_PLUS = wxID_HIGHEST + 1003,
-    ID_MINUS = wxID_HIGHEST + 1004
+    ID_NEXT = wxID_HIGHEST + 1003,
+    ID_PLUS = wxID_HIGHEST + 1004,
+    ID_MINUS = wxID_HIGHEST + 1005
 };
 
 // event table
@@ -33,6 +34,7 @@ BEGIN_EVENT_TABLE(Arena, wxPanel)
 EVT_BUTTON(ID_LOAD, Arena::OnLoad)
 EVT_BUTTON(ID_START, Arena::OnStart)
 EVT_BUTTON(ID_PAUSE, Arena::OnPause)
+EVT_BUTTON(ID_NEXT, Arena::OnNext)
 EVT_BUTTON(ID_PLUS, Arena::OnIncrement)
 EVT_BUTTON(ID_MINUS, Arena::OnDecrement)
 END_EVENT_TABLE()
@@ -63,6 +65,7 @@ Arena::Arena(wxWindow* parent)
     m_btnLoad = new wxButton(this, ID_LOAD, "Load", wxDefaultPosition, wxDefaultSize, 0);
     m_btnStart = new wxButton(this, ID_START, "Start", wxDefaultPosition, wxDefaultSize, 0);
     m_btnPause = new wxButton(this, ID_PAUSE, "Pause", wxDefaultPosition, wxDefaultSize, 0);
+    m_btnNext = new wxButton(this, ID_NEXT, "NextI", wxDefaultPosition, wxDefaultSize, 0);
     m_btnPlus = new wxButton(this, ID_PLUS, "+", wxDefaultPosition, wxDefaultSize, 0);
     m_btnMinus = new wxButton(this, ID_MINUS, "-", wxDefaultPosition, wxDefaultSize, 0);
 
@@ -73,6 +76,8 @@ Arena::Arena(wxWindow* parent)
     m_btnStart->SetBackgroundColour(*wxBLACK);
     m_btnPause->SetForegroundColour(*wxWHITE);
     m_btnPause->SetBackgroundColour(*wxBLACK);
+    m_btnNext->SetForegroundColour(*wxWHITE);
+    m_btnNext->SetBackgroundColour(*wxBLACK);
     m_btnPlus->SetForegroundColour(*wxWHITE);
     m_btnPlus->SetBackgroundColour(*wxBLACK);
     m_btnMinus->SetForegroundColour(*wxWHITE);
@@ -82,6 +87,7 @@ Arena::Arena(wxWindow* parent)
     m_btnsPanelHSizer->Add(m_btnLoad, 1);
     m_btnsPanelHSizer->Add(m_btnStart, 1);
     m_btnsPanelHSizer->Add(m_btnPause, 1);
+    m_btnsPanelHSizer->Add(m_btnNext, 1);
     m_btnsPanelHSizer->Add(m_btnPlus, 1);
     m_btnsPanelHSizer->Add(m_btnMinus, 1);
 
@@ -151,39 +157,12 @@ void Arena::OnStart(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-// void Arena::OnIntervalTimer(wxTimerEvent& e)
-// {
-//     // show stats display with winner
-//     /* m_statsDisplay->SetWinner(get_xwars_instance()->winner); */
-//     /* m_statsDisplay->Show(); */
-
-//     // this is the last battle
-//     if (m_battleIdx == m_battlePairs.size()) {
-//         m_iterTimer.Stop();
-//         return;
-//     }
-
-//     // do battle
-//     const auto& bots = get_xwars_instance()->botpaths;
-//     const std::pair<int, int>& botpair = m_battlePairs[m_battleIdx++];
-
-//     // clear memory grid
-//     FactoryGetMiddlePanel()->GetMemoryGrid()->ClearGrid();
-
-//     // init battle and start iteration timer
-//     if (get_xwars_instance()->battle_init(bots[botpair.first], bots[botpair.second])) {
-//         m_iterTimer.Start(m_iterWaitTime);
-//     }
-// }
-
 void Arena::OnIterationTimer(wxTimerEvent& e)
 {
     xwars* xwars_instance = get_xwars_instance();
 
     // show counter in status text
-    wxString statusText;
-    statusText.Printf("Counter %d | Iteration Wait Time : %ldms", get_xwars_instance()->counter, m_iterWaitTime);
-    FactoryGetMainWindow()->SetStatusText(statusText);
+    UpdateStatus();
 
     if (xwars_instance->get_battle_status() && !xwars_instance->battle_step()) {
         Print("[+] Winner %s in %d instructions\n", get_xwars_instance()->winner.c_str(), get_xwars_instance()->counter);
@@ -252,14 +231,32 @@ void Arena::LoadBots(const wxString& BotsFolder)
     }
 }
 
+void Arena::OnNext(wxCommandEvent& event)
+{
+    if (m_isBattlePaused) {
+        get_xwars_instance()->battle_step();
+    } else {
+        Print("[-] Cannot execute next instruction while battle is not paused\n");
+    }
+}
+
 void Arena::OnPause(wxCommandEvent& event)
 {
     m_iterTimer.Stop();
     m_isBattlePaused = true;
 }
 
+void Arena::UpdateStatus()
+{
+    wxString statusText;
+    statusText.Printf("Instruction Counter: %.4d | Delay: %.3ldms | Loaded Bots: %.3ld", get_xwars_instance()->counter, m_iterWaitTime, get_xwars_instance()->botpaths.size());
+    FactoryGetMainWindow()->SetStatusText(statusText);
+}
+
 void Arena::OnIncrement(wxCommandEvent& event)
 {
+    UpdateStatus();
+
     if (m_iterWaitTime >= 20 && m_iterWaitTime <= 990) {
         m_iterWaitTime += 10;
     }
@@ -271,6 +268,8 @@ void Arena::OnIncrement(wxCommandEvent& event)
 
 void Arena::OnDecrement(wxCommandEvent& event)
 {
+    UpdateStatus();
+
     if (m_iterWaitTime >= 20 && m_iterWaitTime <= 1000) {
         m_iterWaitTime -= 10;
     }
