@@ -82,11 +82,13 @@ MainWindow::MainWindow(wxWindow* parent, wxWindowID id, const wxString& title)
     UpdateSelf();
 
     // create status bar
-    CreateStatusBar();
+    CreateStatusBar(6, wxSTB_DEFAULT_STYLE);
 }
 
-void MainWindow::OnClose(wxCommandEvent& event){
+void MainWindow::OnClose(wxCommandEvent& event)
+{
     Destroy();
+    Close(true);
 }
 
 // handle event

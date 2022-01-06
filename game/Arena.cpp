@@ -99,7 +99,7 @@ Arena::Arena(wxWindow* parent)
     m_iterTimer.Bind(wxEVT_TIMER, &Arena::OnIterationTimer, this);
     // m_intervTimer.Bind(wxEVT_TIMER, &Arena::OnIntervalTimer, this);
     m_statusUpdateTimer.Bind(wxEVT_TIMER, &Arena::OnUpdateStatus, this);
-    m_statusUpdateTimer.Start(10);
+    m_statusUpdateTimer.Start(5);
 
     // create stats display
     m_statsDisplay = new StatsDisplay;
@@ -245,10 +245,48 @@ void Arena::OnPause(wxCommandEvent& event)
     m_isBattlePaused = true;
 }
 
-void Arena::OnUpdateStatus(wxTimerEvent& e){
-    wxString statusText;
-    statusText.Printf("# of Instructions: %.4d | Delay: %.3ldms | Loaded Bots: %.3ld | Current Battle: %.2ld", get_xwars_instance()->counter, m_iterWaitTime, get_xwars_instance()->botpaths.size(), m_battleIdx);
-    FactoryGetMainWindow()->SetStatusText(statusText);
+void Arena::OnUpdateStatus(wxTimerEvent& e)
+{
+    wxString instructionNo;
+    wxString delay;
+    wxString loadedbots;
+    wxString currentbattle;
+    wxString animationstring = "Idle";
+    static wxString output = "Status: ";
+    u32 max_anim_length = 50;
+    static u32 anim_counter = 0;
+    static u32 timer_counter = 0;
+    anim_counter %= max_anim_length;
+    if (timer_counter % 10 == 0) {
+        output = "Status: ";
+        if (anim_counter < max_anim_length) {
+            for (u32 i = 0; i < anim_counter; i++) {
+                output += " ";
+            }
+            u32 len = animationstring.length();
+            if (max_anim_length - anim_counter < animationstring.length()) {
+                len = max_anim_length - anim_counter;
+            }
+            output += animationstring.substr(0, len);
+            if (len == animationstring.length()) {
+                for (u32 i = 0; i < max_anim_length - len - anim_counter; i++) {
+                    output += " ";
+                }
+            }
+        }
+        anim_counter++;
+    }
+    timer_counter++;
+    instructionNo.Printf("# of Instructions: %.4d", get_xwars_instance()->counter);
+    delay.Printf("Delay: %.3ldms", m_iterWaitTime);
+    loadedbots.Printf("Loaded Bots: %.3ld", get_xwars_instance()->botpaths.size());
+    currentbattle.Printf("Current Battle: %.4ld", m_battleIdx);
+    FactoryGetMainWindow()->SetStatusText(instructionNo, 0);
+    FactoryGetMainWindow()->SetStatusText(delay, 1);
+    FactoryGetMainWindow()->SetStatusText(loadedbots, 2);
+    FactoryGetMainWindow()->SetStatusText(currentbattle, 3);
+    FactoryGetMainWindow()->SetStatusText(output, 4);
+    FactoryGetMainWindow()->SetStatusText("XWars Version 1.0 Alpha", 5);
 }
 
 void Arena::OnIncrement(wxCommandEvent& event)
