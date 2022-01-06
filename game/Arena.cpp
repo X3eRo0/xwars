@@ -98,6 +98,8 @@ Arena::Arena(wxWindow* parent)
     // bind our timer to this
     m_iterTimer.Bind(wxEVT_TIMER, &Arena::OnIterationTimer, this);
     // m_intervTimer.Bind(wxEVT_TIMER, &Arena::OnIntervalTimer, this);
+    m_statusUpdateTimer.Bind(wxEVT_TIMER, &Arena::OnUpdateStatus, this);
+    m_statusUpdateTimer.Start(10);
 
     // create stats display
     m_statsDisplay = new StatsDisplay;
@@ -160,9 +162,6 @@ void Arena::OnStart(wxCommandEvent& WXUNUSED(event))
 void Arena::OnIterationTimer(wxTimerEvent& e)
 {
     xwars* xwars_instance = get_xwars_instance();
-
-    // show counter in status text
-    UpdateStatus();
 
     if (xwars_instance->get_battle_status() && !xwars_instance->battle_step()) {
         Print("[+] Winner %s in %d instructions\n", get_xwars_instance()->winner.c_str(), get_xwars_instance()->counter);
@@ -235,7 +234,6 @@ void Arena::OnNext(wxCommandEvent& event)
 {
     if (m_isBattlePaused) {
         get_xwars_instance()->battle_step();
-        UpdateStatus();
     } else {
         Print("[-] Cannot execute next instruction while battle is not paused\n");
     }
@@ -247,17 +245,14 @@ void Arena::OnPause(wxCommandEvent& event)
     m_isBattlePaused = true;
 }
 
-void Arena::UpdateStatus()
-{
+void Arena::OnUpdateStatus(wxTimerEvent& e){
     wxString statusText;
-    statusText.Printf("# of Instructions: %.4d | Delay: %.3ldms | Loaded Bots: %.3ld", get_xwars_instance()->counter, m_iterWaitTime, get_xwars_instance()->botpaths.size());
+    statusText.Printf("# of Instructions: %.4d | Delay: %.3ldms | Loaded Bots: %.3ld | Current Battle: %.2ld", get_xwars_instance()->counter, m_iterWaitTime, get_xwars_instance()->botpaths.size(), m_battleIdx);
     FactoryGetMainWindow()->SetStatusText(statusText);
 }
 
 void Arena::OnIncrement(wxCommandEvent& event)
 {
-    UpdateStatus();
-
     if (m_iterWaitTime >= 20 && m_iterWaitTime <= 990) {
         m_iterWaitTime += 10;
     }
@@ -269,8 +264,6 @@ void Arena::OnIncrement(wxCommandEvent& event)
 
 void Arena::OnDecrement(wxCommandEvent& event)
 {
-    UpdateStatus();
-
     if (m_iterWaitTime >= 20 && m_iterWaitTime <= 1000) {
         m_iterWaitTime -= 10;
     }

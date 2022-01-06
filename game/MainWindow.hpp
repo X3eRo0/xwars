@@ -32,6 +32,8 @@ public:
 
     DECLARE_EVENT_TABLE()
 private:
+    void OnClose(wxCommandEvent& event);
+
     // main panel that spans whole window
     wxPanel* m_parentPanel;
     // main sizer for sizing children

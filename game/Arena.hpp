@@ -68,7 +68,7 @@ public:
     DECLARE_EVENT_TABLE();
 
 private:
-    void UpdateStatus();
+    void OnUpdateStatus(wxTimerEvent& e);
     void OnNext(wxCommandEvent& event);
     void OnPause(wxCommandEvent& event);
     void OnDecrement(wxCommandEvent& event);
@@ -105,7 +105,7 @@ private:
     // wait size for battle iteration
     size_t m_iterWaitTime = 60, m_interWaitTime = 5000;
     // timer for timed battles
-    wxTimer m_iterTimer, m_intervTimer;
+    wxTimer m_iterTimer, m_intervTimer, m_statusUpdateTimer;
     // battle pairs
     std::vector<std::pair<u32, u32>> m_battlePairs;
     // battle index

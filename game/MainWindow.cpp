@@ -18,6 +18,7 @@ enum MainWindowEventHandlerIDs {
 BEGIN_EVENT_TABLE(MainWindow, wxFrame)
 EVT_MENU(MENU_ABOUT_ID, MainWindow::OnAbout)
 EVT_MENU(MENU_SETTINGS_ID, MainWindow::OnSettings)
+EVT_MENU(wxID_EXIT, MainWindow::OnClose)
 END_EVENT_TABLE()
 
 // constructor
@@ -84,6 +85,10 @@ MainWindow::MainWindow(wxWindow* parent, wxWindowID id, const wxString& title)
     CreateStatusBar();
 }
 
+void MainWindow::OnClose(wxCommandEvent& event){
+    Destroy();
+}
+
 // handle event
 void MainWindow::OnAbout(wxCommandEvent& event)
 {
@@ -99,7 +104,7 @@ void MainWindow::OnAbout(wxCommandEvent& event)
 // handle event
 void MainWindow::OnSettings(wxCommandEvent& event)
 {
-    SettingsDialog* dialog = new SettingsDialog(nullptr);
+    SettingsDialog* dialog = new SettingsDialog(this);
     dialog->ShowModal();
     dialog->Destroy();
 }
