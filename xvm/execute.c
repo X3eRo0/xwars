@@ -75,6 +75,7 @@ u32 load_effective_address(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32*
     }
 
     if ((temp = get_register(cpu, read_byte(bin->x_section, cpu->regs.pc++, PERM_EXEC))) == NULL) {
+        raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
         return E_ERR;
     }
 
@@ -87,6 +88,7 @@ u32 load_effective_address(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32*
             u8 reg_byte = read_byte(bin->x_section, cpu->regs.pc, PERM_EXEC);
 
             if ((temp = get_register(cpu, reg_byte)) == NULL) {
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
                 return E_ERR;
             }
             if (reg_byte == pc) {
@@ -101,6 +103,7 @@ u32 load_effective_address(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32*
         if (mode2 & XVM_IMMD) { // pointer has an immediate offset also
 
             if ((temp = get_reference(bin->x_section, cpu->regs.pc, PERM_EXEC)) == NULL) {
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
                 return E_ERR;
             }
             cpu->regs.pc += sizeof(u32);
@@ -551,6 +554,10 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_LEA: {
         u32 temp = 0;
         size = load_effective_address(cpu, bin, mode, &arg1, &temp);
+        if (size == E_ERR){
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            return E_ERR;
+        }
         *arg1 = temp;
 
         break;
@@ -1505,8 +1512,8 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
         break;
     }
     default:
-        size = 2;
-        break; // default NOP
+        raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+        return E_ERR;
     }
     return size;
 }

@@ -208,16 +208,28 @@ void xwars::copy_bots(xbot* bot1, xbot* bot2)
 
     u32 second_offset = firstbot->offset + firstbot->size + random() & 0xfff;
 
+    if (second_offset >= XWARS_MEM_SIZE){
+        second_offset %= XWARS_MEM_SIZE;
+    }
+    
     if (second_offset > XWARS_MEM_SIZE - secondbot->size){
         second_offset -= secondbot->size;
     }
 
-    if (second_offset >= XWARS_MEM_SIZE){
-        second_offset %= XWARS_MEM_SIZE;
+    if (second_offset <= firstbot->offset && second_offset + secondbot->size >= firstbot->offset){
+        if (XWARS_MEM_SIZE - firstbot->size > secondbot->size){
+            second_offset = firstbot->offset + (random() % (XWARS_MEM_SIZE - firstbot->size));
+        } else {
+            second_offset = firstbot->offset - (random() % (firstbot->offset - firstbot->size));
+        }
     }
-
-    if (second_offset >= firstbot->offset){
-        second_offset %= firstbot->offset;
+    
+    if (second_offset >= firstbot->offset && second_offset <= firstbot->offset + firstbot->size){
+        if (XWARS_MEM_SIZE - firstbot->size > secondbot->size){
+            second_offset = firstbot->offset + (random() % (XWARS_MEM_SIZE - firstbot->size));
+        } else {
+            second_offset = firstbot->offset - (random() % (firstbot->offset - firstbot->size));
+        }
     }
 
     secondbot->offset = second_offset;
