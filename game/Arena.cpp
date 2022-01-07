@@ -210,7 +210,7 @@ void Arena::LoadBots(const wxString& BotsFolder)
     struct dirent* dp = NULL;
     while (botdir) {
         if ((dp = readdir(botdir)) != NULL) {
-            if (!strncmp(strchr(dp->d_name, '.'), ".bot", 4)) {
+            if ((dp->d_type == DT_REG) && !strncmp(strchr(dp->d_name, '.'), ".bot", 4)) {
                 // assemble all bots
                 // bot paths must contain assembled bot paths
                 botpaths.emplace_back((BotsFolder + "/" + dp->d_name).ToStdString());
@@ -226,12 +226,15 @@ void Arena::LoadBots(const wxString& BotsFolder)
     get_xwars_instance()->botpaths = botpaths;
     // check and print status
     for (size_t i = 0; i < botpaths.size(); i++) {
-        Print("[+] Loaded Bot [ %s ]\n", botpaths[i].substr(botpaths[i].find_last_of("/\\") + 1));
+        Print("[+] %s Loaded\n", botpaths[i].substr(botpaths[i].find_last_of("/\\") + 1));
     }
 }
 
 void Arena::OnNext(wxCommandEvent& event)
 {
+    if (m_battlePairs.empty()) {
+        return;
+    }
     if (m_isBattlePaused) {
         get_xwars_instance()->battle_step();
     } else {
@@ -241,6 +244,9 @@ void Arena::OnNext(wxCommandEvent& event)
 
 void Arena::OnPause(wxCommandEvent& event)
 {
+    if (m_battlePairs.empty()) {
+        return;
+    }
     m_iterTimer.Stop();
     m_isBattlePaused = true;
 }

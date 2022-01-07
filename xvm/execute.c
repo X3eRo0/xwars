@@ -47,7 +47,7 @@ u32* get_register(xvm_cpu* cpu, u8 reg_id)
     case sp:
         return &cpu->regs.sp;
     default: {
-        raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+        raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
         // fprintf(stderr, "[" KRED "-" KNRM "] Invalid Register\n");
         return NULL;
     };
@@ -63,19 +63,19 @@ u32 load_effective_address(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32*
 
     if (!mode1 && mode2) {
         // invalid mode;
-        raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+        raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
         return E_ERR;
         // fprintf(stderr, "[" KRED "-" KNRM "] Invalid Mode Byte\n");
         // exit(-1);
     }
 
     if (mode1 != XVM_REGD) {
-        raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+        raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
         return E_ERR;
     }
 
     if ((temp = get_register(cpu, read_byte(bin->x_section, cpu->regs.pc++, PERM_EXEC))) == NULL) {
-        raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+        raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
         return E_ERR;
     }
 
@@ -88,7 +88,7 @@ u32 load_effective_address(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32*
             u8 reg_byte = read_byte(bin->x_section, cpu->regs.pc, PERM_EXEC);
 
             if ((temp = get_register(cpu, reg_byte)) == NULL) {
-                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
                 return E_ERR;
             }
             if (reg_byte == pc) {
@@ -103,7 +103,7 @@ u32 load_effective_address(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32*
         if (mode2 & XVM_IMMD) { // pointer has an immediate offset also
 
             if ((temp = get_reference(bin->x_section, cpu->regs.pc, PERM_EXEC)) == NULL) {
-                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
                 return E_ERR;
             }
             cpu->regs.pc += sizeof(u32);
@@ -112,7 +112,7 @@ u32 load_effective_address(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32*
         }
     } else {
         // invalid mode;
-        raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+        raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
         return E_ERR;
     }
 
@@ -128,7 +128,7 @@ u32 get_argument(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32** arg2)
 
     if (!mode1 && mode2) {
         // invalid mode;
-        raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+        raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
         return E_ERR;
         // fprintf(stderr, "[" KRED "-" KNRM "] Invalid Mode Byte\n");
         // exit(-1);
@@ -187,7 +187,7 @@ u32 get_argument(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32** arg2)
                 break;
             } else {
                 // invalid mode;
-                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
                 return E_ERR;
                 // fprintf(stderr, "[" KRED "-" KNRM "] Invalid Mode Byte\n");
                 // exit(-1);
@@ -246,7 +246,7 @@ u32 get_argument(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32** arg2)
                 break;
             } else {
                 // invalid mode;
-                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+                raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
                 return E_ERR;
                 // fprintf(stderr, "[" KRED "-" KNRM "] Invalid Mode Byte\n");
                 // exit(-1);
@@ -266,9 +266,11 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     u8 mode = 0;
     u32 size = 0;
     if ((opcd = read_byte(bin->x_section, cpu->regs.pc++, PERM_EXEC)) == (u8)E_ERR) {
+        raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2 - 1, 0);
         return E_ERR;
     }
     if ((mode = read_byte(bin->x_section, cpu->regs.pc++, PERM_EXEC)) == (u8)E_ERR) {
+        raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2 - 2, 0);
         return E_ERR;
     }
     // resolve arguments
@@ -305,7 +307,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_MOV: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -316,7 +318,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_MOVB: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -327,7 +329,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_MOVW: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -339,7 +341,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_CMOVE: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -352,7 +354,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_CMOVEW: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
         if (get_ZF(cpu)) {
@@ -364,7 +366,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_CMOVEB: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
         if (get_ZF(cpu)) {
@@ -377,7 +379,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_CMOVNE: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -390,7 +392,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_CMOVNEW: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
         if (!get_ZF(cpu)) {
@@ -402,7 +404,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_CMOVNEB: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
         if (!get_ZF(cpu)) {
@@ -414,7 +416,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_CMOVA: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -426,7 +428,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_CMOVAW: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
         if (!get_ZF(cpu) && !get_CF(cpu)) {
@@ -437,7 +439,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_CMOVAB: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
         if (!get_ZF(cpu) && !get_CF(cpu)) {
@@ -449,7 +451,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_CMOVAE: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -461,7 +463,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_CMOVAEW: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
         if (!get_CF(cpu)) {
@@ -472,7 +474,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_CMOVAEB: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
         if (!get_CF(cpu)) {
@@ -484,7 +486,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_CMOVB: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -496,7 +498,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_CMOVBW: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
         if (!get_ZF(cpu) && get_CF(cpu)) {
@@ -507,7 +509,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_CMOVBB: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
         if (!get_ZF(cpu) && get_CF(cpu)) {
@@ -519,7 +521,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_CMOVBE: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -531,7 +533,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_CMOVBEW: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
         if (get_ZF(cpu) || get_CF(cpu)) {
@@ -542,7 +544,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_CMOVBEB: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
         if (get_ZF(cpu) || get_CF(cpu)) {
@@ -554,8 +556,8 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_LEA: {
         u32 temp = 0;
         size = load_effective_address(cpu, bin, mode, &arg1, &temp);
-        if (size == E_ERR){
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+        if (size == E_ERR) {
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
         *arg1 = temp;
@@ -567,7 +569,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_CALL: {
 
         if (!arg1) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -591,7 +593,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     // lsi
     case XVM_OP_LSU: {
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
         *arg1 = *arg1 << *arg2;
@@ -609,7 +611,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     // rsi
     case XVM_OP_RSU: {
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
         *arg1 = *arg1 >> *arg2;
@@ -628,7 +630,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_XOR: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -646,9 +648,9 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_XORB: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
-            // raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            // raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -666,7 +668,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_XORW: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -685,7 +687,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_AND: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -703,7 +705,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_ANDB: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -721,7 +723,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_ANDW: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -740,7 +742,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_OR: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -758,7 +760,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_ORB: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -776,7 +778,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_ORW: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -795,7 +797,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_NOT: {
 
         if (!arg1) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -813,7 +815,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_NOTB: {
 
         if (!arg1) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -831,7 +833,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_NOTW: {
 
         if (!arg1) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -850,7 +852,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_ADD: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -868,7 +870,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_ADDB: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -886,7 +888,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_ADDW: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -905,7 +907,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_SUB: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -923,7 +925,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_SUBB: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -941,7 +943,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_SUBW: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -960,7 +962,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_MUL: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -978,7 +980,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_MULB: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -996,7 +998,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_MULW: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1015,7 +1017,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_DIV: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1041,7 +1043,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_DIVB: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1067,7 +1069,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_DIVW: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1094,7 +1096,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_PUSH: {
 
         if (!arg1) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1145,7 +1147,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_POPA: {
 
         if (!arg1) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1182,7 +1184,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_XCHG: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1196,7 +1198,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_INC: {
 
         if (!arg1) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1217,7 +1219,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_DEC: {
 
         if (!arg1) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1238,7 +1240,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_CMP: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1260,7 +1262,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_CMPB: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1282,7 +1284,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_CMPW: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1305,7 +1307,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_TEST: {
 
         if (!arg1 || !arg2) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1323,7 +1325,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_JMP: {
 
         if (!arg1) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1335,7 +1337,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_RJMP: {
 
         if (!arg1) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1347,7 +1349,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_JZ: {
 
         if (!arg1) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1362,7 +1364,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_RJZ: {
 
         if (!arg1) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1377,7 +1379,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_JNZ: {
 
         if (!arg1) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1391,7 +1393,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_RJNZ: {
 
         if (!arg1) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1405,7 +1407,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_JA: {
 
         if (!arg1) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1418,7 +1420,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_RJA: {
 
         if (!arg1) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1432,7 +1434,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_JB: {
 
         if (!arg1) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1446,7 +1448,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_RJB: {
 
         if (!arg1) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1460,7 +1462,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_JAE: {
 
         if (!arg1) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1474,7 +1476,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_RJAE: {
 
         if (!arg1) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1488,7 +1490,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_JBE: {
 
         if (!arg1) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1502,7 +1504,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     case XVM_OP_RJBE: {
 
         if (!arg1) {
-            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+            raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
 
@@ -1512,7 +1514,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
         break;
     }
     default:
-        raise_signal(cpu->errors, XSIGILL, cpu->regs.pc, 0);
+        raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
         return E_ERR;
     }
     return size;

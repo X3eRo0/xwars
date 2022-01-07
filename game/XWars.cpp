@@ -140,7 +140,7 @@ void xwars::display_disassembly(xbot* bot1, xbot* bot2)
     xasm_disassemble_bytes(
         bot1->dis_writer_e,
         bot1->bin,
-        (char*)get_reference(bot1->bin->x_section, bot1->cpu->regs.pc, 8 | PERM_READ),
+        (char*)get_reference(bot1->bin->x_section, bot1->cpu->regs.pc, DONT_DISR | PERM_READ),
         text->v_size - (bot1->cpu->regs.pc - text->v_addr),
         bot1->cpu->regs.pc,
         20);
@@ -151,7 +151,7 @@ void xwars::display_disassembly(xbot* bot1, xbot* bot2)
     xasm_disassemble_bytes(
         bot2->dis_writer_e,
         bot2->bin,
-        (char*)get_reference(bot2->bin->x_section, bot2->cpu->regs.pc, 8 | PERM_READ),
+        (char*)get_reference(bot2->bin->x_section, bot2->cpu->regs.pc, DONT_DISR | PERM_READ),
         text->v_size - (bot2->cpu->regs.pc - text->v_addr),
         bot2->cpu->regs.pc,
         20);
@@ -199,7 +199,7 @@ void xwars::copy_bots(xbot* bot1, xbot* bot2)
     // assign bot1 in first half
     do {
         firstbot->offset = random() & 0xfff;
-    } while (firstbot->offset > (XWARS_MEM_SIZE) - firstbot->size);
+    } while (firstbot->offset > (XWARS_MEM_SIZE)-firstbot->size);
 
     // assign bot2 in second half
     /* while ((secondbot->offset < (XWARS_MEM_SIZE / 2)) || (secondbot->offset > (XWARS_MEM_SIZE)-secondbot->size)) { */
@@ -208,24 +208,24 @@ void xwars::copy_bots(xbot* bot1, xbot* bot2)
 
     u32 second_offset = firstbot->offset + firstbot->size + random() & 0xfff;
 
-    if (second_offset >= XWARS_MEM_SIZE){
+    if (second_offset >= XWARS_MEM_SIZE) {
         second_offset %= XWARS_MEM_SIZE;
     }
-    
-    if (second_offset > XWARS_MEM_SIZE - secondbot->size){
+
+    if (second_offset > XWARS_MEM_SIZE - secondbot->size) {
         second_offset -= secondbot->size;
     }
 
-    if (second_offset <= firstbot->offset && second_offset + secondbot->size >= firstbot->offset){
-        if (XWARS_MEM_SIZE - firstbot->size > secondbot->size){
+    if (second_offset <= firstbot->offset && second_offset + secondbot->size >= firstbot->offset) {
+        if (XWARS_MEM_SIZE - firstbot->size > secondbot->size) {
             second_offset = firstbot->offset + (random() % (XWARS_MEM_SIZE - firstbot->size));
         } else {
             second_offset = firstbot->offset - (random() % (firstbot->offset - firstbot->size));
         }
     }
-    
-    if (second_offset >= firstbot->offset && second_offset <= firstbot->offset + firstbot->size){
-        if (XWARS_MEM_SIZE - firstbot->size > secondbot->size){
+
+    if (second_offset >= firstbot->offset && second_offset <= firstbot->offset + firstbot->size) {
+        if (XWARS_MEM_SIZE - firstbot->size > secondbot->size) {
             second_offset = firstbot->offset + (random() % (XWARS_MEM_SIZE - firstbot->size));
         } else {
             second_offset = firstbot->offset - (random() % (firstbot->offset - firstbot->size));
@@ -291,8 +291,8 @@ bool xwars::battle_init(std::string Bot1Path, std::string Bot2Path)
     FactoryGetRightBotInfo()->SetBotName(bot2->botname);
 
     // allocate stack region for both bots
-    add_section(bot1->bin->x_section, "stack", XVM_STACK_SIZE, XVM_DFLT_SP & 0xfffff000, PERM_READ | PERM_WRITE | PERM_EXEC);
-    add_section(bot2->bin->x_section, "stack", XVM_STACK_SIZE, XVM_DFLT_SP & 0xfffff000, PERM_READ | PERM_WRITE | PERM_EXEC);
+    add_section(bot1->bin->x_section, "stack", XVM_STACK_SIZE, XVM_DFLT_SP & 0xffff0000, PERM_READ | PERM_WRITE);
+    add_section(bot2->bin->x_section, "stack", XVM_STACK_SIZE, XVM_DFLT_SP & 0xffff0000, PERM_READ | PERM_WRITE);
 
     // set correct stack pointer
     bot1->cpu->regs.sp = XVM_DFLT_SP;
