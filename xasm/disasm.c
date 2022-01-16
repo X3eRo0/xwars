@@ -193,7 +193,7 @@ u32 xasm_disassemble_bytes(FILE* fp, xvm_bin* bin, const char* bytecode, u32 len
 
             if (temp == NULL) {
                 if (((signed int)imm) < 0) {
-                    fprintf(fp, "#-0x%x", (u32 )(-1 * imm));
+                    fprintf(fp, "#-0x%x", (u32)(-1 * imm));
                 } else {
                     fprintf(fp, "#0x%x", imm);
                 }

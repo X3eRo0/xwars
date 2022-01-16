@@ -44,25 +44,25 @@ u32* get_reference(section* sec, u32 addr, u8 opt_perm)
         if (addr + 3 >= sec_entry->v_addr + sec_entry->v_size) {
             raise_signal(sec->errors, XSIGSEGV, addr, 0);
         }
-        if (((addr >> 12) & 0xffff) == 0x1337) {
-            u8 oprn = 0;
-            if (opt_perm & DONT_DISR) {
-                return ((u32*)&sec_entry->m_buff[addr - sec_entry->v_addr]);
-            }
-            if (opt_perm == PERM_EXEC) {
-                oprn = make_oprn(get_current_bitmap_bot(), oprn_cx);
-            } else if (opt_perm == PERM_READ) {
-                oprn = make_oprn(get_current_bitmap_bot(), oprn_r);
-            } else if (opt_perm == PERM_WRITE) {
-                oprn = make_oprn(get_current_bitmap_bot(), oprn_w);
-            }
-            if (addr - sec_entry->v_addr < XWARS_MEM_SIZE) {
-                set_oprn_at_idx(addr - sec_entry->v_addr, oprn);
-                set_oprn_at_idx(addr + 1 - sec_entry->v_addr, oprn);
-                set_oprn_at_idx(addr + 2 - sec_entry->v_addr, oprn);
-                set_oprn_at_idx(addr + 3 - sec_entry->v_addr, oprn);
-            }
-        }
+        /* if (((addr >> 12) & 0xffff) == 0x1337) { */
+        /*     u8 oprn = 0; */
+        /*     if (opt_perm & DONT_DISR) { */
+        /*         return ((u32*)&sec_entry->m_buff[addr - sec_entry->v_addr]); */
+        /*     } */
+        /*     if (opt_perm == PERM_EXEC) { */
+        /*         oprn = make_oprn(get_current_bitmap_bot(), oprn_cx); */
+        /*     } else if (opt_perm == PERM_READ) { */
+        /*         oprn = make_oprn(get_current_bitmap_bot(), oprn_r); */
+        /*     } else if (opt_perm == PERM_WRITE) { */
+        /*         oprn = make_oprn(get_current_bitmap_bot(), oprn_w); */
+        /*     } */
+        /*     if (addr - sec_entry->v_addr < XWARS_MEM_SIZE) { */
+        /*         set_oprn_at_idx(addr - sec_entry->v_addr, oprn); */
+        /*         set_oprn_at_idx(addr + 1 - sec_entry->v_addr, oprn); */
+        /*         set_oprn_at_idx(addr + 2 - sec_entry->v_addr, oprn); */
+        /*         set_oprn_at_idx(addr + 3 - sec_entry->v_addr, oprn); */
+        /*     } */
+        /* } */
         return ((u32*)&sec_entry->m_buff[addr - sec_entry->v_addr]);
     }
 

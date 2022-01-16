@@ -406,9 +406,11 @@ bool xwars::battle_step()
         }
         counter++;
         return true;
-    } else {
+    } else if (!get_RF(bot1->cpu) && !get_RF(bot2->cpu)) {
         winner = "DRAW";
         printf("[!] counter: %d, cpu1: %d, cpu2: %d\n", counter, get_RF(bot1->cpu), get_RF(bot2->cpu));
         return false;
     }
+
+    return false;
 }

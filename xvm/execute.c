@@ -9,6 +9,7 @@
 extern "C" {
 #endif
 
+#include "../common/bitmap.h"
 #include "cpu.h"
 
 u32* get_register(xvm_cpu* cpu, u8 reg_id)
@@ -54,6 +55,40 @@ u32* get_register(xvm_cpu* cpu, u8 reg_id)
     }
 }
 
+void mark_reference_bytes(section* sec, u32 addr, u8 perm, u8 len)
+{
+    section_entry* sec_entry = find_section_entry_by_addr(sec, addr);
+    if (((addr >> 12) & 0xffff) == 0x1337) {
+        u8 oprn = make_oprn(get_current_bitmap_bot(), perm);
+        switch (len) {
+        case sizeof(u32): {
+            if (addr - sec_entry->v_addr < XWARS_MEM_SIZE - sizeof(u32)) {
+                set_oprn_at_idx(addr - sec_entry->v_addr, oprn);
+                set_oprn_at_idx(addr + 1 - sec_entry->v_addr, oprn);
+                set_oprn_at_idx(addr + 2 - sec_entry->v_addr, oprn);
+                set_oprn_at_idx(addr + 3 - sec_entry->v_addr, oprn);
+            }
+            break;
+        }
+        case sizeof(u16): {
+            if (addr - sec_entry->v_addr < XWARS_MEM_SIZE - sizeof(u16)) {
+                set_oprn_at_idx(addr - sec_entry->v_addr, oprn);
+                set_oprn_at_idx(addr + 1 - sec_entry->v_addr, oprn);
+            }
+            break;
+        }
+        case sizeof(u8): {
+            if (addr - sec_entry->v_addr < XWARS_MEM_SIZE - sizeof(u8)) {
+                set_oprn_at_idx(addr - sec_entry->v_addr, oprn);
+            }
+            break;
+        }
+        default:
+            break;
+        }
+    }
+}
+
 u32 load_effective_address(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32* arg2)
 {
     u32 size = 2; // opcode, mode
@@ -74,6 +109,7 @@ u32 load_effective_address(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32*
         return E_ERR;
     }
 
+    mark_reference_bytes(bin->x_section, cpu->regs.pc, oprn_cx, 1);
     if ((temp = get_register(cpu, read_byte(bin->x_section, cpu->regs.pc++, PERM_EXEC))) == NULL) {
         raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
         return E_ERR;
@@ -85,6 +121,7 @@ u32 load_effective_address(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32*
     if (mode2 != XVM_REGD && mode2 != XVM_IMMD) {
         u32 reg_ptr = 0;
         if (mode2 & XVM_REGD) { // pointer has a register as base at least
+            mark_reference_bytes(bin->x_section, cpu->regs.pc, oprn_cx, 1);
             u8 reg_byte = read_byte(bin->x_section, cpu->regs.pc, PERM_EXEC);
 
             if ((temp = get_register(cpu, reg_byte)) == NULL) {
@@ -102,6 +139,7 @@ u32 load_effective_address(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32*
         }
         if (mode2 & XVM_IMMD) { // pointer has an immediate offset also
 
+            mark_reference_bytes(bin->x_section, cpu->regs.pc, oprn_cx, 4);
             if ((temp = get_reference(bin->x_section, cpu->regs.pc, PERM_EXEC)) == NULL) {
                 raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
                 return E_ERR;
@@ -119,13 +157,14 @@ u32 load_effective_address(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32*
     return size;
 }
 
-u32 get_argument(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32** arg2)
+u32 get_argument(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32** arg2, ma* maccess)
 {
     u32 size = 2; // opcode, mode
     u8 mode1 = get_mode1(mode);
     u8 mode2 = get_mode2(mode);
     u32* temp = NULL;
 
+    memset(maccess, 0, sizeof(ma));
     if (!mode1 && mode2) {
         // invalid mode;
         raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
@@ -137,10 +176,10 @@ u32 get_argument(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32** arg2)
     if (mode1) {
         switch (mode1) {
         case XVM_REGD: {
+            mark_reference_bytes(bin->x_section, cpu->regs.pc, oprn_cx, 1);
             if ((temp = get_register(cpu, read_byte(bin->x_section, cpu->regs.pc++, PERM_EXEC))) == NULL) {
                 return E_ERR;
             }
-
             *arg1 = temp;
             size += sizeof(u8);
             break;
@@ -149,7 +188,7 @@ u32 get_argument(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32** arg2)
             if ((temp = get_reference(bin->x_section, cpu->regs.pc, PERM_EXEC)) == NULL) {
                 return E_ERR;
             }
-
+            mark_reference_bytes(bin->x_section, cpu->regs.pc, oprn_cx, 4);
             *arg1 = temp;
             cpu->regs.pc += sizeof(u32);
             size += sizeof(u32);
@@ -160,6 +199,7 @@ u32 get_argument(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32** arg2)
                 u32 reg_ptr = 0;
                 u32 immd = 0;
                 if (mode1 & XVM_REGD) { // pointer has a register as base at least
+                    mark_reference_bytes(bin->x_section, cpu->regs.pc, oprn_cx, 1);
                     if ((temp = get_register(cpu, read_byte(bin->x_section, cpu->regs.pc, PERM_EXEC))) == NULL) {
                         return E_ERR;
                     }
@@ -169,6 +209,8 @@ u32 get_argument(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32** arg2)
                     }
                     *arg1 = temp;
                     cpu->regs.pc++;
+                    maccess->w_addr = reg_ptr;
+                    maccess->w_addr_ptr = 1;
                     size += sizeof(u8);
                 }
                 if (mode1 & XVM_IMMD) { // pointer has an immediate offset also
@@ -177,11 +219,14 @@ u32 get_argument(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32** arg2)
                         return E_ERR;
                     }
                     immd = *temp;
+                    mark_reference_bytes(bin->x_section, cpu->regs.pc, oprn_cx, 4);
                     cpu->regs.pc += sizeof(u32);
                     if ((temp = get_reference(bin->x_section, reg_ptr + immd, PERM_WRITE)) == NULL) {
                         return E_ERR;
                     }
                     *arg1 = temp;
+                    maccess->w_addr = reg_ptr + immd;
+                    maccess->w_addr_ptr = 1;
                     size += sizeof(u32);
                 }
                 break;
@@ -199,6 +244,7 @@ u32 get_argument(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32** arg2)
     if (mode2) {
         switch (mode2) {
         case XVM_REGD: {
+            mark_reference_bytes(bin->x_section, cpu->regs.pc, oprn_cx, 1);
             if ((temp = get_register(cpu, read_byte(bin->x_section, cpu->regs.pc++, PERM_EXEC))) == NULL) {
                 return E_ERR;
             }
@@ -210,6 +256,7 @@ u32 get_argument(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32** arg2)
             if ((temp = get_reference(bin->x_section, cpu->regs.pc, PERM_EXEC)) == NULL) {
                 return E_ERR;
             }
+            mark_reference_bytes(bin->x_section, cpu->regs.pc, oprn_cx, 4);
             *arg2 = temp;
             cpu->regs.pc += sizeof(u32);
             size += sizeof(u32);
@@ -223,10 +270,13 @@ u32 get_argument(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32** arg2)
                     if ((temp = get_register(cpu, read_byte(bin->x_section, cpu->regs.pc, PERM_EXEC))) == NULL) {
                         return E_ERR;
                     }
+                    mark_reference_bytes(bin->x_section, cpu->regs.pc, oprn_cx, 1);
                     reg_ptr = *temp;
                     if ((temp = get_reference(bin->x_section, reg_ptr, PERM_READ)) == NULL) {
                         return E_ERR;
                     }
+                    maccess->r_addr = reg_ptr;
+                    maccess->r_addr_ptr = 1;
                     *arg2 = temp;
                     cpu->regs.pc++;
                     size += sizeof(u8);
@@ -236,10 +286,13 @@ u32 get_argument(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32** arg2)
                         return E_ERR;
                     }
                     immd = *temp;
+                    mark_reference_bytes(bin->x_section, cpu->regs.pc, oprn_cx, 4);
                     cpu->regs.pc += sizeof(u32);
                     if ((temp = get_reference(bin->x_section, reg_ptr + immd, PERM_READ)) == NULL) {
                         return E_ERR;
                     }
+                    maccess->r_addr = reg_ptr + immd;
+                    maccess->r_addr_ptr = 1;
                     *arg2 = temp;
                     size += sizeof(u32);
                 }
@@ -258,6 +311,16 @@ u32 get_argument(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32** arg2)
     return size;
 }
 
+void mark_bytes(ma* maccess, section* sec, u8 len)
+{
+    if (((maccess->r_addr & 0xffff000) == 0x1337000) && (maccess->r_addr_ptr)) {
+        mark_reference_bytes(sec, maccess->r_addr, oprn_r, len);
+    }
+    if (((maccess->w_addr & 0xffff000) == 0x1337000) && (maccess->w_addr_ptr)) {
+        mark_reference_bytes(sec, maccess->w_addr, oprn_w, len);
+    }
+}
+
 u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
 {
     u32* arg1 = NULL; // arguments will be returned here
@@ -265,10 +328,14 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     u8 opcd = 0;
     u8 mode = 0;
     u32 size = 0;
+    ma maccess;
+
+    mark_reference_bytes(bin->x_section, cpu->regs.pc, oprn_cx, 1);
     if ((opcd = read_byte(bin->x_section, cpu->regs.pc++, PERM_EXEC)) == (u8)E_ERR) {
         raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2 - 1, 0);
         return E_ERR;
     }
+    mark_reference_bytes(bin->x_section, cpu->regs.pc, oprn_cx, 1);
     if ((mode = read_byte(bin->x_section, cpu->regs.pc++, PERM_EXEC)) == (u8)E_ERR) {
         raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2 - 2, 0);
         return E_ERR;
@@ -276,7 +343,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
     // resolve arguments
 
     if (opcd != XVM_OP_LEA) {
-        size = get_argument(cpu, bin, mode, &arg1, &arg2);
+        size = get_argument(cpu, bin, mode, &arg1, &arg2, &maccess);
     }
 
     if (size == E_ERR) {
@@ -311,6 +378,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 4);
         *arg1 = *arg2;
         break;
     }
@@ -322,6 +390,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 1);
         *(u8*)arg1 = *(u8*)arg2;
         break;
     }
@@ -332,7 +401,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
-
+        mark_bytes(&maccess, bin->x_section, 2);
         *(u16*)arg1 = *(u16*)arg2;
         break;
     }
@@ -346,6 +415,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
         }
 
         if (get_ZF(cpu)) {
+            mark_bytes(&maccess, bin->x_section, 4);
             *arg1 = *arg2;
         }
         break;
@@ -358,6 +428,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
         if (get_ZF(cpu)) {
+            mark_bytes(&maccess, bin->x_section, 2);
             *(u16*)arg1 = *(u16*)arg2;
         }
         break;
@@ -370,6 +441,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
         if (get_ZF(cpu)) {
+            mark_bytes(&maccess, bin->x_section, 1);
             *(u8*)arg1 = *(u8*)arg2;
         }
         break;
@@ -384,6 +456,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
         }
 
         if (!get_ZF(cpu)) {
+            mark_bytes(&maccess, bin->x_section, 4);
             *arg1 = *arg2;
         }
         break;
@@ -396,6 +469,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
         if (!get_ZF(cpu)) {
+            mark_bytes(&maccess, bin->x_section, 2);
             *(u16*)arg1 = *(u16*)arg2;
         }
         break;
@@ -408,6 +482,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
         if (!get_ZF(cpu)) {
+            mark_bytes(&maccess, bin->x_section, 1);
             *(u8*)arg1 = *(u8*)arg2;
         }
         break;
@@ -421,6 +496,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
         }
 
         if (!get_ZF(cpu) && !get_CF(cpu)) {
+            mark_bytes(&maccess, bin->x_section, 4);
             *arg1 = *arg2;
         }
         break;
@@ -432,6 +508,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
         if (!get_ZF(cpu) && !get_CF(cpu)) {
+            mark_bytes(&maccess, bin->x_section, 2);
             *(u16*)arg1 = *(u16*)arg2;
         }
         break;
@@ -443,6 +520,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
         if (!get_ZF(cpu) && !get_CF(cpu)) {
+            mark_bytes(&maccess, bin->x_section, 1);
             *(u8*)arg1 = *(u8*)arg2;
         }
         break;
@@ -456,6 +534,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
         }
 
         if (!get_CF(cpu)) {
+            mark_bytes(&maccess, bin->x_section, 4);
             *arg1 = *arg2;
         }
         break;
@@ -467,6 +546,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
         if (!get_CF(cpu)) {
+            mark_bytes(&maccess, bin->x_section, 2);
             *(u16*)arg1 = *(u16*)arg2;
         }
         break;
@@ -478,6 +558,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
         if (!get_CF(cpu)) {
+            mark_bytes(&maccess, bin->x_section, 1);
             *(u8*)arg1 = *(u8*)arg2;
         }
         break;
@@ -491,6 +572,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
         }
 
         if (!get_ZF(cpu) && get_CF(cpu)) {
+            mark_bytes(&maccess, bin->x_section, 4);
             *arg1 = *arg2;
         }
         break;
@@ -502,6 +584,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
         if (!get_ZF(cpu) && get_CF(cpu)) {
+            mark_bytes(&maccess, bin->x_section, 2);
             *(u16*)arg1 = *(u16*)arg2;
         }
         break;
@@ -513,6 +596,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
         if (!get_ZF(cpu) && get_CF(cpu)) {
+            mark_bytes(&maccess, bin->x_section, 1);
             *(u8*)arg1 = *(u8*)arg2;
         }
         break;
@@ -526,6 +610,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
         }
 
         if (get_ZF(cpu) || get_CF(cpu)) {
+            mark_bytes(&maccess, bin->x_section, 4);
             *arg1 = *arg2;
         }
         break;
@@ -537,6 +622,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
         if (get_ZF(cpu) || get_CF(cpu)) {
+            mark_bytes(&maccess, bin->x_section, 2);
             *(u16*)arg1 = *(u16*)arg2;
         }
         break;
@@ -548,6 +634,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
         if (get_ZF(cpu) || get_CF(cpu)) {
+            mark_bytes(&maccess, bin->x_section, 1);
             *(u8*)arg1 = *(u8*)arg2;
         }
         break;
@@ -633,7 +720,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             raise_signal(cpu->errors, XSIGILL, cpu->regs.pc - 2, 0);
             return E_ERR;
         }
-
+        mark_bytes(&maccess, bin->x_section, 4);
         *arg1 ^= *arg2;
         if (*arg1 == 0) {
             set_ZF(cpu, 1);
@@ -654,6 +741,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 1);
         *(u8*)arg1 ^= *(u8*)arg2;
         if (*(u8*)arg1 == 0) {
             set_ZF(cpu, 1);
@@ -672,6 +760,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 2);
         *(u16*)arg1 ^= *(u16*)arg2;
         if (*(u16*)arg1 == 0) {
             set_ZF(cpu, 1);
@@ -691,6 +780,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 4);
         *arg1 &= *arg2;
         if (*arg1 == 0) {
             set_ZF(cpu, 1);
@@ -709,6 +799,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 1);
         *(u8*)arg1 &= *(u8*)arg2;
         if (*(u8*)arg1 == 0) {
             set_ZF(cpu, 1);
@@ -727,6 +818,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 2);
         *(u16*)arg1 &= *(u16*)arg2;
         if (*(u16*)arg1 == 0) {
             set_ZF(cpu, 1);
@@ -746,6 +838,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 4);
         *arg1 |= *arg2;
         if (*arg1 == 0) {
             set_ZF(cpu, 1);
@@ -764,6 +857,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 1);
         *(u8*)arg1 |= *(u8*)arg2;
         if (*(u8*)arg1 == 0) {
             set_ZF(cpu, 1);
@@ -782,6 +876,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 2);
         *(u16*)arg1 |= *(u16*)arg2;
         if (*(u16*)arg1 == 0) {
             set_ZF(cpu, 1);
@@ -801,6 +896,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 4);
         *arg1 = ~*arg1;
         if (*arg1 == 0) {
             set_ZF(cpu, 1);
@@ -819,6 +915,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 1);
         *(u8*)arg1 = ~*(u8*)arg1;
         if (*(u8*)arg1 == 0) {
             set_ZF(cpu, 1);
@@ -837,6 +934,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 2);
         *(u16*)arg1 = ~*(u16*)arg1;
         if (*(u16*)arg1 == 0) {
             set_ZF(cpu, 1);
@@ -856,6 +954,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 4);
         *arg1 += *arg2;
         if (*arg1 == 0) {
             set_ZF(cpu, 1);
@@ -874,6 +973,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 1);
         *(u8*)arg1 += *(u8*)arg2;
         if (*(u8*)arg1 == 0) {
             set_ZF(cpu, 1);
@@ -892,6 +992,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 2);
         *(u16*)arg1 += *(u16*)arg2;
         if (*(u16*)arg1 == 0) {
             set_ZF(cpu, 1);
@@ -911,6 +1012,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 4);
         *arg1 -= *arg2;
         if (*arg1 == 0) {
             set_ZF(cpu, 1);
@@ -929,6 +1031,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 1);
         *(u8*)arg1 -= *(u8*)arg2;
         if (*(u8*)arg1 == 0) {
             set_ZF(cpu, 1);
@@ -947,6 +1050,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 2);
         *(u16*)arg1 -= *(u16*)arg2;
         if (*(u16*)arg1 == 0) {
             set_ZF(cpu, 1);
@@ -966,6 +1070,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 4);
         *arg1 *= *arg2;
         if (*arg1 == 0) {
             set_ZF(cpu, 1);
@@ -984,6 +1089,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 1);
         *(u8*)arg1 *= *(u8*)arg2;
         if (*(u8*)arg1 == 0) {
             set_ZF(cpu, 1);
@@ -1002,6 +1108,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 2);
         *(u16*)arg1 *= *(u16*)arg2;
         if (*(u16*)arg1 == 0) {
             set_ZF(cpu, 1);
@@ -1027,6 +1134,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
         }
 
         u32 modulo = *arg1 % *arg2;
+        mark_bytes(&maccess, bin->x_section, 4);
         *arg1 /= *arg2;
         cpu->regs.r5 = modulo;
 
@@ -1053,6 +1161,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
         }
 
         u32 modulo = *(u8*)arg1 % *(u8*)arg2;
+        mark_bytes(&maccess, bin->x_section, 1);
         *(u8*)arg1 /= *(u8*)arg2;
         cpu->regs.r5 = modulo;
 
@@ -1079,6 +1188,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
         }
 
         u32 modulo = *(u16*)arg1 % *(u16*)arg2;
+        mark_bytes(&maccess, bin->x_section, 2);
         *(u16*)arg1 /= *(u16*)arg2;
         cpu->regs.r5 = modulo;
 
@@ -1189,6 +1299,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
         }
 
         u32 temp = *arg1;
+        mark_bytes(&maccess, bin->x_section, 4);
         *arg1 = *arg2;
         *arg2 = temp;
         break;
@@ -1202,6 +1313,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 4);
         (*arg1)++;
 
         if (*arg1 == 0) {
@@ -1223,6 +1335,7 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
             return E_ERR;
         }
 
+        mark_bytes(&maccess, bin->x_section, 4);
         (*arg1)--;
 
         if (*arg1 == 0) {

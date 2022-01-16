@@ -101,6 +101,13 @@ typedef struct xvm_cpu_t {
     signal_report* errors;
 } xvm_cpu;
 
+typedef struct mem_access{
+    u32 w_addr;
+    u32 r_addr;
+    u8 w_addr_ptr;
+    u8 r_addr_ptr;
+} ma;
+
 void reset_reg(xvm_reg* regs);
 xvm_cpu* init_xvm_cpu();
 u8 get_RF(xvm_cpu* cpu);
@@ -109,7 +116,7 @@ u8 get_ZF(xvm_cpu* cpu);
 u8 set_RF(xvm_cpu* cpu, u8 bit);
 u8 set_CF(xvm_cpu* cpu, u8 bit);
 u8 set_ZF(xvm_cpu* cpu, u8 bit);
-u32 get_argument(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32** arg2);
+u32 get_argument(xvm_cpu* cpu, xvm_bin* bin, u8 mode, u32** arg1, u32** arg2, ma* maccess);
 u32* get_register(xvm_cpu* cpu, u8 reg_id);
 u32 do_execute(xvm_cpu* cpu, xvm_bin* bin);
 u32 do_syscall(xvm_cpu* cpu, xvm_bin* bin);
