@@ -153,9 +153,11 @@ void Arena::OnStart(wxCommandEvent& WXUNUSED(event))
         if (get_xwars_instance()->battle_init(bots[botpair.first], bots[botpair.second])) {
             m_iterTimer.Start(m_iterWaitTime);
         }
+        set_statustext("Running!");
     } else {
         m_iterTimer.Start(m_iterWaitTime);
         m_isBattlePaused = false;
+        set_statustext("Running!");
     }
 }
 
@@ -176,6 +178,7 @@ void Arena::OnIterationTimer(wxTimerEvent& e)
         // this is the last battle
         if (m_battleIdx == m_battlePairs.size()) {
             m_iterTimer.Stop();
+            set_statustext("Idle");
             return;
         }
 
@@ -249,6 +252,7 @@ void Arena::OnPause(wxCommandEvent& event)
     }
     m_iterTimer.Stop();
     m_isBattlePaused = true;
+    set_statustext("Paused!");
 }
 
 void Arena::OnUpdateStatus(wxTimerEvent& e)
@@ -257,7 +261,7 @@ void Arena::OnUpdateStatus(wxTimerEvent& e)
     wxString delay;
     wxString loadedbots;
     wxString currentbattle;
-    wxString animationstring = "Idle";
+    wxString animationstring = get_statustext();
     static wxString output = "Status: ";
     u32 max_anim_length = 50;
     static u32 anim_counter = 0;

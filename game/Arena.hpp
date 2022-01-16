@@ -64,6 +64,13 @@ public:
 
     // load bots from path
     void LoadBots(const wxString& botsFolder);
+    wxString get_statustext(){
+        return m_statustext;
+    }
+    
+    void set_statustext(wxString str){
+        m_statustext = str;
+    }
 
     DECLARE_EVENT_TABLE();
 
@@ -110,6 +117,8 @@ private:
     std::vector<std::pair<u32, u32>> m_battlePairs;
     // battle index
     size_t m_battleIdx = 0;
+    // status text
+    wxString m_statustext = "Idle";
 };
 
 #endif // XVM_ARENA_TERMINAL_HPP
