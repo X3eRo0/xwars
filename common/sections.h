@@ -74,5 +74,4 @@ u32 remove_section_by_name(section* section, const char* name);
 u32 show_section_info(section* sec);
 u32 reset_address_of_sections(section* sec);
 u32 fini_section(section* sec);
-void segfault(u32 error, section_entry* sec_entry, u32 addr);
 #endif // XVM_SECTIONS_H

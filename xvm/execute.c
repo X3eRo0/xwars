@@ -365,8 +365,8 @@ u32 do_execute(xvm_cpu* cpu, xvm_bin* bin)
 
     // syscall
     case XVM_OP_SYSC: {
-        // do_syscall(cpu, bin);
-        cpu->regs.r0 = -1;
+        do_syscall(cpu, bin);
+        /* cpu->regs.r0 = -1; */
         break;
     }
 

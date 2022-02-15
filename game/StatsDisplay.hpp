@@ -4,13 +4,14 @@
 #include "Common.hpp"
 #include <unordered_map>
 #include <wx/listctrl.h>
+#include <wx/position.h>
 
 class StatsDisplay : public wxDialog{
 public:
     StatsDisplay(const wxString& winner = "None",
                  wxWindow* parent = nullptr, wxWindowID id = wxID_ANY,
                  const wxString& name = "Battle Statistics",
-                 const wxPoint& pos = wxDefaultPosition,
+                 const wxPoint& pos = wxPoint(400, 400),
                  const wxSize& size = wxSize(800, 600));
 
     void SetWinnerAndLooser(u32 state, std::string bot1, std::string bot2);

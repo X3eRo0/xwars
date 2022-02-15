@@ -100,10 +100,21 @@ u32 signal_abort(signal_report* err, xvm_cpu* cpu)
             return E_OK;
         }
 
-        set_RF(cpu, 0);
 
-        // FILE *fp = fopen("/tmp/xwars_2", "w");
-        // setbuf(fp, 0);
+        if (err->handler.signal_handler != 0 && err->handler.nexecs == 0){
+            if (err->signal_id == err->handler.signal_id){
+                cpu->regs.pc = err->handler.signal_handler;
+                err->signal_id = NOSIGNAL;
+                err->handler.signal_id = 0;
+                err->handler.signal_handler = 0;
+                err->handler.nexecs++;
+                err->error_addr = 0;
+                err->error_misc = 0;
+                return E_OK;
+            }
+        }
+        
+        set_RF(cpu, 0);
 
         switch (err->signal_id) {
         case XSIGFPE:
@@ -114,10 +125,10 @@ u32 signal_abort(signal_report* err, xvm_cpu* cpu)
             break;
         case XSIGTRAP:
             fprintf(stderr /*fp*/, "[-] Trap/Breakpoint\n");
-            break;
+            return E_OK;
         case XSIGSTOP:
             fprintf(stderr /*fp*/, "[-] SIGSTOP\n");
-            break;
+            return E_OK;
         default:
             fprintf(stderr /*fp*/, "[-] Segmentation Fault (core not dumped)\n");
             break;

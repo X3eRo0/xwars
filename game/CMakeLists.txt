@@ -10,7 +10,6 @@ add_library(vm
     ../xvm/syscall.c
     ../common/loader.c
     ../common/sections.c
-    ../common/segfault.c
     ../common/signals.c
     ../common/symbols.c
     ../common/bitmap.c

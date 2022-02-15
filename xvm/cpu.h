@@ -36,6 +36,7 @@ typedef enum xvm_sysc_t {
     XVM_SYSC_SOCKET,
     XVM_SYSC_CONNECT,
     XVM_SYSC_DUP2,
+    XVM_SYSC_SIGNAL,
 
 } xvm_syscalls;
 
