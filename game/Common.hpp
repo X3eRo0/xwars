@@ -26,6 +26,17 @@ typedef int64_t i64;
 
 typedef const char* cstring;
 
+
+enum round_state{
+    ROUND_CONCLUDED,
+    ROUND_DRAW
+};
+
+enum winner{
+    BOT1_WINNER = 2,
+    BOT2_WINNER = 4
+};
+
 // get reader and writer
 FILE* get_reader_end();
 FILE* get_writer_end();

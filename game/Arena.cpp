@@ -166,13 +166,13 @@ void Arena::OnIterationTimer(wxTimerEvent& e)
     xwars* xwars_instance = get_xwars_instance();
 
     if (xwars_instance->get_battle_status() && !xwars_instance->battle_step()) {
-        Print("[+] Winner %s in %d instructions\n", get_xwars_instance()->winner.c_str(), get_xwars_instance()->counter);
+        Print("%s", xwars_instance->get_battle_results());
         xwars_instance->set_battle_status(0);
         // m_iterTimer.Stop();
         // m_intervTimer.Start(m_interWaitTime);
 
         // display stats
-        m_statsDisplay->SetWinner(get_xwars_instance()->winner);
+        m_statsDisplay->SetWinnerAndLooser(xwars_instance->battle_result.state, xwars_instance->battle_result.bot1->botname, xwars_instance->battle_result.bot2->botname);
         m_statsDisplay->ShowModal();
 
         // this is the last battle

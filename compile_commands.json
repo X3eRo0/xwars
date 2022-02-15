@@ -1,0 +1,317 @@
+[
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xinfo.dir/xasm/xinfo.c.o   -c /home/x3ero0/xwars/xasm/xinfo.c",
+  "file": "/home/x3ero0/xwars/xasm/xinfo.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xinfo.dir/common/loader.c.o   -c /home/x3ero0/xwars/common/loader.c",
+  "file": "/home/x3ero0/xwars/common/loader.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xinfo.dir/common/symbols.c.o   -c /home/x3ero0/xwars/common/symbols.c",
+  "file": "/home/x3ero0/xwars/common/symbols.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xinfo.dir/common/sections.c.o   -c /home/x3ero0/xwars/common/sections.c",
+  "file": "/home/x3ero0/xwars/common/sections.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xinfo.dir/common/signals.c.o   -c /home/x3ero0/xwars/common/signals.c",
+  "file": "/home/x3ero0/xwars/common/signals.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xinfo.dir/common/bitmap.c.o   -c /home/x3ero0/xwars/common/bitmap.c",
+  "file": "/home/x3ero0/xwars/common/bitmap.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xasm.dir/xasm/xasm.c.o   -c /home/x3ero0/xwars/xasm/xasm.c",
+  "file": "/home/x3ero0/xwars/xasm/xasm.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xasm.dir/xasm/xasm_functions.c.o   -c /home/x3ero0/xwars/xasm/xasm_functions.c",
+  "file": "/home/x3ero0/xwars/xasm/xasm_functions.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xasm.dir/xasm/parse.c.o   -c /home/x3ero0/xwars/xasm/parse.c",
+  "file": "/home/x3ero0/xwars/xasm/parse.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xasm.dir/common/symbols.c.o   -c /home/x3ero0/xwars/common/symbols.c",
+  "file": "/home/x3ero0/xwars/common/symbols.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xasm.dir/common/sections.c.o   -c /home/x3ero0/xwars/common/sections.c",
+  "file": "/home/x3ero0/xwars/common/sections.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xasm.dir/common/loader.c.o   -c /home/x3ero0/xwars/common/loader.c",
+  "file": "/home/x3ero0/xwars/common/loader.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xasm.dir/common/signals.c.o   -c /home/x3ero0/xwars/common/signals.c",
+  "file": "/home/x3ero0/xwars/common/signals.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xasm.dir/common/bitmap.c.o   -c /home/x3ero0/xwars/common/bitmap.c",
+  "file": "/home/x3ero0/xwars/common/bitmap.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xdis.dir/xasm/xdis.c.o   -c /home/x3ero0/xwars/xasm/xdis.c",
+  "file": "/home/x3ero0/xwars/xasm/xdis.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xdis.dir/xasm/disasm.c.o   -c /home/x3ero0/xwars/xasm/disasm.c",
+  "file": "/home/x3ero0/xwars/xasm/disasm.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xdis.dir/xasm/xasm_functions.c.o   -c /home/x3ero0/xwars/xasm/xasm_functions.c",
+  "file": "/home/x3ero0/xwars/xasm/xasm_functions.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xdis.dir/common/loader.c.o   -c /home/x3ero0/xwars/common/loader.c",
+  "file": "/home/x3ero0/xwars/common/loader.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xdis.dir/common/symbols.c.o   -c /home/x3ero0/xwars/common/symbols.c",
+  "file": "/home/x3ero0/xwars/common/symbols.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xdis.dir/common/sections.c.o   -c /home/x3ero0/xwars/common/sections.c",
+  "file": "/home/x3ero0/xwars/common/sections.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xdis.dir/common/signals.c.o   -c /home/x3ero0/xwars/common/signals.c",
+  "file": "/home/x3ero0/xwars/common/signals.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xdis.dir/common/bitmap.c.o   -c /home/x3ero0/xwars/common/bitmap.c",
+  "file": "/home/x3ero0/xwars/common/bitmap.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xvm.dir/xvm/xvm.c.o   -c /home/x3ero0/xwars/xvm/xvm.c",
+  "file": "/home/x3ero0/xwars/xvm/xvm.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xvm.dir/xvm/cpu.c.o   -c /home/x3ero0/xwars/xvm/cpu.c",
+  "file": "/home/x3ero0/xwars/xvm/cpu.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xvm.dir/xvm/execute.c.o   -c /home/x3ero0/xwars/xvm/execute.c",
+  "file": "/home/x3ero0/xwars/xvm/execute.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xvm.dir/common/symbols.c.o   -c /home/x3ero0/xwars/common/symbols.c",
+  "file": "/home/x3ero0/xwars/common/symbols.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xvm.dir/common/loader.c.o   -c /home/x3ero0/xwars/common/loader.c",
+  "file": "/home/x3ero0/xwars/common/loader.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xvm.dir/common/sections.c.o   -c /home/x3ero0/xwars/common/sections.c",
+  "file": "/home/x3ero0/xwars/common/sections.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xvm.dir/common/bitmap.c.o   -c /home/x3ero0/xwars/common/bitmap.c",
+  "file": "/home/x3ero0/xwars/common/bitmap.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xvm.dir/xvm/syscall.c.o   -c /home/x3ero0/xwars/xvm/syscall.c",
+  "file": "/home/x3ero0/xwars/xvm/syscall.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build",
+  "command": "/usr/bin/cc   -g   -std=gnu11 -o CMakeFiles/xvm.dir/common/signals.c.o   -c /home/x3ero0/xwars/common/signals.c",
+  "file": "/home/x3ero0/xwars/common/signals.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/c++  -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1   -pthread -g   -std=gnu++17 -o CMakeFiles/xwars.dir/Common.cpp.o -c /home/x3ero0/xwars/game/Common.cpp",
+  "file": "/home/x3ero0/xwars/game/Common.cpp"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/c++  -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1   -pthread -g   -std=gnu++17 -o CMakeFiles/xwars.dir/MainApp.cpp.o -c /home/x3ero0/xwars/game/MainApp.cpp",
+  "file": "/home/x3ero0/xwars/game/MainApp.cpp"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/c++  -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1   -pthread -g   -std=gnu++17 -o CMakeFiles/xwars.dir/MainWindow.cpp.o -c /home/x3ero0/xwars/game/MainWindow.cpp",
+  "file": "/home/x3ero0/xwars/game/MainWindow.cpp"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/c++  -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1   -pthread -g   -std=gnu++17 -o CMakeFiles/xwars.dir/MiddlePanel.cpp.o -c /home/x3ero0/xwars/game/MiddlePanel.cpp",
+  "file": "/home/x3ero0/xwars/game/MiddlePanel.cpp"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/c++  -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1   -pthread -g   -std=gnu++17 -o CMakeFiles/xwars.dir/MemoryGrid.cpp.o -c /home/x3ero0/xwars/game/MemoryGrid.cpp",
+  "file": "/home/x3ero0/xwars/game/MemoryGrid.cpp"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/c++  -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1   -pthread -g   -std=gnu++17 -o CMakeFiles/xwars.dir/Arena.cpp.o -c /home/x3ero0/xwars/game/Arena.cpp",
+  "file": "/home/x3ero0/xwars/game/Arena.cpp"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/c++  -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1   -pthread -g   -std=gnu++17 -o CMakeFiles/xwars.dir/InstructionDisplay.cpp.o -c /home/x3ero0/xwars/game/InstructionDisplay.cpp",
+  "file": "/home/x3ero0/xwars/game/InstructionDisplay.cpp"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/c++  -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1   -pthread -g   -std=gnu++17 -o CMakeFiles/xwars.dir/RegisterDisplay.cpp.o -c /home/x3ero0/xwars/game/RegisterDisplay.cpp",
+  "file": "/home/x3ero0/xwars/game/RegisterDisplay.cpp"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/c++  -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1   -pthread -g   -std=gnu++17 -o CMakeFiles/xwars.dir/XBot.cpp.o -c /home/x3ero0/xwars/game/XBot.cpp",
+  "file": "/home/x3ero0/xwars/game/XBot.cpp"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/c++  -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1   -pthread -g   -std=gnu++17 -o CMakeFiles/xwars.dir/XWars.cpp.o -c /home/x3ero0/xwars/game/XWars.cpp",
+  "file": "/home/x3ero0/xwars/game/XWars.cpp"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/c++  -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1   -pthread -g   -std=gnu++17 -o CMakeFiles/xwars.dir/Register.cpp.o -c /home/x3ero0/xwars/game/Register.cpp",
+  "file": "/home/x3ero0/xwars/game/Register.cpp"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/c++  -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1   -pthread -g   -std=gnu++17 -o CMakeFiles/xwars.dir/BotNameDisplay.cpp.o -c /home/x3ero0/xwars/game/BotNameDisplay.cpp",
+  "file": "/home/x3ero0/xwars/game/BotNameDisplay.cpp"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/c++  -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1   -pthread -g   -std=gnu++17 -o CMakeFiles/xwars.dir/BotInfo.cpp.o -c /home/x3ero0/xwars/game/BotInfo.cpp",
+  "file": "/home/x3ero0/xwars/game/BotInfo.cpp"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/c++  -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1   -pthread -g   -std=gnu++17 -o CMakeFiles/xwars.dir/Factory.cpp.o -c /home/x3ero0/xwars/game/Factory.cpp",
+  "file": "/home/x3ero0/xwars/game/Factory.cpp"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/c++  -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1   -pthread -g   -std=gnu++17 -o CMakeFiles/xwars.dir/Property.cpp.o -c /home/x3ero0/xwars/game/Property.cpp",
+  "file": "/home/x3ero0/xwars/game/Property.cpp"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/c++  -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1   -pthread -g   -std=gnu++17 -o CMakeFiles/xwars.dir/PropertyDataWidgets.cpp.o -c /home/x3ero0/xwars/game/PropertyDataWidgets.cpp",
+  "file": "/home/x3ero0/xwars/game/PropertyDataWidgets.cpp"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/c++  -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1   -pthread -g   -std=gnu++17 -o CMakeFiles/xwars.dir/PropertyDisplay.cpp.o -c /home/x3ero0/xwars/game/PropertyDisplay.cpp",
+  "file": "/home/x3ero0/xwars/game/PropertyDisplay.cpp"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/c++  -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1   -pthread -g   -std=gnu++17 -o CMakeFiles/xwars.dir/SettingsDialog.cpp.o -c /home/x3ero0/xwars/game/SettingsDialog.cpp",
+  "file": "/home/x3ero0/xwars/game/SettingsDialog.cpp"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/c++  -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1   -pthread -g   -std=gnu++17 -o CMakeFiles/xwars.dir/PropertyData.cpp.o -c /home/x3ero0/xwars/game/PropertyData.cpp",
+  "file": "/home/x3ero0/xwars/game/PropertyData.cpp"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/c++  -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1   -pthread -g   -std=gnu++17 -o CMakeFiles/xwars.dir/StatsDisplay.cpp.o -c /home/x3ero0/xwars/game/StatsDisplay.cpp",
+  "file": "/home/x3ero0/xwars/game/StatsDisplay.cpp"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/cc -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1  -g   -std=gnu11 -o CMakeFiles/vm.dir/__/xasm/disasm.c.o   -c /home/x3ero0/xwars/xasm/disasm.c",
+  "file": "/home/x3ero0/xwars/xasm/disasm.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/cc -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1  -g   -std=gnu11 -o CMakeFiles/vm.dir/__/xasm/xasm_functions.c.o   -c /home/x3ero0/xwars/xasm/xasm_functions.c",
+  "file": "/home/x3ero0/xwars/xasm/xasm_functions.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/cc -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1  -g   -std=gnu11 -o CMakeFiles/vm.dir/__/xasm/parse.c.o   -c /home/x3ero0/xwars/xasm/parse.c",
+  "file": "/home/x3ero0/xwars/xasm/parse.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/cc -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1  -g   -std=gnu11 -o CMakeFiles/vm.dir/__/xvm/cpu.c.o   -c /home/x3ero0/xwars/xvm/cpu.c",
+  "file": "/home/x3ero0/xwars/xvm/cpu.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/cc -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1  -g   -std=gnu11 -o CMakeFiles/vm.dir/__/xvm/execute.c.o   -c /home/x3ero0/xwars/xvm/execute.c",
+  "file": "/home/x3ero0/xwars/xvm/execute.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/cc -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1  -g   -std=gnu11 -o CMakeFiles/vm.dir/__/xvm/syscall.c.o   -c /home/x3ero0/xwars/xvm/syscall.c",
+  "file": "/home/x3ero0/xwars/xvm/syscall.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/cc -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1  -g   -std=gnu11 -o CMakeFiles/vm.dir/__/common/loader.c.o   -c /home/x3ero0/xwars/common/loader.c",
+  "file": "/home/x3ero0/xwars/common/loader.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/cc -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1  -g   -std=gnu11 -o CMakeFiles/vm.dir/__/common/sections.c.o   -c /home/x3ero0/xwars/common/sections.c",
+  "file": "/home/x3ero0/xwars/common/sections.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/cc -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1  -g   -std=gnu11 -o CMakeFiles/vm.dir/__/common/segfault.c.o   -c /home/x3ero0/xwars/common/segfault.c",
+  "file": "/home/x3ero0/xwars/common/segfault.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/cc -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1  -g   -std=gnu11 -o CMakeFiles/vm.dir/__/common/signals.c.o   -c /home/x3ero0/xwars/common/signals.c",
+  "file": "/home/x3ero0/xwars/common/signals.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/cc -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1  -g   -std=gnu11 -o CMakeFiles/vm.dir/__/common/symbols.c.o   -c /home/x3ero0/xwars/common/symbols.c",
+  "file": "/home/x3ero0/xwars/common/symbols.c"
+},
+{
+  "directory": "/home/x3ero0/xwars/build/game",
+  "command": "/usr/bin/cc -DWXUSINGDLL -D_FILE_OFFSET_BITS=64 -D__WXGTK__ -isystem /usr/local/lib/wx/include/gtk3-unicode-3.1 -isystem /usr/local/include/wx-3.1  -g   -std=gnu11 -o CMakeFiles/vm.dir/__/common/bitmap.c.o   -c /home/x3ero0/xwars/common/bitmap.c",
+  "file": "/home/x3ero0/xwars/common/bitmap.c"
+}
+]

@@ -13,9 +13,9 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxSize(800, 600));
 
-    void SetWinner(const wxString& name);
+    void SetWinnerAndLooser(u32 state, std::string bot1, std::string bot2);
     void AddBot(const wxString& name, u32 score);
-    void SetBotScore(const wxString& name, u32 score);
+    void SetBotScore(const wxString& name, double score);
     void IncBotScore(const wxString& name);
 
     // reset scoreboard
@@ -23,7 +23,7 @@ public:
 private:
     // map from bot names to their index in list
     std::unordered_map<wxString, u32> m_botNameIDMap;
-    std::unordered_map<wxString, u32> m_botNameScoreMap;
+    std::unordered_map<wxString, double> m_botNameScoreMap;
 
     u32 m_botCount = 0;
     wxBoxSizer *m_topSizer, *m_mainSizer;

@@ -10,6 +10,13 @@
 #define MAX_INSTR_EXECS 2000
 #define MAX_BOT_SIZE 0x180
 
+typedef struct xwars_round_results_t {
+  u32 state;
+  xbot *bot1;
+  xbot *bot2;
+
+} xwars_round_result;
+
 struct xwars {
     xwars();
     ~xwars();
@@ -43,6 +50,8 @@ struct xwars {
     void set_battle_status(u32 value);
     u32 get_battle_status();
 
+    std::string get_battle_results();
+
     // -- README --
     // here I will explain working :
     // 1 - get xwars global instance by calling get_xwars_instance()
@@ -56,9 +65,9 @@ struct xwars {
     u32 counter = 0;
 
     // winner of last battle
-    wxString winner = "";
+    xwars_round_result battle_result;
 
-private:
+  private:
     // first - left
     // second - right
     std::pair<BotInfo*, BotInfo*> m_botInfos;

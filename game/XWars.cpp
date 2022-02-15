@@ -6,6 +6,7 @@
 #include "MainWindow.hpp"
 #include "MiddlePanel.hpp"
 #include <cstdio>
+#include <string>
 #include <unistd.h>
 #include <wx/app.h>
 #include <wx/event.h>
@@ -341,6 +342,9 @@ bool xwars::battle_init(std::string Bot1Path, std::string Bot2Path)
 
     // take first step in battle
     set_battle_status(1);
+
+    battle_result.bot1 = bot1;
+    battle_result.bot2 = bot2;
     return battle_step();
 }
 
@@ -377,11 +381,11 @@ bool xwars::battle_step()
         /* FactoryGetMiddlePanel()->GetMemoryGrid()->UpdateGrid(); */
 
         if (signal_abort(bot1->cpu->errors, bot1->cpu) == E_ERR) {
-            winner = bot2->botname;
+            battle_result.state = ROUND_CONCLUDED | BOT2_WINNER;
             return false;
         }
         if (signal_abort(bot1->bin->x_section->errors, bot1->cpu) == E_ERR) {
-            winner = bot2->botname;
+            battle_result.state = ROUND_CONCLUDED | BOT2_WINNER;
             return false;
         }
 
@@ -396,21 +400,40 @@ bool xwars::battle_step()
 
         // check which won
         if (signal_abort(bot2->cpu->errors, bot2->cpu) == E_ERR) {
-            winner = bot1->botname;
+            battle_result.state = ROUND_CONCLUDED | BOT1_WINNER;
             return false;
         }
 
         if (signal_abort(bot2->bin->x_section->errors, bot2->cpu) == E_ERR) {
-            winner = bot1->botname;
+            battle_result.state = ROUND_CONCLUDED | BOT1_WINNER;
             return false;
         }
         counter++;
         return true;
     } else if (!get_RF(bot1->cpu) && !get_RF(bot2->cpu)) {
-        winner = "DRAW";
+        battle_result.state = ROUND_DRAW;
         printf("[!] counter: %d, cpu1: %d, cpu2: %d\n", counter, get_RF(bot1->cpu), get_RF(bot2->cpu));
         return false;
     }
 
     return false;
+}
+
+std::string xwars::get_battle_results()
+{
+    char Message[100] = { 0 };
+    std::string returnstr = "";
+    std::string winner = "";
+    if ((battle_result.state & 1) == ROUND_CONCLUDED) {
+        if (battle_result.state == 2) {
+            winner = battle_result.bot1->botname;
+        } else if (battle_result.state == 4) {
+            winner = battle_result.bot2->botname;
+        }
+        snprintf(Message, 100, "[+] Winner %s in %d instructions\n", winner.c_str(), counter);
+    } else {
+        snprintf(Message, 100, "[-] %s vs %s resulted in a DRAW after %d instructions\n", battle_result.bot1->botname.c_str(), battle_result.bot2->botname.c_str(), counter);
+    }
+    returnstr = Message;
+    return Message;
 }

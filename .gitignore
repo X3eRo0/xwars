@@ -3,6 +3,7 @@
 /cmake-build-release/
 /build/
 /.idea
+/.clangd
 /pygui/__pycache__
 /.cache/
 *.swp

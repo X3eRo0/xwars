@@ -1,5 +1,6 @@
 #include "StatsDisplay.hpp"
 #include "BotInfo.hpp"
+#include "Common.hpp"
 #include "Factory.hpp"
 #include <wx/font.h>
 #include <wx/listbase.h>
@@ -71,29 +72,42 @@ void StatsDisplay::AddBot(const wxString& name, u32 score)
     m_botNameScoreMap[name] = 0;
 }
 
-void StatsDisplay::SetBotScore(const wxString& name, u32 score)
+void StatsDisplay::SetBotScore(const wxString& name, double score)
 {
     m_scoreboardList->SetItem(m_botNameIDMap[name], 1, std::to_string(score));
 }
 
-void StatsDisplay::SetWinner(const wxString& name)
+void StatsDisplay::SetWinnerAndLooser(u32 state, std::string bot1, std::string bot2)
 {
-    m_winnerText->SetLabel("The Winner is " + name);
-    IncBotScore(name);
+    std::string winner = "";
+    if ((state & 1) == ROUND_DRAW) {
+        m_winnerText->SetLabel("Round Draw !");
+        SetBotScore(bot1, m_botNameScoreMap[bot1] + 0.5);
+        SetBotScore(bot2, m_botNameScoreMap[bot2] + 0.5);
+        return;
+    } else {
+        if (state == BOT1_WINNER) {
+            winner = bot1;
+        } else if (state == BOT2_WINNER) {
+            winner = bot2;
+        }
+    }
 
+    m_winnerText->SetLabel("The Winner is " + winner);
+    IncBotScore(winner);
     static int lastWinner = -1;
 
     if (lastWinner != -1) {
         m_scoreboardList->Select(lastWinner, false);
     }
 
-    m_scoreboardList->Select(m_botNameIDMap[name], true);
-    lastWinner = m_botNameIDMap[name];
+    m_scoreboardList->Select(m_botNameIDMap[winner], true);
+    lastWinner = m_botNameIDMap[winner];
 }
 
 void StatsDisplay::IncBotScore(const wxString& name)
 {
-    SetBotScore(name, ++m_botNameScoreMap[name]);
+    SetBotScore(name, 1.0 + m_botNameScoreMap[name]);
 }
 
 void StatsDisplay::ClearDisplay()
