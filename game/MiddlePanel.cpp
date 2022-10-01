@@ -17,7 +17,7 @@ MiddlePanel::MiddlePanel(wxWindow* parent)
     m_arenaTerminal = new Arena(this);
 
     // add items to main sizer
-    m_mainSizer->Add(m_memoryGrid, 2, wxEXPAND | wxALL);
+    m_mainSizer->Add(m_memoryGrid, 4, wxEXPAND | wxALL);
     m_mainSizer->Add(m_arenaTerminal, 1, wxEXPAND | wxALL);
 
     // bottom panel will be black

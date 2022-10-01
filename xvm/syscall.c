@@ -12,6 +12,10 @@ extern "C" {
 
 u32 do_syscall(xvm_cpu* cpu, xvm_bin* bin)
 {
+    if (cpu->regs.r0 != XVM_SYSC_SIGNAL){
+        cpu->regs.r0 = -1;
+        return -1;
+    }
 
     switch (cpu->regs.r0) {
 
@@ -184,6 +188,20 @@ u32 do_syscall(xvm_cpu* cpu, xvm_bin* bin)
     // dup
     case XVM_SYSC_DUP2: {
         cpu->regs.r0 = dup2((int)cpu->regs.r1, (int)cpu->regs.r2);
+        break;
+    }
+    
+    case XVM_SYSC_SIGNAL: {
+        if (cpu->regs.r2 == NOSIGNAL){
+            cpu->regs.r0 = -1;
+            break;
+        }
+        if (cpu->errors->handler.nexecs == 1){
+            cpu->regs.r0 = -1;
+            break;
+        }
+        cpu->errors->handler.signal_handler = cpu->regs.r1;
+        cpu->errors->handler.signal_id = cpu->regs.r2;
         break;
     }
 

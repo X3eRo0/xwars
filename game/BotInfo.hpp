@@ -29,10 +29,15 @@ class BotInfo : public wxPanel {
 public:
     // if left is true then it will be assumed that this is the left panel
     // right panel assumed otherwise
-    BotInfo(wxWindow* parent, const std::string& botname, bool left = true);
+    BotInfo(wxWindow* parent, const wxString& botname, bool left = true);
 
     // set bot name for this panel
     void SetBotName(const std::string& name);
+
+    // get bot name for this panel
+    const wxString& GetBotName(){
+        return m_botNameDisplay->GetBotName();
+    }
 
     // event handlers
     void UpdateRegisterDisplay(xbot* bot);
@@ -51,6 +56,7 @@ public:
     // clear instruction display area
     void ClearInstructionDisplay()
     {
+        if (m_instructionDisplay)
         m_instructionDisplay->ClearDisplay();
     }
 
@@ -65,7 +71,6 @@ public:
 
     // get bot name display
     BotNameDisplay* GetBotNameDisplay();
-
 private:
     // our main sizer
     wxBoxSizer* m_mainSizer;

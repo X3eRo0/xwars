@@ -149,7 +149,7 @@ u32 xasm_disassemble_bytes(FILE* fp, xvm_bin* bin, const char* bytecode, u32 len
 
         mode = bytecode[pc++];
         if (opcode >= sizeof(mnemonics) / sizeof(mnemonics[0])) {
-            fprintf(fp, "%-10.7s\n", "(bad)");
+            fprintf(fp, "%-10.7s 0x%.2x\n", "(bad)", opcode);
             continue;
         }
 
@@ -193,7 +193,7 @@ u32 xasm_disassemble_bytes(FILE* fp, xvm_bin* bin, const char* bytecode, u32 len
 
             if (temp == NULL) {
                 if (((signed int)imm) < 0) {
-                    fprintf(fp, "#0x%x", (signed int)imm);
+                    fprintf(fp, "#-0x%x", (u32)(-1 * imm));
                 } else {
                     fprintf(fp, "#0x%x", imm);
                 }
@@ -232,7 +232,7 @@ u32 xasm_disassemble_bytes(FILE* fp, xvm_bin* bin, const char* bytecode, u32 len
 
                 if (temp == NULL) {
                     if (((signed int)imm) < 0) {
-                        fprintf(fp, "#0x%x", (signed int)imm);
+                        fprintf(fp, "#0x%x", (u32)(-1 * imm));
                     } else {
                         fprintf(fp, "#0x%x", imm);
                     }
@@ -271,7 +271,7 @@ u32 xasm_disassemble_bytes(FILE* fp, xvm_bin* bin, const char* bytecode, u32 len
 
             if (temp == NULL) {
                 if (((signed int)imm) < 0) {
-                    fprintf(fp, "#0x%x", (signed int)imm);
+                    fprintf(fp, "#-0x%x", (u32)(-1 * imm));
                 } else {
                     fprintf(fp, "#0x%x", imm);
                 }
@@ -310,7 +310,7 @@ u32 xasm_disassemble_bytes(FILE* fp, xvm_bin* bin, const char* bytecode, u32 len
 
                 if (temp == NULL) {
                     if (((signed int)imm) < 0) {
-                        fprintf(fp, "#0x%x", (signed int)imm);
+                        fprintf(fp, "#0x%x", (u32)(-1 * imm));
                     } else {
                         fprintf(fp, "#0x%x", imm);
                     }

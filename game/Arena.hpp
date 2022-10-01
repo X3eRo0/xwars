@@ -3,6 +3,7 @@
 
 #include "Common.hpp"
 #include "PropertyData.hpp"
+#include "StatsDisplay.hpp"
 #include "XWars.hpp"
 #include <vector>
 #include <wx/event.h>
@@ -63,15 +64,32 @@ public:
 
     // load bots from path
     void LoadBots(const wxString& botsFolder);
+    wxString get_statustext(){
+        return m_statustext;
+    }
+    
+    void set_statustext(wxString str){
+        m_statustext = str;
+    }
 
     DECLARE_EVENT_TABLE();
 
 private:
+    void OnUpdateStatus(wxTimerEvent& e);
+    void OnNext(wxCommandEvent& event);
+    void OnPause(wxCommandEvent& event);
+    void OnDecrement(wxCommandEvent& event);
+    void OnIncrement(wxCommandEvent& event);
     void OnLoad(wxCommandEvent& event);
     void OnStart(wxCommandEvent& event);
     void OnIntervalTimer(wxTimerEvent& e);
     void OnIterationTimer(wxTimerEvent& e);
 
+    // stats display
+    StatsDisplay *m_statsDisplay;
+
+    // is battle paused
+    bool m_isBattlePaused = false;
     // main sizer
     wxBoxSizer* m_mainSizer;
     // our awesome terminal will only show output
@@ -87,18 +105,20 @@ private:
     // horizontal sizer for buttons panel
     wxBoxSizer* m_btnsPanelHSizer;
     // our control buttons
-    wxButton *m_btnLoad, *m_btnStart, *m_btnPlus, *m_btnMinus, *m_btnPause;
+    wxButton *m_btnLoad, *m_btnStart, *m_btnPlus, *m_btnNext, *m_btnMinus, *m_btnPause;
     // terminal font
     wxFont m_terminalFont = wxFont(10, wxFONTFAMILY_MODERN,
         wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM);
     // wait size for battle iteration
-    size_t m_iterWaitTime = 50, m_interWaitTime = 5000;
+    size_t m_iterWaitTime = 60, m_interWaitTime = 5000;
     // timer for timed battles
-    wxTimer m_iterTimer, m_intervTimer;
+    wxTimer m_iterTimer, m_intervTimer, m_statusUpdateTimer;
     // battle pairs
     std::vector<std::pair<u32, u32>> m_battlePairs;
     // battle index
     size_t m_battleIdx = 0;
+    // status text
+    wxString m_statustext = "Idle";
 };
 
 #endif // XVM_ARENA_TERMINAL_HPP

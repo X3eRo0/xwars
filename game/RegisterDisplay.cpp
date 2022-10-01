@@ -18,13 +18,13 @@ RegisterDisplay::RegisterDisplay(wxWindow* parent)
     SetBackgroundColour(m_bgColor);
 
     // initialize grid sizer for arranging gprs
-    m_regGridSizer = new wxGridSizer(6, 3, 1, 1);
+    m_regGridSizer = new wxGridSizer(6, 3, -1, -1);
 
     // initialize gen purpose regs
     for (size_t i = 0; i < NUMBER_OF_REGISTERS; i++) {
         // initialize registers and add to grid sizer
         m_registers[Register::RegisterNames[i]] = new Register(this, Register::RegisterNames[i]);
-        m_registers[Register::RegisterNames[i]]->SetBackgroundColour(wxColour(32, 16, 32));
+        m_registers[Register::RegisterNames[i]]->SetBackgroundColour(wxColour(0, 0, 0));
         m_regGridSizer->Add(m_registers[Register::RegisterNames[i]], 1);
     }
 

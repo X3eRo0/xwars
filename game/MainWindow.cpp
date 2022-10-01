@@ -18,6 +18,7 @@ enum MainWindowEventHandlerIDs {
 BEGIN_EVENT_TABLE(MainWindow, wxFrame)
 EVT_MENU(MENU_ABOUT_ID, MainWindow::OnAbout)
 EVT_MENU(MENU_SETTINGS_ID, MainWindow::OnSettings)
+EVT_MENU(wxID_EXIT, MainWindow::OnClose)
 END_EVENT_TABLE()
 
 // constructor
@@ -44,9 +45,9 @@ MainWindow::MainWindow(wxWindow* parent, wxWindowID id, const wxString& title)
     // get_xwars_instance()->register_bot_info(m_lBotInfo, m_rBotInfo);
 
     // add these panels to main sizer
-    m_mainHSizer->Add(m_lBotInfo, 1, wxEXPAND | wxALL);
-    m_mainHSizer->Add(m_midPanel, 1, wxEXPAND | wxALL);
-    m_mainHSizer->Add(m_rBotInfo, 1, wxEXPAND | wxALL);
+    m_mainHSizer->Add(m_lBotInfo, 5, wxEXPAND | wxALL);
+    m_mainHSizer->Add(m_midPanel, 6, wxEXPAND | wxALL);
+    m_mainHSizer->Add(m_rBotInfo, 5, wxEXPAND | wxALL);
 
     // set colors for panels to tell them apart
     m_lBotInfo->SetBackgroundColour(*wxBLACK);
@@ -77,7 +78,17 @@ MainWindow::MainWindow(wxWindow* parent, wxWindowID id, const wxString& title)
         .size = wxSize(1366, 768)
     };
 
+    // update self according to loaded theme
     UpdateSelf();
+
+    // create status bar
+    CreateStatusBar(6, wxSTB_DEFAULT_STYLE);
+}
+
+void MainWindow::OnClose(wxCommandEvent& event)
+{
+    Destroy();
+    Close(true);
 }
 
 // handle event
@@ -95,7 +106,7 @@ void MainWindow::OnAbout(wxCommandEvent& event)
 // handle event
 void MainWindow::OnSettings(wxCommandEvent& event)
 {
-    SettingsDialog* dialog = new SettingsDialog(nullptr);
+    SettingsDialog* dialog = new SettingsDialog(this);
     dialog->ShowModal();
     dialog->Destroy();
 }

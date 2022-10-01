@@ -13,9 +13,10 @@
 #define XVM_MAGIC 0x036d7678 // "xvm\x03"
 #define XVM_DFLT_EP 0x13371000
 #define XVM_DFLT_DP 0x1337F000
-#define XVM_DFLT_SP 0xCAFE3ffc
-#define XVM_STACK_SIZE 0x3000
+#define XVM_DFLT_SP 0xCAFE4000
+#define XVM_STACK_SIZE 0x4000
 #define XVM_HDR_SIZE 0x14
+#define XWARS_MEM_SIZE 0x900
 
 #define E_OK 0
 #define E_ERR (-1)

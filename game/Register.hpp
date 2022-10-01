@@ -40,14 +40,14 @@ public:
     // one can use this as reference to set register name using the set name
     // like in a for loop
     static inline std::array<std::string, NUMBER_OF_REGISTERS> RegisterNames
-        = { "r0", "r1", "r2", "r3",
-              "r4", "r5", "r6", "r7",
-              "r8", "r9", "ra", "rb",
-              "rc", "sp", "bp", "pc" };
+    = { "r0", "r1", "r2", "r3",
+    "r4", "r5", "r6", "r7",
+    "r8", "r9", "ra", "rb",
+    "rc", "sp", "bp", "pc" };
 
-private:
+    private:
     // RegisterDisplay and Register, both must have same background colour
-    wxColour m_defaultColour = wxColour(32, 16, 32);
+    wxColour m_defaultColour = wxColour(0, 0, 0);
     // main sizer
     wxBoxSizer* m_mainSizer;
     // label name and value
@@ -56,7 +56,7 @@ private:
     // panel will be like this [ <reg_name> : <reg_value> ]
     wxStaticText *m_registerNameText, *m_registerValueText, *m_delimiterText;
     // label and value fomt
-    wxFont m_font = wxFont(8, wxFONTFAMILY_MODERN,
+    wxFont m_font = wxFont(9, wxFONTFAMILY_MODERN,
         wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
     // color values
     wxColour m_registerNameFGColour = *wxGREEN, m_registerValueFGColour = *wxWHITE;

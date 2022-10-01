@@ -44,7 +44,7 @@ public:
     // properties
     PropertyData properties = PropertyData {
         .widgetType = WidgetType::InstructionDisplay,
-        .fontSize = 8,
+        .fontSize = 10,
         .fontFamily = wxFONTFAMILY_MODERN,
         .fontStyle = wxFONTSTYLE_NORMAL,
         .fontWeight = wxFONTWEIGHT_NORMAL,
@@ -63,7 +63,7 @@ public:
     }
 
 private:
-    wxColour m_bgColor = wxColour(32, 16, 32);
+    wxColour m_bgColor = wxColour(0, 0, 0);
     // main sizer
     wxSizer* m_mainSizer;
     // this box will contain all our objects
@@ -77,7 +77,7 @@ private:
     // display area bg color
     wxColour m_displayBGColour = *wxBLACK, m_displayFGColour = *wxGREEN;
     // instruction display font
-    wxFont m_displayFont = wxFont(9, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM);
+    wxFont m_displayFont = wxFont(10, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_MEDIUM);
 };
 
 #endif // XVM_ARENA_INSTRUCTION_DISPLAY_HPP

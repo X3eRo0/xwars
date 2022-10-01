@@ -5,7 +5,7 @@ _start:
 	mov $r1, $r0
 	and $r1, #0xfffff000
 	lea $r6, [$r1+0x40]
-	lea $sp, [$r1+#0x3a0]
+	lea $sp, [$r1+#0x400]
 	lea $r2, [$r1+#0x400] ; upper bound
 	
 	mov $rc, #0x060f1142 ; kamikaze opcode:

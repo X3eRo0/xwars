@@ -24,6 +24,9 @@ bool MainApp::OnInit()
         FactoryGetMiddlePanel()->GetArena()->LoadBots(BotsFolder);
     }
 
+    // open window maximized
+    mainWindow->Maximize(true);
+
     // everything's ok dude ;-)
     return true;
 }

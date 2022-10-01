@@ -22,6 +22,7 @@
 #define SYS_SOCKET  #0x0C
 #define SYS_CONNECT #0x0D
 #define SYS_DUP2    #0x0E
+#define SYS_SIGNAL  #0x0F
 
 ; perms
 #define PERM_READ   #0x1
@@ -81,6 +82,14 @@
 #define PRNG_A          #0x4212
 #define PRNG_B          #0x9837
 #define PRNG_C          #0x117
+
+; SIGNALS
+#define NOSIGNAL        #0
+#define XSIGSEGV        #1
+#define XSIGTRAP        #2
+#define XSIGSTOP        #3
+#define XSIGFPE         #4
+#define XSIGILL         #5
 
 
 .section .data

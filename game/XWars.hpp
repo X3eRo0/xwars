@@ -8,6 +8,14 @@
 #include <utility>
 
 #define MAX_INSTR_EXECS 2000
+#define MAX_BOT_SIZE 0x180
+
+typedef struct xwars_round_results_t {
+  u32 state;
+  xbot *bot1;
+  xbot *bot2;
+
+} xwars_round_result;
 
 struct xwars {
     xwars();
@@ -15,9 +23,6 @@ struct xwars {
 
     // // register bot info panels that must be updated
     // void register_bot_info(BotInfo* first, BotInfo* second);
-
-    // compile given bots
-    void compile_bots(const std::vector<std::string>& bot_paths);
 
     // this will allocate bots for the first time by loading
     // the assembly file(s) from locations in bot_paths
@@ -42,6 +47,11 @@ struct xwars {
     // again or not, true means this must be called again, false otherwise
     bool battle_step();
 
+    void set_battle_status(u32 value);
+    u32 get_battle_status();
+
+    std::string get_battle_results();
+
     // -- README --
     // here I will explain working :
     // 1 - get xwars global instance by calling get_xwars_instance()
@@ -55,15 +65,18 @@ struct xwars {
     u32 counter = 0;
 
     // winner of last battle
-    std::string winner = "";
+    xwars_round_result battle_result;
 
-private:
+  private:
     // first - left
     // second - right
     std::pair<BotInfo*, BotInfo*> m_botInfos;
 
     // current fighting bots
-    std::pair<xbot*, xbot*> m_currentBots = { nullptr, nullptr };
+    std::pair<xbot*, xbot*> m_currentBots;
+
+    // is battle running
+    u32 battle_status = 0;
 };
 
 // get xwars global instance

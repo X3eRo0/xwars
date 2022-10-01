@@ -26,8 +26,29 @@ typedef int64_t i64;
 
 typedef const char* cstring;
 
+
+enum round_state{
+    ROUND_CONCLUDED,
+    ROUND_DRAW
+};
+
+enum winner{
+    BOT1_WINNER = 2,
+    BOT2_WINNER = 4
+};
+
 // get reader and writer
 FILE* get_reader_end();
 FILE* get_writer_end();
+
+// GetBot1 read/write/execute colours
+inline wxColour GetBot1ReadColour() { return wxColour(0x00, 0xff, 0xff); } // #00ffff
+inline wxColour GetBot1WriteColour() { return wxColour(0xff, 0x66, 0xff); } // #ff66ff
+inline wxColour GetBot1ExecColour() { return wxColour(0x00, 0x4d, 0x99); } // #004d99
+
+// GetBot2 read/write/execute colors
+inline wxColour GetBot2ReadColour() { return wxColour(0xff, 0xff, 0x00); } // #ffff00
+inline wxColour GetBot2WriteColour() { return wxColour(0xff, 0xff, 0xff); } // #ffffff
+inline wxColour GetBot2ExecColour() { return wxColour(0xaf, 0x00, 0x00); } // #af0000
 
 #endif // XVM_ARENA_COMMON_HPP

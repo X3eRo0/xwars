@@ -11,9 +11,9 @@
 extern "C" {
 #endif
 
-#define make_oprn(b, p) (b << oprn_b) | (1 << (p))
-
-// 000, 000 - invalid
+#define DONT_DISR 8
+#define oprn_cx 7
+// 111 - invalid
 // 010 - valid
 // 100 - valid
 // 001 - valid
@@ -25,6 +25,7 @@ enum oprn {
     oprn_b = 3,
 };
 
+u8 make_oprn(u8 botid, u8 perm);
 u8 get_oprn_at_idx(u32 idx); // return oprn at index in bitmap
 void set_oprn_at_idx(u32 idx, u8 value); // set oprn at index in bitmap
 
