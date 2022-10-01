@@ -62,12 +62,12 @@ Arena::Arena(wxWindow* parent)
     m_buttonsPanel->SetSizer(m_btnsPanelHSizer);
 
     // create buttons
-    m_btnLoad = new wxButton(this, ID_LOAD, "Load", wxDefaultPosition, wxDefaultSize, 0);
-    m_btnStart = new wxButton(this, ID_START, "Start", wxDefaultPosition, wxDefaultSize, 0);
-    m_btnPause = new wxButton(this, ID_PAUSE, "Pause", wxDefaultPosition, wxDefaultSize, 0);
-    m_btnNext = new wxButton(this, ID_NEXT, "NextI", wxDefaultPosition, wxDefaultSize, 0);
-    m_btnPlus = new wxButton(this, ID_PLUS, "+", wxDefaultPosition, wxDefaultSize, 0);
-    m_btnMinus = new wxButton(this, ID_MINUS, "-", wxDefaultPosition, wxDefaultSize, 0);
+    m_btnLoad = new wxButton(m_buttonsPanel, ID_LOAD, "Load", wxDefaultPosition, wxDefaultSize, 0);
+    m_btnStart = new wxButton(m_buttonsPanel, ID_START, "Start", wxDefaultPosition, wxDefaultSize, 0);
+    m_btnPause = new wxButton(m_buttonsPanel, ID_PAUSE, "Pause", wxDefaultPosition, wxDefaultSize, 0);
+    m_btnNext = new wxButton(m_buttonsPanel, ID_NEXT, "NextI", wxDefaultPosition, wxDefaultSize, 0);
+    m_btnPlus = new wxButton(m_buttonsPanel, ID_PLUS, "+", wxDefaultPosition, wxDefaultSize, 0);
+    m_btnMinus = new wxButton(m_buttonsPanel, ID_MINUS, "-", wxDefaultPosition, wxDefaultSize, 0);
 
     // change background and foreground colors
     m_btnLoad->SetForegroundColour(*wxWHITE);

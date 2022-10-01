@@ -72,13 +72,11 @@ void StatsDisplay::AddBot(const wxString& name, u32 score)
     m_botNameScoreMap[name] = 0;
 }
 
-void StatsDisplay::SetBotScore(const wxString& name, double score)
-{
+void StatsDisplay::SetBotScore(const wxString& name, double score){
     m_scoreboardList->SetItem(m_botNameIDMap[name], 1, std::to_string(score));
 }
 
-void StatsDisplay::SetWinnerAndLooser(u32 state, std::string bot1, std::string bot2)
-{
+void StatsDisplay::SetWinnerAndLooser(u32 state, std::string bot1, std::string bot2){
     std::string winner = "";
     if ((state & 1) == ROUND_DRAW) {
         m_winnerText->SetLabel("Round Draw !");
@@ -105,8 +103,7 @@ void StatsDisplay::SetWinnerAndLooser(u32 state, std::string bot1, std::string b
     lastWinner = m_botNameIDMap[winner];
 }
 
-void StatsDisplay::IncBotScore(const wxString& name)
-{
+void StatsDisplay::IncBotScore(const wxString& name){
     SetBotScore(name, 1.0 + m_botNameScoreMap[name]);
 }
 
